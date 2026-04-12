@@ -39,7 +39,7 @@ export function CallTrendChart({ data }: CallTrendChartProps) {
 
   return (
     <div className="h-[280px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={200}>
         <BarChart data={chartData} margin={{ top: 20, right: 10, left: -10, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
           <XAxis

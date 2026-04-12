@@ -62,7 +62,7 @@ export function MediaPieChart({ calls }: MediaPieChartProps) {
 
   return (
     <div className="h-[280px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={200}>
         <PieChart>
           <Pie
             data={chartData}
