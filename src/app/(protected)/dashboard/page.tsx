@@ -94,7 +94,7 @@ function buildDailySummaries(
           ? Math.round(data.total_spend / data.valid_calls)
           : null,
     }))
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => a.date.localeCompare(b.date));
 }
 
 const MEDIA_FILTER_MAP: Record<string, MediaChannel[]> = {
@@ -126,7 +126,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       .select("*")
       .gte("date", startDate)
       .lte("date", endDate)
-      .order("date", { ascending: false }),
+      .order("date", { ascending: true }),
     admin
       .from("ad_spend")
       .select("*")
@@ -158,7 +158,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             {/* Daily summary table */}
             <section>
               <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">일별 합산</h2>
-              <div className="overflow-hidden rounded-xl border border-[#334155] bg-[#1e293b]">
+              <div className="overflow-hidden rounded-xl border border-[#334155] bg-[#1e293b] max-h-[420px] overflow-y-auto">
                 <DailyTable data={dailySummaries} />
               </div>
             </section>

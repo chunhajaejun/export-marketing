@@ -35,11 +35,11 @@ export function TabContainer({ userRole }: TabContainerProps) {
     <div className="space-y-4">
       <RecentSummary key={`recent-${refreshKey}`} />
     <Tabs defaultValue={defaultTab}>
-      <TabsList className="w-full grid grid-cols-2 h-12 rounded-xl bg-[#1e293b] border border-[#334155]">
-        <TabsTrigger value="calls" disabled={!canAccessCalls} className="text-base font-bold data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white rounded-lg">
+      <TabsList className="inline-flex gap-1 rounded-lg bg-[#1e293b] border border-[#334155] p-1">
+        <TabsTrigger value="calls" disabled={!canAccessCalls} className="rounded-md px-4 py-2 text-sm font-medium data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white">
           문의 관리
         </TabsTrigger>
-        <TabsTrigger value="spend" disabled={!canAccessSpend} className="text-base font-bold data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white rounded-lg">
+        <TabsTrigger value="spend" disabled={!canAccessSpend} className="rounded-md px-4 py-2 text-sm font-medium data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white">
           광고비 관리
         </TabsTrigger>
       </TabsList>
