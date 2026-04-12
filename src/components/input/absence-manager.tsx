@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/client";
 import type { CallReport, MediaChannel } from "@/lib/types";
 
@@ -33,7 +32,7 @@ const RESOLUTION_FIELD_MAP: Record<AbsenceResolution, string | null> = {
 
 interface AbsenceItem {
   report: CallReport;
-  index: number; // nth absence in this report (0-based)
+  index: number;
 }
 
 interface AbsenceManagerProps {
@@ -97,7 +96,7 @@ export function AbsenceManager({
         const currentTarget =
           (report[targetField as keyof CallReport] as number) ?? 0;
 
-        // call_reports 업데이트: absence -1, target +1
+        // Update call_reports: absence -1, target +1
         const { error: updateError } = await supabase
           .from("call_reports")
           .update({
@@ -108,7 +107,7 @@ export function AbsenceManager({
 
         if (updateError) throw updateError;
 
-        // 이력 기록
+        // Log the change
         await supabase.from("call_report_logs").insert({
           call_report_id: report.id,
           field_changed: `absence_to_${resolution}`,
@@ -117,7 +116,7 @@ export function AbsenceManager({
           changed_by: user.id,
         });
 
-        // 로컬 상태 업데이트: 해당 아이템 제거
+        // Remove item from local state
         setItems((prev) =>
           prev.filter(
             (i) => !(i.report.id === item.report.id && i.index === item.index)
@@ -134,7 +133,7 @@ export function AbsenceManager({
 
   if (loading) {
     return (
-      <div className="py-4 text-center text-xs text-muted-foreground">
+      <div className="py-4 text-center text-xs text-[#94a3b8]">
         부재 정보 로딩 중...
       </div>
     );
@@ -142,7 +141,7 @@ export function AbsenceManager({
 
   if (items.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed px-3 py-4 text-center text-xs text-muted-foreground">
+      <div className="py-4 text-center text-xs text-[#94a3b8]">
         부재 건이 없습니다
       </div>
     );
@@ -150,11 +149,11 @@ export function AbsenceManager({
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium">
+      <h3 className="text-sm font-medium text-[#e2e8f0]">
         부재 관리{" "}
-        <Badge variant="secondary" className="ml-1">
+        <span className="ml-1 rounded bg-[#60a5fa]/20 px-1.5 py-0.5 text-xs text-[#60a5fa]">
           {items.length}건
-        </Badge>
+        </span>
       </h3>
 
       <div className="space-y-1.5">
@@ -165,19 +164,19 @@ export function AbsenceManager({
           return (
             <div
               key={itemKey}
-              className="flex flex-wrap items-center gap-2 rounded-lg border px-3 py-2 text-sm"
+              className="flex flex-wrap items-center gap-2 rounded-lg border border-[#334155] bg-[#0f172a] px-3 py-2 text-sm"
             >
-              <Badge variant="outline">
+              <span className="rounded bg-[#334155] px-2 py-0.5 text-xs text-[#e2e8f0]">
                 {MEDIA_LABELS[item.report.media]}
-              </Badge>
-              <span className="text-xs text-muted-foreground">
+              </span>
+              <span className="text-xs text-[#94a3b8]">
                 {new Date(item.report.reported_at).toLocaleTimeString("ko-KR", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
               </span>
               <select
-                className="ml-auto h-7 rounded-md border border-input bg-transparent px-2 text-xs focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:bg-input/30"
+                className="ml-auto h-7 rounded-md border border-[#334155] bg-[#0f172a] px-2 text-xs text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
                 defaultValue="absence"
                 disabled={isProcessing}
                 onChange={(e) =>

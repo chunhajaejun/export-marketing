@@ -20,6 +20,14 @@ interface CallTrendChartProps {
 }
 
 export function CallTrendChart({ data }: CallTrendChartProps) {
+  if (data.length === 0) {
+    return (
+      <div className="flex h-[280px] items-center justify-center text-sm text-[#94a3b8]">
+        데이터가 없습니다
+      </div>
+    );
+  }
+
   const chartData = [...data]
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((row) => ({
@@ -33,25 +41,27 @@ export function CallTrendChart({ data }: CallTrendChartProps) {
     <div className="h-[280px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData} margin={{ top: 20, right: 10, left: -10, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            axisLine={{ stroke: "hsl(var(--border))" }}
+            tick={{ fontSize: 12, fill: "#94a3b8" }}
+            axisLine={{ stroke: "#334155" }}
+            tickLine={{ stroke: "#334155" }}
           />
           <YAxis
-            tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            axisLine={{ stroke: "hsl(var(--border))" }}
+            tick={{ fontSize: 12, fill: "#94a3b8" }}
+            axisLine={{ stroke: "#334155" }}
+            tickLine={{ stroke: "#334155" }}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border))",
+              backgroundColor: "#1e293b",
+              border: "1px solid #334155",
               borderRadius: "8px",
-              color: "hsl(var(--foreground))",
+              color: "#e2e8f0",
             }}
             formatter={(value, name) => [
-              String(value),
+              `${value}건`,
               name === "total" ? "전체콜량" : "유효콜량",
             ]}
           />
@@ -59,12 +69,12 @@ export function CallTrendChart({ data }: CallTrendChartProps) {
             <LabelList
               dataKey="total"
               position="top"
-              style={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+              style={{ fontSize: 11, fill: "#94a3b8" }}
             />
             {chartData.map((entry, index) => (
               <Cell
                 key={index}
-                fill="hsl(var(--primary))"
+                fill="#3b82f6"
                 fillOpacity={entry.isToday ? 0.5 : 1}
               />
             ))}

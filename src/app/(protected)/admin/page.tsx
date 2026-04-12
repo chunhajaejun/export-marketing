@@ -30,9 +30,9 @@ export default async function AdminPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-[#0f172a]">
       <div className="mx-auto max-w-7xl px-4 py-6">
-        <h1 className="mb-4 text-xl font-bold">사용자 관리</h1>
+        <h1 className="mb-4 text-xl font-bold text-[#e2e8f0]">사용자 관리</h1>
         <UserTable initialUsers={(users as Profile[]) || []} />
       </div>
     </main>

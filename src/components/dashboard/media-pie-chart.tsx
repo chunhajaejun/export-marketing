@@ -54,7 +54,7 @@ export function MediaPieChart({ calls }: MediaPieChartProps) {
 
   if (chartData.length === 0) {
     return (
-      <div className="flex h-[280px] items-center justify-center text-muted-foreground">
+      <div className="flex h-[280px] items-center justify-center text-sm text-[#94a3b8]">
         데이터가 없습니다
       </div>
     );
@@ -72,6 +72,7 @@ export function MediaPieChart({ calls }: MediaPieChartProps) {
             outerRadius={90}
             dataKey="value"
             stroke="none"
+            label={({ percent }) => `${percent}%`}
           >
             {chartData.map((entry, index) => (
               <Cell key={index} fill={entry.color} />
@@ -79,10 +80,10 @@ export function MediaPieChart({ calls }: MediaPieChartProps) {
           </Pie>
           <Tooltip
             contentStyle={{
-              backgroundColor: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border))",
+              backgroundColor: "#1e293b",
+              border: "1px solid #334155",
               borderRadius: "8px",
-              color: "hsl(var(--foreground))",
+              color: "#e2e8f0",
             }}
             formatter={(value, name) => [`${value}건`, String(name)]}
           />
@@ -90,7 +91,7 @@ export function MediaPieChart({ calls }: MediaPieChartProps) {
             formatter={(value: string) => {
               const item = chartData.find((d) => d.name === value);
               return (
-                <span className="text-xs text-foreground">
+                <span style={{ color: "#e2e8f0", fontSize: "12px" }}>
                   {value} {item ? `${item.percent}% (${item.value}건)` : ""}
                 </span>
               );

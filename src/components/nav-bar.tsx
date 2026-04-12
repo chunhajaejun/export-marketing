@@ -41,13 +41,13 @@ export function NavBar({ userName, userRole }: NavBarProps) {
   ];
 
   return (
-    <nav className="border-b border-border bg-card">
+    <nav className="border-b border-[#334155] bg-[#1e293b]">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-14 items-center justify-between">
           {/* Logo */}
           <Link
             href="/dashboard"
-            className="text-sm font-bold text-foreground sm:text-base"
+            className="text-sm font-bold text-white sm:text-base"
           >
             수출 마케팅 대시보드
           </Link>
@@ -62,8 +62,8 @@ export function NavBar({ userName, userRole }: NavBarProps) {
                   href={item.href}
                   className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      ? "bg-[#3b82f6]/15 text-[#3b82f6]"
+                      : "text-[#94a3b8] hover:bg-[#334155] hover:text-[#e2e8f0]"
                   }`}
                 >
                   {item.label}
@@ -74,13 +74,13 @@ export function NavBar({ userName, userRole }: NavBarProps) {
 
           {/* Desktop right side */}
           <div className="hidden items-center gap-3 md:flex">
-            <span className="text-sm text-muted-foreground">{userName}</span>
+            <span className="text-sm text-[#94a3b8]">{userName}</span>
             <Button
               size="sm"
               variant="ghost"
               disabled={loggingOut}
               onClick={handleLogout}
-              className="gap-1.5"
+              className="gap-1.5 text-[#94a3b8] hover:text-[#e2e8f0]"
             >
               <LogOut className="size-4" />
               {loggingOut ? "로그아웃 중..." : "로그아웃"}
@@ -89,7 +89,7 @@ export function NavBar({ userName, userRole }: NavBarProps) {
 
           {/* Mobile hamburger */}
           <button
-            className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground md:hidden"
+            className="inline-flex items-center justify-center rounded-md p-2 text-[#94a3b8] hover:bg-[#334155] hover:text-[#e2e8f0] md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="메뉴 열기"
           >
@@ -100,7 +100,7 @@ export function NavBar({ userName, userRole }: NavBarProps) {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-border md:hidden">
+        <div className="border-t border-[#334155] md:hidden">
           <div className="space-y-1 px-4 py-3">
             {allItems.map((item) => {
               const isActive = pathname === item.href;
@@ -111,8 +111,8 @@ export function NavBar({ userName, userRole }: NavBarProps) {
                   onClick={() => setMobileOpen(false)}
                   className={`block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      ? "bg-[#3b82f6]/15 text-[#3b82f6]"
+                      : "text-[#94a3b8] hover:bg-[#334155] hover:text-[#e2e8f0]"
                   }`}
                 >
                   {item.label}
@@ -120,14 +120,14 @@ export function NavBar({ userName, userRole }: NavBarProps) {
               );
             })}
           </div>
-          <div className="border-t border-border px-4 py-3">
-            <p className="mb-2 text-sm text-muted-foreground">{userName}</p>
+          <div className="border-t border-[#334155] px-4 py-3">
+            <p className="mb-2 text-sm text-[#94a3b8]">{userName}</p>
             <Button
               size="sm"
               variant="ghost"
               disabled={loggingOut}
               onClick={handleLogout}
-              className="w-full justify-start gap-1.5"
+              className="w-full justify-start gap-1.5 text-[#94a3b8] hover:text-[#e2e8f0]"
             >
               <LogOut className="size-4" />
               {loggingOut ? "로그아웃 중..." : "로그아웃"}

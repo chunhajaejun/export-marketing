@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   Table,
   TableBody,
@@ -18,16 +18,16 @@ const MEDIA_LABELS: Record<MediaChannel, string> = {
   naver_web: "네이버(웹)",
   naver_landing: "네이버(랜딩)",
   danggeun: "당근",
-  meta: "메타",
+  meta: "��타",
   google: "구글",
 };
 
 const MEDIA_COLORS: Record<string, string> = {
-  naver_web: "text-blue-400",
-  naver_landing: "text-blue-400",
-  danggeun: "text-orange-400",
-  meta: "text-purple-400",
-  google: "text-emerald-400",
+  naver_web: "#3b82f6",
+  naver_landing: "#3b82f6",
+  danggeun: "#f97316",
+  meta: "#8b5cf6",
+  google: "#34d399",
 };
 
 interface MediaTableProps {
@@ -136,16 +136,24 @@ export function MediaTable({ calls, spend }: MediaTableProps) {
     });
   };
 
+  if (groups.length === 0) {
+    return (
+      <div className="flex h-40 items-center justify-center text-sm text-[#94a3b8]">
+        데이���가 없습니다
+      </div>
+    );
+  }
+
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead>날짜 / 매체</TableHead>
-          <TableHead className="text-right">전체콜량</TableHead>
-          <TableHead className="text-right">유효</TableHead>
-          <TableHead className="text-right">폐차</TableHead>
-          <TableHead className="text-right">소진액</TableHead>
-          <TableHead className="text-right">CPA(전체)</TableHead>
+        <TableRow className="border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]">
+          <TableHead className="text-[#94a3b8]">날짜 / 매체</TableHead>
+          <TableHead className="text-right text-[#94a3b8]">전체콜량</TableHead>
+          <TableHead className="text-right text-[#94a3b8]">유효</TableHead>
+          <TableHead className="text-right text-[#94a3b8]">폐차</TableHead>
+          <TableHead className="text-right text-[#94a3b8]">소진액</TableHead>
+          <TableHead className="text-right text-[#94a3b8]">CPA(전체)</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -159,28 +167,28 @@ export function MediaTable({ calls, spend }: MediaTableProps) {
           return (
             <Fragment key={group.date}>
               <TableRow
-                className="cursor-pointer hover:bg-muted/70"
+                className="cursor-pointer border-[#334155] hover:bg-[#334155]/50"
                 onClick={() => toggle(group.date)}
               >
-                <TableCell className="font-medium">
-                  <span className="mr-1.5 inline-block w-3 text-muted-foreground">
+                <TableCell className="font-medium text-[#e2e8f0]">
+                  <span className="mr-1.5 inline-block w-3 text-[#94a3b8]">
                     {isOpen ? "▾" : "▸"}
                   </span>
                   {formatDateWithDay(parseISO(group.date))}
                 </TableCell>
-                <TableCell className="text-right font-semibold">
+                <TableCell className="text-right font-semibold text-[#e2e8f0]">
                   {group.subtotal.total_calls}
                 </TableCell>
-                <TableCell className="text-right text-blue-400">
+                <TableCell className="text-right font-semibold text-[#4ade80]">
                   {group.subtotal.valid_calls}
                 </TableCell>
-                <TableCell className="text-right text-muted-foreground">
+                <TableCell className="text-right text-[#fbbf24]">
                   {group.subtotal.scrap_count}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right text-[#e2e8f0]">
                   {formatCurrency(group.subtotal.spend)}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right text-[#94a3b8]">
                   {cpaTotal != null ? formatCurrency(cpaTotal) : "-"}
                 </TableCell>
               </TableRow>
@@ -193,24 +201,24 @@ export function MediaTable({ calls, spend }: MediaTableProps) {
                   return (
                     <TableRow
                       key={`${group.date}-${row.media}`}
-                      className="bg-muted/20"
+                      className="border-[#334155] bg-[#0f172a]/40 hover:bg-[#334155]/30"
                     >
                       <TableCell className="pl-8">
-                        <span className={MEDIA_COLORS[row.media] || ""}>
+                        <span style={{ color: MEDIA_COLORS[row.media] || "#94a3b8" }}>
                           {MEDIA_LABELS[row.media] || row.media}
                         </span>
                       </TableCell>
-                      <TableCell className="text-right">{row.total_calls}</TableCell>
-                      <TableCell className="text-right text-blue-400">
+                      <TableCell className="text-right text-[#e2e8f0]">{row.total_calls}</TableCell>
+                      <TableCell className="text-right text-[#4ade80]">
                         {row.valid_calls}
                       </TableCell>
-                      <TableCell className="text-right text-muted-foreground">
+                      <TableCell className="text-right text-[#fbbf24]">
                         {row.scrap_count}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right text-[#e2e8f0]">
                         {formatCurrency(row.spend)}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right text-[#94a3b8]">
                         {mediaCpa != null ? formatCurrency(mediaCpa) : "-"}
                       </TableCell>
                     </TableRow>
@@ -223,6 +231,3 @@ export function MediaTable({ calls, spend }: MediaTableProps) {
     </Table>
   );
 }
-
-// Fragment import
-import { Fragment } from "react";

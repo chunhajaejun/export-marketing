@@ -8,7 +8,6 @@ import { SpendTextInput } from "./spend-text-input";
 import { SpendDirectInput } from "./spend-direct-input";
 import { DailyHistory } from "./daily-history";
 import { AbsenceManager } from "./absence-manager";
-import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils/date-utils";
 import type { UserRole } from "@/lib/types";
 
@@ -44,38 +43,46 @@ export function TabContainer({ userRole }: TabContainerProps) {
 
       <TabsContent value="calls">
         <div className="flex flex-col gap-4 lg:flex-row">
-          {/* 좌측: 입력 폼 */}
+          {/* Left: input form */}
           <div className="w-full shrink-0 lg:w-[300px]">
-            {/* 입력 모드 토글 */}
+            {/* Input mode toggle */}
             <div className="mb-3 flex gap-2">
-              <Button
-                variant={inputMode === "text" ? "default" : "outline"}
-                size="sm"
+              <button
                 onClick={() => setInputMode("text")}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  inputMode === "text"
+                    ? "bg-[#3b82f6] text-white"
+                    : "bg-[#334155] text-[#94a3b8] hover:text-[#e2e8f0]"
+                }`}
               >
                 텍스트 작성
-              </Button>
-              <Button
-                variant={inputMode === "direct" ? "default" : "outline"}
-                size="sm"
+              </button>
+              <button
                 onClick={() => setInputMode("direct")}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  inputMode === "direct"
+                    ? "bg-[#3b82f6] text-white"
+                    : "bg-[#334155] text-[#94a3b8] hover:text-[#e2e8f0]"
+                }`}
               >
                 직접 입력
-              </Button>
+              </button>
             </div>
 
-            {inputMode === "text" ? (
-              <CallTextInput onSaved={handleSaved} />
-            ) : (
-              <CallDirectInput
-                selectedDate={selectedDate}
-                onDateChange={setSelectedDate}
-                onSaved={handleSaved}
-              />
-            )}
+            <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
+              {inputMode === "text" ? (
+                <CallTextInput onSaved={handleSaved} />
+              ) : (
+                <CallDirectInput
+                  selectedDate={selectedDate}
+                  onDateChange={setSelectedDate}
+                  onSaved={handleSaved}
+                />
+              )}
+            </div>
 
-            {/* 부재 관리 */}
-            <div className="mt-4">
+            {/* Absence manager */}
+            <div className="mt-4 rounded-xl border border-[#334155] bg-[#1e293b] p-4">
               <AbsenceManager
                 selectedDate={selectedDate}
                 refreshKey={refreshKey}
@@ -83,59 +90,71 @@ export function TabContainer({ userRole }: TabContainerProps) {
             </div>
           </div>
 
-          {/* 우측: 이력 테이블 */}
+          {/* Right: history table */}
           <div className="min-w-0 flex-1">
-            <DailyHistory
-              type="calls"
-              selectedDate={selectedDate}
-              onDateChange={setSelectedDate}
-              refreshKey={refreshKey}
-            />
+            <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
+              <DailyHistory
+                type="calls"
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                refreshKey={refreshKey}
+              />
+            </div>
           </div>
         </div>
       </TabsContent>
 
       <TabsContent value="spend">
         <div className="flex flex-col gap-4 lg:flex-row">
-          {/* 좌측: 입력 폼 */}
+          {/* Left: input form */}
           <div className="w-full shrink-0 lg:w-[300px]">
-            {/* 입력 모드 토글 */}
+            {/* Input mode toggle */}
             <div className="mb-3 flex gap-2">
-              <Button
-                variant={spendInputMode === "text" ? "default" : "outline"}
-                size="sm"
+              <button
                 onClick={() => setSpendInputMode("text")}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  spendInputMode === "text"
+                    ? "bg-[#3b82f6] text-white"
+                    : "bg-[#334155] text-[#94a3b8] hover:text-[#e2e8f0]"
+                }`}
               >
                 텍스트 작성
-              </Button>
-              <Button
-                variant={spendInputMode === "direct" ? "default" : "outline"}
-                size="sm"
+              </button>
+              <button
                 onClick={() => setSpendInputMode("direct")}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  spendInputMode === "direct"
+                    ? "bg-[#3b82f6] text-white"
+                    : "bg-[#334155] text-[#94a3b8] hover:text-[#e2e8f0]"
+                }`}
               >
                 직접 입력
-              </Button>
+              </button>
             </div>
 
-            {spendInputMode === "text" ? (
-              <SpendTextInput onSaved={handleSaved} />
-            ) : (
-              <SpendDirectInput
-                selectedDate={selectedDate}
-                onDateChange={setSelectedDate}
-                onSaved={handleSaved}
-              />
-            )}
+            <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
+              {spendInputMode === "text" ? (
+                <SpendTextInput onSaved={handleSaved} />
+              ) : (
+                <SpendDirectInput
+                  selectedDate={selectedDate}
+                  onDateChange={setSelectedDate}
+                  onSaved={handleSaved}
+                />
+              )}
+            </div>
           </div>
 
-          {/* 우측: 이력 테이블 */}
+          {/* Right: history table */}
           <div className="min-w-0 flex-1">
-            <DailyHistory
-              type="spend"
-              selectedDate={selectedDate}
-              onDateChange={setSelectedDate}
-              refreshKey={refreshKey}
-            />
+            <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
+              <DailyHistory
+                type="spend"
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                refreshKey={refreshKey}
+              />
+            </div>
           </div>
         </div>
       </TabsContent>

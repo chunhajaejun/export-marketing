@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import type { MediaChannel } from "@/lib/types";
 
@@ -21,12 +20,12 @@ interface FieldDef {
 }
 
 const FIELDS: FieldDef[] = [
-  { key: "export_count", label: "수출가능", color: "text-green-600" },
-  { key: "used_car_count", label: "중고매입", color: "text-green-600" },
-  { key: "scrap_count", label: "폐차", color: "text-yellow-600" },
-  { key: "phone_naver_count", label: "전화-네이버웹 추정", color: "text-green-600" },
-  { key: "absence_count", label: "부재", color: "text-blue-600" },
-  { key: "invalid_count", label: "무효", color: "text-red-600" },
+  { key: "export_count", label: "수출가능", color: "#4ade80" },
+  { key: "used_car_count", label: "중고매입", color: "#4ade80" },
+  { key: "scrap_count", label: "폐차", color: "#fbbf24" },
+  { key: "phone_naver_count", label: "전화-네이버웹", color: "#4ade80" },
+  { key: "absence_count", label: "부재", color: "#60a5fa" },
+  { key: "invalid_count", label: "무효", color: "#f87171" },
 ];
 
 type FieldValues = Record<string, number>;
@@ -110,25 +109,26 @@ export function CallDirectInput({
 
   return (
     <div className="space-y-3">
-      {/* 날짜 선택 */}
+      {/* Date selection */}
       <div>
-        <label className="mb-1 block text-xs font-medium text-muted-foreground">
+        <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
           날짜
         </label>
-        <Input
+        <input
           type="date"
           value={selectedDate}
           onChange={(e) => onDateChange(e.target.value)}
+          className="h-8 w-full rounded-lg border border-[#334155] bg-[#0f172a] px-2.5 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
         />
       </div>
 
-      {/* 매체 선택 */}
+      {/* Media selection */}
       <div>
-        <label className="mb-1 block text-xs font-medium text-muted-foreground">
+        <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
           매체
         </label>
         <select
-          className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:bg-input/30"
+          className="h-8 w-full rounded-lg border border-[#334155] bg-[#0f172a] px-2.5 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
           value={media}
           onChange={(e) => setMedia(e.target.value as MediaChannel)}
         >
@@ -140,21 +140,24 @@ export function CallDirectInput({
         </select>
       </div>
 
-      {/* 세부 내역 2열 */}
+      {/* Detail fields 2-column */}
       <div>
-        <label className="mb-1 block text-xs font-medium text-muted-foreground">
+        <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
           세부 내역
         </label>
         <div className="grid grid-cols-2 gap-2">
           {FIELDS.map((field) => (
             <div key={field.key} className="flex items-center gap-1.5">
-              <span className={`w-[90px] shrink-0 text-xs ${field.color}`}>
+              <span
+                className="w-[90px] shrink-0 text-xs"
+                style={{ color: field.color }}
+              >
                 {field.label}
               </span>
-              <Input
+              <input
                 type="number"
                 min={0}
-                className="w-[50px] px-1.5 text-center"
+                className="h-7 w-[50px] rounded-md border border-[#334155] bg-[#0f172a] px-1.5 text-center text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
                 value={values[field.key] || ""}
                 onChange={(e) => handleChange(field.key, e.target.value)}
                 placeholder="0"
@@ -164,20 +167,20 @@ export function CallDirectInput({
         </div>
       </div>
 
-      {/* 합계 */}
-      <div className="flex items-center justify-between rounded-lg bg-muted px-3 py-2 text-sm">
-        <span className="font-medium">합계</span>
-        <span className="font-bold">{total}건</span>
+      {/* Total */}
+      <div className="flex items-center justify-between rounded-lg bg-[#334155] px-3 py-2 text-sm">
+        <span className="font-medium text-[#e2e8f0]">합계</span>
+        <span className="font-bold text-[#e2e8f0]">{total}건</span>
       </div>
 
-      {/* 에러/성공 */}
+      {/* Error/Success */}
       {error && (
-        <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-lg bg-[#f87171]/10 border border-[#f87171]/20 px-3 py-2 text-sm text-[#f87171]">
           {error}
         </div>
       )}
       {success && (
-        <div className="rounded-lg bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+        <div className="rounded-lg bg-[#4ade80]/10 border border-[#4ade80]/20 px-3 py-2 text-sm text-[#4ade80]">
           저장 완료
         </div>
       )}

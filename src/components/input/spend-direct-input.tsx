@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { formatCurrency, parseCurrencyInput } from "@/lib/utils/currency-format";
 import { formatDate } from "@/lib/utils/date-utils";
@@ -33,14 +32,13 @@ export function SpendDirectInput({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  // CPA 관련
+  // CPA
   const [cpaTotal, setCpaTotal] = useState<number | null>(null);
   const [cpaValid, setCpaValid] = useState<number | null>(null);
   const [loadingCpa, setLoadingCpa] = useState(false);
 
   const amount = parseCurrencyInput(amountInput);
 
-  // 금액 입력 시 콤마 자동 포맷
   const handleAmountChange = useCallback((raw: string) => {
     const num = parseCurrencyInput(raw);
     setAmountInput(num > 0 ? num.toLocaleString("ko-KR") : "");
@@ -48,7 +46,7 @@ export function SpendDirectInput({
     setError(null);
   }, []);
 
-  // CPA 자동 계산: 날짜+매체 변경 시 콜량 조회
+  // Auto CPA calculation
   useEffect(() => {
     if (!selectedDate || !media) {
       setCpaTotal(null);
@@ -102,7 +100,6 @@ export function SpendDirectInput({
     };
   }, [selectedDate, media, amount]);
 
-  // 어제와 같은 매체로 입력
   const handleYesterdayMedias = useCallback(async () => {
     setError(null);
     try {
@@ -119,7 +116,6 @@ export function SpendDirectInput({
         return;
       }
 
-      // 첫 번째 매체를 선택
       setMedia(data[0].media as MediaChannel);
     } catch (err) {
       setError(
@@ -169,25 +165,26 @@ export function SpendDirectInput({
 
   return (
     <div className="space-y-3">
-      {/* 날짜 선택 */}
+      {/* Date */}
       <div>
-        <label className="mb-1 block text-xs font-medium text-muted-foreground">
+        <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
           날짜
         </label>
-        <Input
+        <input
           type="date"
           value={selectedDate}
           onChange={(e) => onDateChange(e.target.value)}
+          className="h-8 w-full rounded-lg border border-[#334155] bg-[#0f172a] px-2.5 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
         />
       </div>
 
-      {/* 매체 선택 */}
+      {/* Media */}
       <div>
-        <label className="mb-1 block text-xs font-medium text-muted-foreground">
+        <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
           매체
         </label>
         <select
-          className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:bg-input/30"
+          className="h-8 w-full rounded-lg border border-[#334155] bg-[#0f172a] px-2.5 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
           value={media}
           onChange={(e) => setMedia(e.target.value as MediaChannel)}
         >
@@ -199,7 +196,7 @@ export function SpendDirectInput({
         </select>
       </div>
 
-      {/* 어제와 같은 매체 버튼 */}
+      {/* Yesterday media button */}
       <Button
         variant="outline"
         size="sm"
@@ -209,19 +206,19 @@ export function SpendDirectInput({
         어제와 같은 매체로 입력
       </Button>
 
-      {/* 소진액 입력 */}
+      {/* Amount input */}
       <div>
-        <label className="mb-1 block text-xs font-medium text-muted-foreground">
+        <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
           소진액
         </label>
         <div className="relative">
-          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-[#94a3b8]">
             &#8361;
           </span>
-          <Input
+          <input
             type="text"
             inputMode="numeric"
-            className="pl-7"
+            className="h-8 w-full rounded-lg border border-[#334155] bg-[#0f172a] pl-7 pr-2.5 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
             placeholder="0"
             value={amountInput}
             onChange={(e) => handleAmountChange(e.target.value)}
@@ -229,46 +226,46 @@ export function SpendDirectInput({
         </div>
       </div>
 
-      {/* CPA 자동 계산 */}
+      {/* CPA auto-calculation */}
       {amount > 0 && (
-        <div className="rounded-lg bg-muted px-3 py-2 text-sm">
-          <div className="mb-1 text-xs font-medium text-muted-foreground">
+        <div className="rounded-lg bg-[#334155] px-3 py-2 text-sm">
+          <div className="mb-1 text-xs font-medium text-[#94a3b8]">
             자동 CPA 계산
           </div>
           {loadingCpa ? (
-            <span className="text-xs text-muted-foreground">계산 중...</span>
+            <span className="text-xs text-[#94a3b8]">계산 중...</span>
           ) : (
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div>
-                <span className="text-muted-foreground">단가(전체): </span>
-                <span className="font-semibold">
+                <span className="text-[#94a3b8]">단가(전체): </span>
+                <span className="font-semibold text-[#e2e8f0]">
                   {cpaTotal !== null ? formatCurrency(cpaTotal) : "-"}
                 </span>
               </div>
               <div>
-                <span className="text-muted-foreground">단가(유효): </span>
-                <span className="font-semibold">
+                <span className="text-[#94a3b8]">단가(유효): </span>
+                <span className="font-semibold text-[#e2e8f0]">
                   {cpaValid !== null ? formatCurrency(cpaValid) : "-"}
                 </span>
               </div>
             </div>
           )}
           {cpaTotal === null && cpaValid === null && !loadingCpa && (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-[#94a3b8]">
               해당 날짜/매체의 콜 데이터가 없습니다
             </span>
           )}
         </div>
       )}
 
-      {/* 에러/성공 */}
+      {/* Error/Success */}
       {error && (
-        <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-lg bg-[#f87171]/10 border border-[#f87171]/20 px-3 py-2 text-sm text-[#f87171]">
           {error}
         </div>
       )}
       {success && (
-        <div className="rounded-lg bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+        <div className="rounded-lg bg-[#4ade80]/10 border border-[#4ade80]/20 px-3 py-2 text-sm text-[#4ade80]">
           저장 완료
         </div>
       )}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils/currency-format";
 import { formatDateWithDay } from "@/lib/utils/date-utils";
 import { isToday, parseISO } from "date-fns";
@@ -31,6 +30,14 @@ export function DailySwipeCard({ data }: DailySwipeCardProps) {
     return () => el.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
+  if (data.length === 0) {
+    return (
+      <div className="flex h-32 items-center justify-center rounded-xl border border-[#334155] bg-[#1e293b] text-sm text-[#94a3b8]">
+        데이터가 없습니다
+      </div>
+    );
+  }
+
   // Sort: today first, then descending
   const sorted = [...data].sort((a, b) => {
     const aToday = isToday(parseISO(a.date));
@@ -44,78 +51,84 @@ export function DailySwipeCard({ data }: DailySwipeCardProps) {
     <div className="space-y-3">
       <div
         ref={scrollRef}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 scrollbar-none"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2"
         style={{ scrollbarWidth: "none" }}
       >
-        {sorted.map((row, i) => {
+        {sorted.map((row) => {
           const today = isToday(parseISO(row.date));
-          const invalidTotal =
-            row.scrap_count + row.absence_count + row.invalid_count + row.phone_naver_count;
 
           return (
-            <Card
+            <div
               key={row.date}
-              className={`w-[82%] shrink-0 snap-start ${today ? "ring-2 ring-primary/50" : ""}`}
+              className={`w-[82%] shrink-0 snap-start rounded-xl border bg-[#1e293b] p-4 ${
+                today ? "border-[#3b82f6]/50" : "border-[#334155]"
+              }`}
             >
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-baseline gap-2 text-sm">
-                  {formatDateWithDay(parseISO(row.date))}
-                  {today && (
-                    <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] text-primary">
-                      오늘
-                    </span>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-y-2.5 text-sm">
+              <div className="mb-3 flex items-baseline gap-2 text-sm font-semibold text-[#e2e8f0]">
+                {formatDateWithDay(parseISO(row.date))}
+                {today && (
+                  <span className="rounded-full bg-[#3b82f6]/20 px-2 py-0.5 text-[10px] text-[#3b82f6]">
+                    오늘
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-y-2.5 text-sm">
                 <div>
-                  <div className="text-muted-foreground text-xs">콜량(유효)</div>
-                  <div className="text-lg font-bold text-blue-400">
+                  <div className="text-xs text-[#94a3b8]">콜량(유효)</div>
+                  <div className="text-lg font-bold text-[#4ade80]">
                     {row.valid_calls}
-                    <span className="ml-1 text-sm font-normal text-muted-foreground">
+                    <span className="ml-1 text-sm font-normal text-[#94a3b8]">
                       / {row.total_calls}
                     </span>
                   </div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs">소진액</div>
-                  <div className="text-lg font-bold">
+                  <div className="text-xs text-[#94a3b8]">소진액</div>
+                  <div className="text-lg font-bold text-[#e2e8f0]">
                     {formatCurrency(row.total_spend)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs">폐차/부재/무효</div>
-                  <div className="text-muted-foreground">
-                    {row.scrap_count} / {row.absence_count} / {row.invalid_count}
+                  <div className="text-xs text-[#94a3b8]">폐차/부재/무효</div>
+                  <div className="text-[#94a3b8]">
+                    <span className="text-[#fbbf24]">{row.scrap_count}</span>
+                    {" / "}
+                    <span className="text-[#60a5fa]">{row.absence_count}</span>
+                    {" / "}
+                    <span className="text-[#f87171]">{row.invalid_count}</span>
                   </div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs">CPA 전체/유효</div>
+                  <div className="text-xs text-[#94a3b8]">CPA 전체/유효</div>
                   <div>
-                    <span>{row.cpa_total != null ? formatCurrency(row.cpa_total) : "-"}</span>
-                    <span className="mx-1 text-muted-foreground">/</span>
-                    <span className="text-blue-400">
+                    <span className="text-[#94a3b8]">
+                      {row.cpa_total != null ? formatCurrency(row.cpa_total) : "-"}
+                    </span>
+                    <span className="mx-1 text-[#334155]">/</span>
+                    <span className="text-[#4ade80]">
                       {row.cpa_valid != null ? formatCurrency(row.cpa_valid) : "-"}
                     </span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           );
         })}
       </div>
 
       {/* Indicators */}
-      <div className="flex justify-center gap-1.5">
-        {sorted.map((_, i) => (
-          <div
-            key={i}
-            className={`h-1.5 w-1.5 rounded-full transition-colors ${
-              i === activeIndex ? "bg-primary" : "bg-muted-foreground/30"
-            }`}
-          />
-        ))}
-      </div>
+      {sorted.length > 1 && (
+        <div className="flex justify-center gap-1.5">
+          {sorted.map((_, i) => (
+            <div
+              key={i}
+              className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                i === activeIndex ? "bg-[#3b82f6]" : "bg-[#334155]"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

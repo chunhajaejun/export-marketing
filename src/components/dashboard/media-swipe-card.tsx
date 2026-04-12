@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils/currency-format";
 import type { CallReport, AdSpend, MediaChannel } from "@/lib/types";
 
@@ -80,11 +79,21 @@ export function MediaSwipeCard({ calls, spend }: MediaSwipeCardProps) {
     };
   });
 
+  const hasData = summaries.some((s) => s.total_calls > 0 || s.spend > 0);
+
+  if (!hasData) {
+    return (
+      <div className="flex h-32 items-center justify-center rounded-xl border border-[#334155] bg-[#1e293b] text-sm text-[#94a3b8]">
+        데이터가 없습니다
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
       <div
         ref={scrollRef}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 scrollbar-none"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2"
         style={{ scrollbarWidth: "none" }}
       >
         {summaries.map((s) => {
@@ -94,56 +103,63 @@ export function MediaSwipeCard({ calls, spend }: MediaSwipeCardProps) {
             s.valid_calls > 0 ? Math.round(s.spend / s.valid_calls) : null;
 
           return (
-            <Card key={s.group} className="w-[82%] shrink-0 snap-start">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-sm">
-                  <span
-                    className="inline-block h-2.5 w-2.5 rounded-full"
-                    style={{ backgroundColor: s.color }}
-                  />
-                  {s.label}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-y-2.5 text-sm">
+            <div
+              key={s.group}
+              className="w-[82%] shrink-0 snap-start rounded-xl border border-[#334155] bg-[#1e293b] p-4"
+            >
+              <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#e2e8f0]">
+                <span
+                  className="inline-block h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: s.color }}
+                />
+                {s.label}
+              </div>
+              <div className="grid grid-cols-2 gap-y-2.5 text-sm">
                 <div>
-                  <div className="text-muted-foreground text-xs">콜량(유효/전체)</div>
+                  <div className="text-xs text-[#94a3b8]">콜량(유효/전체)</div>
                   <div className="text-lg font-bold">
                     <span style={{ color: s.color }}>{s.valid_calls}</span>
-                    <span className="ml-1 text-sm font-normal text-muted-foreground">
+                    <span className="ml-1 text-sm font-normal text-[#94a3b8]">
                       / {s.total_calls}
                     </span>
                   </div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs">소진액</div>
-                  <div className="text-lg font-bold">
+                  <div className="text-xs text-[#94a3b8]">소진액</div>
+                  <div className="text-lg font-bold text-[#e2e8f0]">
                     {formatCurrency(s.spend)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs">수출/중고매입</div>
-                  <div>
+                  <div className="text-xs text-[#94a3b8]">수출/중고매입</div>
+                  <div className="text-[#4ade80]">
                     {s.export_count} / {s.used_car_count}
                   </div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs">폐차/부재/무효</div>
-                  <div className="text-muted-foreground">
-                    {s.scrap_count} / {s.absence_count} / {s.invalid_count}
+                  <div className="text-xs text-[#94a3b8]">폐차/부재/무효</div>
+                  <div>
+                    <span className="text-[#fbbf24]">{s.scrap_count}</span>
+                    {" / "}
+                    <span className="text-[#60a5fa]">{s.absence_count}</span>
+                    {" / "}
+                    <span className="text-[#f87171]">{s.invalid_count}</span>
                   </div>
                 </div>
                 <div className="col-span-2">
-                  <div className="text-muted-foreground text-xs">CPA 전체 / 유효</div>
+                  <div className="text-xs text-[#94a3b8]">CPA 전체 / 유효</div>
                   <div>
-                    <span>{cpaTotal != null ? formatCurrency(cpaTotal) : "-"}</span>
-                    <span className="mx-1.5 text-muted-foreground">/</span>
+                    <span className="text-[#94a3b8]">
+                      {cpaTotal != null ? formatCurrency(cpaTotal) : "-"}
+                    </span>
+                    <span className="mx-1.5 text-[#334155]">/</span>
                     <span style={{ color: s.color }}>
                       {cpaValid != null ? formatCurrency(cpaValid) : "-"}
                     </span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           );
         })}
       </div>
@@ -154,7 +170,7 @@ export function MediaSwipeCard({ calls, spend }: MediaSwipeCardProps) {
           <div
             key={i}
             className={`h-1.5 w-1.5 rounded-full transition-colors ${
-              i === activeIndex ? "bg-primary" : "bg-muted-foreground/30"
+              i === activeIndex ? "bg-[#3b82f6]" : "bg-[#334155]"
             }`}
           />
         ))}

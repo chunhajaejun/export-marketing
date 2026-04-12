@@ -4,7 +4,6 @@ import { subDays, format } from "date-fns";
 import type { CallReport, AdSpend, DailySummary, MediaChannel } from "@/lib/types";
 import { FilterBar } from "@/components/dashboard/filter-bar";
 import { DailyTable } from "@/components/dashboard/daily-table";
-import { MediaTable } from "@/components/dashboard/media-table";
 import { CallTrendChart } from "@/components/dashboard/call-trend-chart";
 import { MediaPieChart } from "@/components/dashboard/media-pie-chart";
 import { DailySwipeCard } from "@/components/dashboard/daily-swipe-card";
@@ -145,10 +144,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const dailySummaries = buildDailySummaries(filteredCalls, filteredSpend);
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-[#0f172a]">
       <div className="mx-auto max-w-7xl px-4 py-6">
-        <h1 className="mb-4 text-xl font-bold">대시보드</h1>
-
         <Suspense fallback={null}>
           <FilterBar />
         </Suspense>
@@ -158,8 +155,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="grid grid-cols-1 gap-6">
             {/* Daily summary table */}
             <section>
-              <h2 className="mb-3 text-base font-semibold">일별 합산</h2>
-              <div className="overflow-hidden rounded-xl ring-1 ring-foreground/10">
+              <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">일별 합산</h2>
+              <div className="overflow-hidden rounded-xl border border-[#334155] bg-[#1e293b]">
                 <DailyTable data={dailySummaries} />
               </div>
             </section>
@@ -167,26 +164,18 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             {/* Charts row */}
             <div className="grid grid-cols-2 gap-6">
               <section>
-                <h2 className="mb-3 text-base font-semibold">일별 콜량 추이</h2>
-                <div className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+                <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">일별 콜량 추이</h2>
+                <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
                   <CallTrendChart data={dailySummaries} />
                 </div>
               </section>
               <section>
-                <h2 className="mb-3 text-base font-semibold">매체별 비중</h2>
-                <div className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+                <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">매체별 비중</h2>
+                <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
                   <MediaPieChart calls={filteredCalls} />
                 </div>
               </section>
             </div>
-
-            {/* Media table */}
-            <section>
-              <h2 className="mb-3 text-base font-semibold">매체별 상세</h2>
-              <div className="overflow-hidden rounded-xl ring-1 ring-foreground/10">
-                <MediaTable calls={filteredCalls} spend={filteredSpend} />
-              </div>
-            </section>
           </div>
         </div>
 
@@ -195,36 +184,28 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="space-y-6">
             {/* Daily swipe cards */}
             <section>
-              <h2 className="mb-3 text-base font-semibold">일별 요약</h2>
+              <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">일별 요약</h2>
               <DailySwipeCard data={dailySummaries} />
             </section>
 
             {/* Media swipe cards */}
             <section>
-              <h2 className="mb-3 text-base font-semibold">매체별 요약</h2>
+              <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">매체별 요약</h2>
               <MediaSwipeCard calls={filteredCalls} spend={filteredSpend} />
             </section>
 
             {/* Charts stacked */}
             <section>
-              <h2 className="mb-3 text-base font-semibold">일별 콜량 추이</h2>
-              <div className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+              <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">일별 콜량 추이</h2>
+              <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
                 <CallTrendChart data={dailySummaries} />
               </div>
             </section>
 
             <section>
-              <h2 className="mb-3 text-base font-semibold">매체별 비중</h2>
-              <div className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+              <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">매체별 비중</h2>
+              <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
                 <MediaPieChart calls={filteredCalls} />
-              </div>
-            </section>
-
-            {/* Media detail table */}
-            <section>
-              <h2 className="mb-3 text-base font-semibold">매체별 상세</h2>
-              <div className="overflow-hidden rounded-xl ring-1 ring-foreground/10">
-                <MediaTable calls={filteredCalls} spend={filteredSpend} />
               </div>
             </section>
           </div>

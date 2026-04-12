@@ -10,7 +10,6 @@ import {
   TableRow,
   TableFooter,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import type { CallReport, MediaChannel } from "@/lib/types";
 
@@ -20,6 +19,14 @@ const MEDIA_LABELS: Record<MediaChannel, string> = {
   danggeun: "당근",
   meta: "메타",
   google: "구글",
+};
+
+const MEDIA_COLORS: Record<MediaChannel, string> = {
+  naver_web: "#3b82f6",
+  naver_landing: "#3b82f6",
+  danggeun: "#f97316",
+  meta: "#8b5cf6",
+  google: "#34d399",
 };
 
 const MEDIA_ORDER: MediaChannel[] = [
@@ -85,7 +92,7 @@ export function DailyHistory({
     reportMap.set(r.media, r);
   }
 
-  // 합계 계산
+  // Calculate totals
   const totals = {
     export_count: 0,
     used_car_count: 0,
@@ -114,17 +121,17 @@ export function DailyHistory({
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <label className="text-sm font-medium">날짜</label>
-        <Input
+        <label className="text-sm font-medium text-[#e2e8f0]">날짜</label>
+        <input
           type="date"
           value={selectedDate}
           onChange={(e) => onDateChange(e.target.value)}
-          className="w-[160px]"
+          className="h-8 w-[160px] rounded-lg border border-[#334155] bg-[#0f172a] px-2.5 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
         />
       </div>
 
       {loading ? (
-        <div className="py-8 text-center text-sm text-muted-foreground">
+        <div className="py-8 text-center text-sm text-[#94a3b8]">
           로딩 중...
         </div>
       ) : type === "calls" ? (
@@ -166,72 +173,74 @@ function CallsTable({
   totals: Totals;
 }) {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>매체</TableHead>
-          <TableHead className="text-right">수출</TableHead>
-          <TableHead className="text-right">중고</TableHead>
-          <TableHead className="text-right">폐차</TableHead>
-          <TableHead className="text-right">부재</TableHead>
-          <TableHead className="text-right">무효</TableHead>
-          <TableHead className="text-right">합계</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {mediaOrder.map((media) => {
-          const r = reportMap.get(media);
-          return (
-            <TableRow key={media}>
-              <TableCell className="font-medium">
-                {MEDIA_LABELS[media]}
-              </TableCell>
-              <TableCell className="text-right">
-                {r ? (r.export_count ?? 0) + (r.phone_naver_count ?? 0) : "-"}
-              </TableCell>
-              <TableCell className="text-right">
-                {r ? (r.used_car_count ?? 0) : "-"}
-              </TableCell>
-              <TableCell className="text-right">
-                {r ? r.scrap_count : "-"}
-              </TableCell>
-              <TableCell className="text-right">
-                {r ? r.absence_count : "-"}
-              </TableCell>
-              <TableCell className="text-right">
-                {r ? r.invalid_count : "-"}
-              </TableCell>
-              <TableCell className="text-right font-bold">
-                {r ? r.total_count : "-"}
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell className="font-bold">합계</TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.export_count + totals.phone_naver_count}
-          </TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.used_car_count}
-          </TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.scrap_count}
-          </TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.absence_count}
-          </TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.invalid_count}
-          </TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.total_count}
-          </TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+    <div className="overflow-hidden rounded-lg border border-[#334155]">
+      <Table>
+        <TableHeader>
+          <TableRow className="border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]">
+            <TableHead className="text-[#94a3b8]">매체</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">수출</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">중고</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">폐차</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">부재</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">무효</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">합계</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {mediaOrder.map((media) => {
+            const r = reportMap.get(media);
+            return (
+              <TableRow key={media} className="border-[#334155] hover:bg-[#334155]/50">
+                <TableCell className="font-medium" style={{ color: MEDIA_COLORS[media] }}>
+                  {MEDIA_LABELS[media]}
+                </TableCell>
+                <TableCell className="text-right text-[#4ade80]">
+                  {r ? (r.export_count ?? 0) + (r.phone_naver_count ?? 0) : "-"}
+                </TableCell>
+                <TableCell className="text-right text-[#4ade80]">
+                  {r ? (r.used_car_count ?? 0) : "-"}
+                </TableCell>
+                <TableCell className="text-right text-[#fbbf24]">
+                  {r ? r.scrap_count : "-"}
+                </TableCell>
+                <TableCell className="text-right text-[#60a5fa]">
+                  {r ? r.absence_count : "-"}
+                </TableCell>
+                <TableCell className="text-right text-[#f87171]">
+                  {r ? r.invalid_count : "-"}
+                </TableCell>
+                <TableCell className="text-right font-bold text-[#e2e8f0]">
+                  {r ? r.total_count : "-"}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+        <TableFooter>
+          <TableRow className="border-[#334155] bg-[#0f172a]/80 hover:bg-[#0f172a]/80">
+            <TableCell className="font-bold text-[#e2e8f0]">합계</TableCell>
+            <TableCell className="text-right font-bold text-[#4ade80]">
+              {totals.export_count + totals.phone_naver_count}
+            </TableCell>
+            <TableCell className="text-right font-bold text-[#4ade80]">
+              {totals.used_car_count}
+            </TableCell>
+            <TableCell className="text-right font-bold text-[#fbbf24]">
+              {totals.scrap_count}
+            </TableCell>
+            <TableCell className="text-right font-bold text-[#60a5fa]">
+              {totals.absence_count}
+            </TableCell>
+            <TableCell className="text-right font-bold text-[#f87171]">
+              {totals.invalid_count}
+            </TableCell>
+            <TableCell className="text-right font-bold text-[#e2e8f0]">
+              {totals.total_count}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </div>
   );
 }
 
@@ -247,76 +256,78 @@ function SpendTable({
   totals: Totals;
 }) {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>매체</TableHead>
-          <TableHead className="text-right">소진액</TableHead>
-          <TableHead className="text-right">콜량</TableHead>
-          <TableHead className="text-right">단가(전체)</TableHead>
-          <TableHead className="text-right">단가(유효)</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {mediaOrder.map((media) => {
-          const r = reportMap.get(media);
-          const spend = spendMap[media] ?? 0;
-          const calls = r?.total_count ?? 0;
-          const validCalls =
-            (r?.export_count ?? 0) +
-            (r?.used_car_count ?? 0) +
-            (r?.phone_naver_count ?? 0);
-          const cpaTotal = calls > 0 ? Math.round(spend / calls) : null;
-          const cpaValid =
-            validCalls > 0 ? Math.round(spend / validCalls) : null;
+    <div className="overflow-hidden rounded-lg border border-[#334155]">
+      <Table>
+        <TableHeader>
+          <TableRow className="border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]">
+            <TableHead className="text-[#94a3b8]">매체</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">소진액</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">콜량</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">단가(전체)</TableHead>
+            <TableHead className="text-right text-[#94a3b8]">단가(유효)</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {mediaOrder.map((media) => {
+            const r = reportMap.get(media);
+            const spend = spendMap[media] ?? 0;
+            const calls = r?.total_count ?? 0;
+            const validCalls =
+              (r?.export_count ?? 0) +
+              (r?.used_car_count ?? 0) +
+              (r?.phone_naver_count ?? 0);
+            const cpaTotal = calls > 0 ? Math.round(spend / calls) : null;
+            const cpaValid =
+              validCalls > 0 ? Math.round(spend / validCalls) : null;
 
-          return (
-            <TableRow key={media}>
-              <TableCell className="font-medium">
-                {MEDIA_LABELS[media]}
-              </TableCell>
-              <TableCell className="text-right">
-                {spend > 0 ? spend.toLocaleString() : "-"}
-              </TableCell>
-              <TableCell className="text-right">
-                {calls > 0 ? calls : "-"}
-              </TableCell>
-              <TableCell className="text-right">
-                {cpaTotal !== null ? cpaTotal.toLocaleString() : "-"}
-              </TableCell>
-              <TableCell className="text-right">
-                {cpaValid !== null ? cpaValid.toLocaleString() : "-"}
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell className="font-bold">합계</TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.spend > 0 ? totals.spend.toLocaleString() : "-"}
-          </TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.total_count > 0 ? totals.total_count : "-"}
-          </TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.total_count > 0
-              ? Math.round(totals.spend / totals.total_count).toLocaleString()
-              : "-"}
-          </TableCell>
-          <TableCell className="text-right font-bold">
-            {totals.export_count + totals.used_car_count + totals.phone_naver_count > 0
-              ? Math.round(
-                  totals.spend /
-                    (totals.export_count +
-                      totals.used_car_count +
-                      totals.phone_naver_count)
-                ).toLocaleString()
-              : "-"}
-          </TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+            return (
+              <TableRow key={media} className="border-[#334155] hover:bg-[#334155]/50">
+                <TableCell className="font-medium" style={{ color: MEDIA_COLORS[media] }}>
+                  {MEDIA_LABELS[media]}
+                </TableCell>
+                <TableCell className="text-right text-[#e2e8f0]">
+                  {spend > 0 ? spend.toLocaleString() : "-"}
+                </TableCell>
+                <TableCell className="text-right text-[#e2e8f0]">
+                  {calls > 0 ? calls : "-"}
+                </TableCell>
+                <TableCell className="text-right text-[#94a3b8]">
+                  {cpaTotal !== null ? cpaTotal.toLocaleString() : "-"}
+                </TableCell>
+                <TableCell className="text-right text-[#94a3b8]">
+                  {cpaValid !== null ? cpaValid.toLocaleString() : "-"}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+        <TableFooter>
+          <TableRow className="border-[#334155] bg-[#0f172a]/80 hover:bg-[#0f172a]/80">
+            <TableCell className="font-bold text-[#e2e8f0]">합계</TableCell>
+            <TableCell className="text-right font-bold text-[#e2e8f0]">
+              {totals.spend > 0 ? totals.spend.toLocaleString() : "-"}
+            </TableCell>
+            <TableCell className="text-right font-bold text-[#e2e8f0]">
+              {totals.total_count > 0 ? totals.total_count : "-"}
+            </TableCell>
+            <TableCell className="text-right font-bold text-[#94a3b8]">
+              {totals.total_count > 0
+                ? Math.round(totals.spend / totals.total_count).toLocaleString()
+                : "-"}
+            </TableCell>
+            <TableCell className="text-right font-bold text-[#94a3b8]">
+              {totals.export_count + totals.used_car_count + totals.phone_naver_count > 0
+                ? Math.round(
+                    totals.spend /
+                      (totals.export_count +
+                        totals.used_car_count +
+                        totals.phone_naver_count)
+                  ).toLocaleString()
+                : "-"}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </div>
   );
 }

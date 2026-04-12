@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { parseSpendReport } from "@/lib/parsers/spend-report-parser";
 import { formatCurrency } from "@/lib/utils/currency-format";
 import { createClient } from "@/lib/supabase/client";
@@ -83,9 +82,9 @@ export function SpendTextInput({ onSaved }: SpendTextInputProps) {
 
   return (
     <div className="space-y-3">
-      {/* 텍스트 입력 */}
+      {/* Text input */}
       <textarea
-        className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:bg-input/30"
+        className="w-full rounded-lg border border-[#334155] bg-[#0f172a] px-3 py-2 text-sm text-[#e2e8f0] placeholder:text-[#94a3b8] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
         rows={6}
         placeholder={`소진액 보고 텍스트를 붙여넣으세요...\n\n예시:\n4/10 금요일\n네이버 소진액 : 96,432 원\n당근 소진액 : 100,254 원`}
         value={text}
@@ -101,43 +100,47 @@ export function SpendTextInput({ onSaved }: SpendTextInputProps) {
         파싱하기
       </Button>
 
-      {/* 에러 */}
+      {/* Error */}
       {error && (
-        <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-lg bg-[#f87171]/10 border border-[#f87171]/20 px-3 py-2 text-sm text-[#f87171]">
           {error}
         </div>
       )}
 
-      {/* 성공 */}
+      {/* Success */}
       {success && (
-        <div className="rounded-lg bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+        <div className="rounded-lg bg-[#4ade80]/10 border border-[#4ade80]/20 px-3 py-2 text-sm text-[#4ade80]">
           저장 완료
         </div>
       )}
 
-      {/* 파싱 결과 미리보기 */}
+      {/* Parse results preview */}
       {parsed && parsed.length > 0 && (
         <div className="space-y-2">
-          <h3 className="text-sm font-medium">파싱 결과</h3>
+          <h3 className="text-sm font-medium text-[#e2e8f0]">파싱 결과</h3>
           {parsed.map((item, i) => (
             <div
               key={`${item.date}-${item.media}-${i}`}
-              className="flex items-center justify-between rounded-lg border p-3 text-sm"
+              className="flex items-center justify-between rounded-lg border border-[#334155] bg-[#0f172a] p-3 text-sm"
             >
               <div className="flex items-center gap-2">
-                <Badge variant="outline">{item.date}</Badge>
-                <Badge>{MEDIA_LABELS[item.media]}</Badge>
+                <span className="rounded bg-[#334155] px-2 py-0.5 text-xs text-[#e2e8f0]">
+                  {item.date}
+                </span>
+                <span className="rounded bg-[#3b82f6]/20 px-2 py-0.5 text-xs text-[#3b82f6]">
+                  {MEDIA_LABELS[item.media]}
+                </span>
               </div>
-              <span className="font-semibold">
+              <span className="font-semibold text-[#e2e8f0]">
                 {formatCurrency(item.amount)}
               </span>
             </div>
           ))}
 
-          {/* 합계 */}
-          <div className="flex items-center justify-between rounded-lg bg-muted px-3 py-2 text-sm">
-            <span className="font-medium">합계</span>
-            <span className="font-bold">
+          {/* Total */}
+          <div className="flex items-center justify-between rounded-lg bg-[#334155] px-3 py-2 text-sm">
+            <span className="font-medium text-[#e2e8f0]">합계</span>
+            <span className="font-bold text-[#e2e8f0]">
               {formatCurrency(parsed.reduce((sum, item) => sum + item.amount, 0))}
             </span>
           </div>

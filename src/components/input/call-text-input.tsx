@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   getReportMode,
   getReportModeLabel,
@@ -115,20 +114,25 @@ export function CallTextInput({ onSaved }: CallTextInputProps) {
 
   return (
     <div className="space-y-3">
-      {/* 시간 추정 배너 */}
-      <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-        <Badge variant="secondary">{getReportModeLabel(activeMode)}</Badge>
-        <span className="flex-1 text-xs text-muted-foreground">
+      {/* Time estimation banner */}
+      <div className="flex items-center gap-2 rounded-lg bg-[#334155] px-3 py-2 text-sm">
+        <span className="rounded-md bg-[#3b82f6]/20 px-2 py-0.5 text-xs font-medium text-[#3b82f6]">
+          {getReportModeLabel(activeMode)}
+        </span>
+        <span className="flex-1 text-xs text-[#94a3b8]">
           {getReportModeDescription(activeMode)}
         </span>
-        <Button variant="ghost" size="xs" onClick={cycleMode}>
+        <button
+          onClick={cycleMode}
+          className="rounded px-2 py-0.5 text-xs text-[#94a3b8] hover:bg-[#1e293b] hover:text-[#e2e8f0]"
+        >
           변경
-        </Button>
+        </button>
       </div>
 
-      {/* 텍스트 입력 */}
+      {/* Text input */}
       <textarea
-        className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:bg-input/30"
+        className="w-full rounded-lg border border-[#334155] bg-[#0f172a] px-3 py-2 text-sm text-[#e2e8f0] placeholder:text-[#94a3b8] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
         rows={8}
         placeholder="보고 텍스트를 붙여넣거나 직접 작성하세요..."
         value={text}
@@ -144,63 +148,67 @@ export function CallTextInput({ onSaved }: CallTextInputProps) {
         파싱하기
       </Button>
 
-      {/* 안내 텍스트 */}
-      <div className="space-y-1 text-xs text-muted-foreground">
+      {/* Help text */}
+      <div className="space-y-1 text-xs text-[#94a3b8]">
         <p>* &quot;유효(미분리)&quot;: 수출/중고매입이 분리되지 않은 유효 건수</p>
         <p>* &quot;전화&quot; 채널은 네이버웹 추정으로 네이버 건수에 합산됩니다</p>
       </div>
 
-      {/* 에러 */}
+      {/* Error */}
       {error && (
-        <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-lg bg-[#f87171]/10 border border-[#f87171]/20 px-3 py-2 text-sm text-[#f87171]">
           {error}
         </div>
       )}
 
-      {/* 성공 */}
+      {/* Success */}
       {success && (
-        <div className="rounded-lg bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+        <div className="rounded-lg bg-[#4ade80]/10 border border-[#4ade80]/20 px-3 py-2 text-sm text-[#4ade80]">
           저장 완료
         </div>
       )}
 
-      {/* 파싱 결과 미리보기 */}
+      {/* Parse results preview */}
       {parsed && parsed.length > 0 && (
         <div className="space-y-2">
-          <h3 className="text-sm font-medium">파싱 결과</h3>
+          <h3 className="text-sm font-medium text-[#e2e8f0]">파싱 결과</h3>
           {parsed.map((item, i) => (
             <div
               key={`${item.date}-${item.media}-${i}`}
-              className="rounded-lg border p-3 text-sm"
+              className="rounded-lg border border-[#334155] bg-[#0f172a] p-3 text-sm"
             >
               <div className="mb-1 flex items-center gap-2">
-                <Badge variant="outline">{item.date}</Badge>
-                <Badge>{MEDIA_LABELS[item.media]}</Badge>
+                <span className="rounded bg-[#334155] px-2 py-0.5 text-xs text-[#e2e8f0]">
+                  {item.date}
+                </span>
+                <span className="rounded bg-[#3b82f6]/20 px-2 py-0.5 text-xs text-[#3b82f6]">
+                  {MEDIA_LABELS[item.media]}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs">
-                <span className="text-green-600">
+                <span className="text-[#4ade80]">
                   수출가능: {item.export_count}
                 </span>
-                <span className="text-green-600">
+                <span className="text-[#4ade80]">
                   중고매입: {item.used_car_count}
                 </span>
-                <span className="text-yellow-600">
+                <span className="text-[#fbbf24]">
                   폐차: {item.scrap_count}
                 </span>
-                <span className="text-green-600">
+                <span className="text-[#4ade80]">
                   전화-네이버웹: {item.phone_count}
                 </span>
-                <span className="text-blue-600">
+                <span className="text-[#60a5fa]">
                   부재: {item.absence_count}
                 </span>
-                <span className="text-red-600">
+                <span className="text-[#f87171]">
                   무효: {item.invalid_count}
                 </span>
               </div>
               {(item.channels.phone > 0 ||
                 item.channels.kakao > 0 ||
                 item.channels.sms > 0) && (
-                <div className="mt-1 text-xs text-muted-foreground">
+                <div className="mt-1 text-xs text-[#94a3b8]">
                   채널: 전화 {item.channels.phone} / 카톡 {item.channels.kakao}{" "}
                   / 문자 {item.channels.sms}
                 </div>

@@ -2,15 +2,14 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { format, subDays, startOfWeek, startOfMonth, endOfMonth, subMonths } from "date-fns";
-import { Button } from "@/components/ui/button";
+import { format, subDays, startOfMonth, endOfMonth, subMonths } from "date-fns";
 
 const MEDIA_OPTIONS = [
-  { value: "all", label: "전체" },
-  { value: "naver", label: "네이버" },
-  { value: "danggeun", label: "당근" },
-  { value: "meta", label: "메타" },
-  { value: "google", label: "구글" },
+  { value: "all", label: "전체", color: "" },
+  { value: "naver", label: "네이버", color: "#3b82f6" },
+  { value: "danggeun", label: "당근", color: "#f97316" },
+  { value: "meta", label: "메타", color: "#8b5cf6" },
+  { value: "google", label: "구글", color: "#34d399" },
 ] as const;
 
 type Preset = "today" | "week" | "month" | "last_month";
@@ -69,24 +68,29 @@ export function FilterBar() {
     updateParams({ start: range.start, end: range.end });
   };
 
+  const presets: [Preset, string][] = [
+    ["today", "오늘"],
+    ["week", "이번주"],
+    ["month", "이번달"],
+    ["last_month", "지난달"],
+  ];
+
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+    <div className="flex flex-col gap-3 rounded-xl border border-[#334155] bg-[#1e293b] p-4 sm:flex-row sm:items-center sm:gap-4">
       {/* Preset buttons */}
       <div className="flex gap-1.5">
-        {([
-          ["today", "오늘"],
-          ["week", "이번주"],
-          ["month", "이번달"],
-          ["last_month", "지난달"],
-        ] as [Preset, string][]).map(([key, label]) => (
-          <Button
+        {presets.map(([key, label]) => (
+          <button
             key={key}
-            variant={activePreset === key ? "default" : "outline"}
-            size="sm"
             onClick={() => handlePreset(key)}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              activePreset === key
+                ? "bg-[#3b82f6] text-white"
+                : "bg-[#334155] text-[#94a3b8] hover:bg-[#334155]/80 hover:text-[#e2e8f0]"
+            }`}
           >
             {label}
-          </Button>
+          </button>
         ))}
       </div>
 
@@ -96,29 +100,40 @@ export function FilterBar() {
           type="date"
           value={startDate}
           onChange={(e) => updateParams({ start: e.target.value })}
-          className="h-7 rounded-md border border-border bg-background px-2 text-sm text-foreground"
+          className="h-8 rounded-lg border border-[#334155] bg-[#0f172a] px-2 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
         />
-        <span className="text-muted-foreground">~</span>
+        <span className="text-[#94a3b8]">~</span>
         <input
           type="date"
           value={endDate}
           onChange={(e) => updateParams({ end: e.target.value })}
-          className="h-7 rounded-md border border-border bg-background px-2 text-sm text-foreground"
+          className="h-8 rounded-lg border border-[#334155] bg-[#0f172a] px-2 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
         />
       </div>
 
       {/* Media filter */}
       <div className="flex gap-1.5">
-        {MEDIA_OPTIONS.map((opt) => (
-          <Button
-            key={opt.value}
-            variant={media === opt.value ? "default" : "outline"}
-            size="sm"
-            onClick={() => updateParams({ media: opt.value })}
-          >
-            {opt.label}
-          </Button>
-        ))}
+        {MEDIA_OPTIONS.map((opt) => {
+          const isActive = media === opt.value;
+          return (
+            <button
+              key={opt.value}
+              onClick={() => updateParams({ media: opt.value })}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                isActive
+                  ? "text-white"
+                  : "bg-[#334155] text-[#94a3b8] hover:text-[#e2e8f0]"
+              }`}
+              style={
+                isActive
+                  ? { backgroundColor: opt.color || "#3b82f6" }
+                  : undefined
+              }
+            >
+              {opt.label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
