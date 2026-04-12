@@ -212,7 +212,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             {/* Media swipe cards */}
             <section>
               <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">매체별 요약</h2>
-              <MediaSwipeCard calls={filteredCalls} spend={filteredSpend} />
+              <MediaSwipeCard calls={filteredCalls} spend={filteredSpend} startDate={startDate} endDate={endDate} />
             </section>
 
             {/* Charts stacked */}
