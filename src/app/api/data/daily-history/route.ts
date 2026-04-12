@@ -9,11 +9,28 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
   const date = searchParams.get("date");
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
   const type = searchParams.get("type") || "calls";
 
-  if (!date) return NextResponse.json({ error: "date required" }, { status: 400 });
-
   const admin = createAdminClient();
+
+  // 범위 조회 (startDate ~ endDate)
+  if (startDate && endDate) {
+    if (type === "calls") {
+      const { data } = await admin.from("call_reports").select("*").gte("date", startDate).lte("date", endDate).order("date", { ascending: false });
+      return NextResponse.json(data || []);
+    } else {
+      const [{ data: spend }, { data: calls }] = await Promise.all([
+        admin.from("ad_spend").select("*").gte("date", startDate).lte("date", endDate),
+        admin.from("call_reports").select("date, media, total_count, valid_total").gte("date", startDate).lte("date", endDate),
+      ]);
+      return NextResponse.json({ spend: spend || [], calls: calls || [] });
+    }
+  }
+
+  // 단일 날짜 조회
+  if (!date) return NextResponse.json({ error: "date or startDate/endDate required" }, { status: 400 });
 
   if (type === "calls") {
     const { data } = await admin.from("call_reports").select("*").eq("date", date);
