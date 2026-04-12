@@ -128,4 +128,7 @@
   html {
     @apply font-sans;
   }
+  input[type="date"] {
+    color-scheme: dark;
+  }
 }

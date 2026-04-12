@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import type { Profile, UserRole } from "@/lib/types";
 import {
   Table,
@@ -45,18 +44,17 @@ export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
 
-  const supabase = createClient();
-
   async function handleApprove(userId: string) {
     const role = selectedRoles[userId] || "viewer";
     setLoading(userId);
     try {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ status: "approved", role })
-        .eq("id", userId);
-
-      if (error) throw error;
+      const res = await fetch("/api/admin/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, role, status: "approved" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "승인 실패");
 
       setUsers((prev) =>
         prev.map((u) =>
@@ -77,12 +75,13 @@ export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
 
     setLoading(userId);
     try {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ role })
-        .eq("id", userId);
-
-      if (error) throw error;
+      const res = await fetch("/api/admin/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, role, status: "approved" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "역할 변경 실패");
 
       setUsers((prev) =>
         prev.map((u) => (u.id === userId ? { ...u, role } : u))

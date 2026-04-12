@@ -22,7 +22,7 @@ export default async function ProtectedLayout({
   const admin = createAdminClient();
   const { data: profile } = await admin
     .from("profiles")
-    .select("status, role, name")
+    .select("status, role, name, organization")
     .eq("id", user.id)
     .single();
 
@@ -35,6 +35,7 @@ export default async function ProtectedLayout({
       <NavBar
         userName={profile.name || user.email || "사용자"}
         userRole={profile.role as UserRole}
+        userOrganization={profile.organization}
       />
       {children}
     </>

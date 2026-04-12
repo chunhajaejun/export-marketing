@@ -10,6 +10,7 @@ import type { UserRole } from "@/lib/types";
 interface NavBarProps {
   userName: string;
   userRole: UserRole;
+  userOrganization?: string | null;
 }
 
 const NAV_ITEMS = [
@@ -17,7 +18,7 @@ const NAV_ITEMS = [
   { href: "/input", label: "데이터 입력" },
 ] as const;
 
-export function NavBar({ userName, userRole }: NavBarProps) {
+export function NavBar({ userName, userRole, userOrganization }: NavBarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -74,7 +75,7 @@ export function NavBar({ userName, userRole }: NavBarProps) {
 
           {/* Desktop right side */}
           <div className="hidden items-center gap-3 md:flex">
-            <span className="text-sm text-[#94a3b8]">{userName}</span>
+            <span className="text-sm text-[#94a3b8]">{userName}{userOrganization ? ` \u00B7 ${userOrganization}` : ""}</span>
             <Button
               size="sm"
               variant="ghost"
@@ -121,7 +122,7 @@ export function NavBar({ userName, userRole }: NavBarProps) {
             })}
           </div>
           <div className="border-t border-[#334155] px-4 py-3">
-            <p className="mb-2 text-sm text-[#94a3b8]">{userName}</p>
+            <p className="mb-2 text-sm text-[#94a3b8]">{userName}{userOrganization ? ` \u00B7 ${userOrganization}` : ""}</p>
             <Button
               size="sm"
               variant="ghost"
