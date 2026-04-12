@@ -8,6 +8,7 @@ import { SpendTextInput } from "./spend-text-input";
 import { SpendDirectInput } from "./spend-direct-input";
 import { DailyHistory } from "./daily-history";
 import { AbsenceManager } from "./absence-manager";
+import { RecentSummary } from "./recent-summary";
 import { formatDate } from "@/lib/utils/date-utils";
 import type { UserRole } from "@/lib/types";
 
@@ -31,6 +32,8 @@ export function TabContainer({ userRole }: TabContainerProps) {
   }
 
   return (
+    <div className="space-y-4">
+      <RecentSummary key={`recent-${refreshKey}`} />
     <Tabs defaultValue={defaultTab}>
       <TabsList>
         <TabsTrigger value="calls" disabled={!canAccessCalls}>
@@ -159,5 +162,6 @@ export function TabContainer({ userRole }: TabContainerProps) {
         </div>
       </TabsContent>
     </Tabs>
+    </div>
   );
 }
