@@ -125,7 +125,7 @@ export function SignupForm() {
 
       <div>
         <label className="text-sm text-[#94a3b8]">소속 <span className="text-xs text-[#64748b]">(선택)</span></label>
-        <Input placeholder="예: (주)지엔에이 마케팅팀" value={organization} onChange={(e) => setOrganization(e.target.value)} className={`mt-1 ${inputStyle}`} />
+        <Input placeholder="예: 마케팅팀, 당근대행사" value={organization} onChange={(e) => setOrganization(e.target.value)} className={`mt-1 ${inputStyle}`} />
       </div>
 
       {error && <p className="text-sm text-red-500">{error}</p>}

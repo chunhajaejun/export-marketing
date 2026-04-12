@@ -49,7 +49,7 @@ export function NavBar({ userName, userRole }: NavBarProps) {
             href="/dashboard"
             className="text-sm font-bold text-foreground sm:text-base"
           >
-            (주)지엔에이 수출 마케팅
+            수출 마케팅 대시보드
           </Link>
 
           {/* Desktop nav */}
