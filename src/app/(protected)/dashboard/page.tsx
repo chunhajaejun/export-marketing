@@ -178,7 +178,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <section>
               <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">매체별 데이터</h2>
               <div className="rounded-xl border border-[#334155] bg-[#1e293b] max-h-[480px] overflow-y-auto">
-                <MediaTable calls={filteredCalls} spend={filteredSpend} />
+                <MediaTable calls={filteredCalls} spend={filteredSpend} startDate={startDate} endDate={endDate} />
               </div>
             </section>
 
