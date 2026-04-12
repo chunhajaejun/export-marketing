@@ -14,17 +14,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 const ROLE_OPTIONS: { value: UserRole; label: string }[] = [
-  { value: "call_reporter", label: "콜량보고" },
-  { value: "spend_reporter", label: "소진액보고" },
-  { value: "viewer", label: "뷰어" },
-  { value: "admin", label: "관리자" },
+  { value: "call_reporter", label: "인바운드 매니저" },
+  { value: "spend_reporter", label: "미디어 매니저" },
+  { value: "viewer", label: "열람자" },
+  { value: "admin", label: "마스터" },
 ];
 
 const ROLE_LABEL: Record<UserRole, string> = {
-  call_reporter: "콜량보고",
-  spend_reporter: "소진액보고",
-  viewer: "뷰어",
-  admin: "관리자",
+  call_reporter: "인바운드 매니저",
+  spend_reporter: "미디어 매니저",
+  viewer: "열람자",
+  admin: "마스터",
 };
 
 function formatDate(dateStr: string) {
@@ -276,19 +276,19 @@ export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
         <h3 className="mb-3 text-sm font-bold text-[#e2e8f0]">역할 권한 안내</h3>
         <ul className="space-y-1 text-sm text-[#94a3b8]">
           <li>
-            <span className="font-semibold text-[#e2e8f0]">콜량보고</span> —
+            <span className="font-semibold text-[#e2e8f0]">인바운드 매니저</span> —
             대시보드 조회 + 문의 관리 탭 입력
           </li>
           <li>
-            <span className="font-semibold text-[#e2e8f0]">소진액보고</span> —
+            <span className="font-semibold text-[#e2e8f0]">미디어 매니저</span> —
             대시보드 조회 + 광고비 관리 탭 입력
           </li>
           <li>
-            <span className="font-semibold text-[#e2e8f0]">뷰어</span> —
+            <span className="font-semibold text-[#e2e8f0]">열람자</span> —
             대시보드 조회만
           </li>
           <li>
-            <span className="font-semibold text-[#e2e8f0]">관리자</span> —
+            <span className="font-semibold text-[#e2e8f0]">마스터</span> —
             전체 접근 + 사용자 관리
           </li>
         </ul>
