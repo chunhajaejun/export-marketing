@@ -61,8 +61,7 @@ export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
           u.id === userId ? { ...u, status: "approved" as const, role } : u
         )
       );
-    } catch (err) {
-      console.error("승인 실패:", err);
+    } catch {
       alert("승인에 실패했습니다.");
     } finally {
       setLoading(null);
@@ -87,8 +86,7 @@ export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
         prev.map((u) => (u.id === userId ? { ...u, role } : u))
       );
       setEditingUserId(null);
-    } catch (err) {
-      console.error("역할 변경 실패:", err);
+    } catch {
       alert("역할 변경에 실패했습니다.");
     } finally {
       setLoading(null);

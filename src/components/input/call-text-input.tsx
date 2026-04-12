@@ -8,7 +8,6 @@ import {
   getReportModeDescription,
 } from "@/lib/utils/date-utils";
 import { parseCallReport } from "@/lib/parsers/call-report-parser";
-import { createClient } from "@/lib/supabase/client";
 import type { ParsedCallReport, MediaChannel } from "@/lib/types";
 import type { ReportMode } from "@/lib/utils/date-utils";
 

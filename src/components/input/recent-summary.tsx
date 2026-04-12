@@ -15,14 +15,6 @@ interface DayData {
   cpa_valid: number | null;
 }
 
-const MEDIA_COLORS: Record<string, string> = {
-  naver_web: "#3b82f6",
-  naver_landing: "#3b82f6",
-  danggeun: "#f97316",
-  meta: "#8b5cf6",
-  google: "#34d399",
-};
-
 export function RecentSummary() {
   const [days, setDays] = useState<DayData[]>([]);
   const [loading, setLoading] = useState(true);

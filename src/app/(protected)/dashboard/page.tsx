@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { subDays, format } from "date-fns";
 import type { CallReport, AdSpend, DailySummary, MediaChannel } from "@/lib/types";

@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { parseSpendReport } from "@/lib/parsers/spend-report-parser";
 import { formatCurrency } from "@/lib/utils/currency-format";
-import { createClient } from "@/lib/supabase/client";
 import type { ParsedAdSpend, MediaChannel } from "@/lib/types";
 
 const MEDIA_LABELS: Record<MediaChannel, string> = {

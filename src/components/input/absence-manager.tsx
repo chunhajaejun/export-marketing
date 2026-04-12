@@ -22,14 +22,6 @@ const RESOLUTION_OPTIONS: { value: AbsenceResolution; label: string }[] = [
   { value: "invalid", label: "무효" },
 ];
 
-const RESOLUTION_FIELD_MAP: Record<AbsenceResolution, string | null> = {
-  absence: null,
-  export: "export_count",
-  used_car: "used_car_count",
-  scrap: "scrap_count",
-  invalid: "invalid_count",
-};
-
 interface AbsenceItem {
   report: CallReport;
   index: number;
@@ -102,8 +94,8 @@ export function AbsenceManager({
             (i) => !(i.report.id === item.report.id && i.index === item.index)
           )
         );
-      } catch (err) {
-        console.error("부재 처리 오류:", err);
+      } catch {
+        // handled silently
       } finally {
         setProcessing(null);
       }

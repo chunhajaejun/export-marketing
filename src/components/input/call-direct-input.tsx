@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
 import type { MediaChannel } from "@/lib/types";
 
 const MEDIA_OPTIONS: { value: MediaChannel; label: string }[] = [
@@ -91,7 +90,7 @@ export function CallDirectInput({
     } finally {
       setSaving(false);
     }
-  }, [selectedDate, media, values, total, onSaved]);
+  }, [selectedDate, media, values, onSaved]);
 
   return (
     <div className="space-y-3">
