@@ -7,6 +7,7 @@ import { FilterBar } from "@/components/dashboard/filter-bar";
 import { DailyTable } from "@/components/dashboard/daily-table";
 import { CallTrendChart } from "@/components/dashboard/call-trend-chart";
 import { MediaPieChart } from "@/components/dashboard/media-pie-chart";
+import { MediaTable } from "@/components/dashboard/media-table";
 import { DailySwipeCard } from "@/components/dashboard/daily-swipe-card";
 import { MediaSwipeCard } from "@/components/dashboard/media-swipe-card";
 
@@ -159,6 +160,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">일별 합산</h2>
               <div className="overflow-hidden rounded-xl border border-[#334155] bg-[#1e293b]">
                 <DailyTable data={dailySummaries} />
+              </div>
+            </section>
+
+            {/* 매체별 뷰 */}
+            <section>
+              <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">매체별 뷰</h2>
+              <div className="overflow-hidden rounded-xl border border-[#334155] bg-[#1e293b]">
+                <MediaTable calls={filteredCalls} spend={filteredSpend} />
               </div>
             </section>
 
