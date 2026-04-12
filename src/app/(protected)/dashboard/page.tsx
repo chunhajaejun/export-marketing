@@ -12,7 +12,9 @@ import { MediaSwipeCard } from "@/components/dashboard/media-swipe-card";
 
 function buildDailySummaries(
   calls: CallReport[],
-  spend: AdSpend[]
+  spend: AdSpend[],
+  startDate: string,
+  endDate: string
 ): DailySummary[] {
   const dateMap = new Map<
     string,
@@ -80,20 +82,30 @@ function buildDailySummaries(
     dateMap.set(s.date, existing);
   }
 
-  return Array.from(dateMap.entries())
-    .map(([date, data]) => ({
+  // startDate~endDate 사이 모든 날짜를 채움 (데이터 없으면 0)
+  const allDates: string[] = [];
+  const cur = new Date(startDate);
+  const end = new Date(endDate);
+  while (cur <= end) {
+    allDates.push(format(cur, "yyyy-MM-dd"));
+    cur.setDate(cur.getDate() + 1);
+  }
+
+  const emptyDay = {
+    total_calls: 0, valid_calls: 0, export_count: 0, used_car_count: 0,
+    scrap_count: 0, absence_count: 0, invalid_count: 0, phone_naver_count: 0,
+    total_spend: 0, last_reported_at: null,
+  };
+
+  return allDates.map((date) => {
+    const data = dateMap.get(date) || emptyDay;
+    return {
       date,
       ...data,
-      cpa_total:
-        data.total_calls > 0
-          ? Math.round(data.total_spend / data.total_calls)
-          : null,
-      cpa_valid:
-        data.valid_calls > 0
-          ? Math.round(data.total_spend / data.valid_calls)
-          : null,
-    }))
-    .sort((a, b) => a.date.localeCompare(b.date));
+      cpa_total: data.total_calls > 0 ? Math.round(data.total_spend / data.total_calls) : null,
+      cpa_valid: data.valid_calls > 0 ? Math.round(data.total_spend / data.valid_calls) : null,
+    };
+  });
 }
 
 const MEDIA_FILTER_MAP: Record<string, MediaChannel[]> = {
@@ -142,7 +154,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     filteredSpend = filteredSpend.filter((s) => allowedChannels.includes(s.media));
   }
 
-  const dailySummaries = buildDailySummaries(filteredCalls, filteredSpend);
+  const dailySummaries = buildDailySummaries(filteredCalls, filteredSpend, startDate, endDate);
 
   return (
     <main className="min-h-screen bg-[#0f172a]">
