@@ -55,36 +55,32 @@ export function DailyHistory({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchData() {
       setLoading(true);
-      const supabase = createClient();
+      try {
+        const res = await fetch(`/api/data/daily-history?date=${selectedDate}&type=${type}`);
+        if (!res.ok) throw new Error("조회 실패");
+        const data = await res.json();
 
-      const { data: callData } = await supabase
-        .from("call_reports")
-        .select("*")
-        .eq("date", selectedDate);
-
-      setReports((callData as CallReport[]) ?? []);
-
-      if (type === "spend") {
-        const { data: spendData } = await supabase
-          .from("ad_spend")
-          .select("*")
-          .eq("date", selectedDate);
-
-        const map: Record<string, number> = {};
-        if (spendData) {
-          for (const s of spendData) {
+        if (type === "calls") {
+          setReports(data as CallReport[]);
+        } else {
+          setReports((data.calls as CallReport[]) ?? []);
+          const map: Record<string, number> = {};
+          for (const s of data.spend) {
             map[s.media] = s.amount;
           }
+          setSpendMap(map);
         }
-        setSpendMap(map);
+      } catch {
+        setReports([]);
+        setSpendMap({});
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     }
 
-    fetch();
+    fetchData();
   }, [selectedDate, refreshKey, type]);
 
   const reportMap = new Map<MediaChannel, CallReport>();

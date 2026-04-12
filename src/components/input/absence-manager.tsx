@@ -49,15 +49,12 @@ export function AbsenceManager({
   const [processing, setProcessing] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchAbsence() {
       setLoading(true);
-      const supabase = createClient();
-
-      const { data } = await supabase
-        .from("call_reports")
-        .select("*")
-        .eq("date", selectedDate)
-        .gt("absence_count", 0);
+      try {
+      const res = await fetch(`/api/data/daily-history?date=${selectedDate}&type=calls`);
+      const allData = res.ok ? await res.json() : [];
+      const data = (allData as CallReport[]).filter((r) => r.absence_count > 0);
 
       const result: AbsenceItem[] = [];
       if (data) {
@@ -68,10 +65,14 @@ export function AbsenceManager({
         }
       }
       setItems(result);
-      setLoading(false);
+      } catch {
+        setItems([]);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    fetch();
+    fetchAbsence();
   }, [selectedDate, refreshKey]);
 
   const handleResolve = useCallback(
