@@ -132,3 +132,8 @@
     color-scheme: dark;
   }
 }
+/* 탭 활성 배경색 강제 */
+[data-state="active"][role="tab"] {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
