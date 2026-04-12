@@ -292,9 +292,6 @@ export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
             전체 접근 + 사용자 관리
           </li>
         </ul>
-        <p className="mt-3 text-xs text-[#94a3b8]">
-          * 비밀번호 찾기 기능은 로그인 화면에서 이용 가능
-        </p>
       </div>
     </div>
   );

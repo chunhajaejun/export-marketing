@@ -35,11 +35,11 @@ export function TabContainer({ userRole }: TabContainerProps) {
     <div className="space-y-4">
       <RecentSummary key={`recent-${refreshKey}`} />
     <Tabs defaultValue={defaultTab}>
-      <TabsList>
-        <TabsTrigger value="calls" disabled={!canAccessCalls}>
+      <TabsList className="w-full grid grid-cols-2 h-12 rounded-xl bg-[#1e293b] border border-[#334155]">
+        <TabsTrigger value="calls" disabled={!canAccessCalls} className="text-base font-bold data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white rounded-lg">
           문의 관리
         </TabsTrigger>
-        <TabsTrigger value="spend" disabled={!canAccessSpend}>
+        <TabsTrigger value="spend" disabled={!canAccessSpend} className="text-base font-bold data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white rounded-lg">
           광고비 관리
         </TabsTrigger>
       </TabsList>
@@ -47,7 +47,7 @@ export function TabContainer({ userRole }: TabContainerProps) {
       <TabsContent value="calls">
         <div className="flex flex-col gap-4 lg:flex-row">
           {/* Left: input form */}
-          <div className="w-full shrink-0 lg:w-[300px]">
+          <div className="w-full shrink-0 lg:w-[400px]">
             {/* Input mode toggle */}
             <div className="mb-3 flex gap-2">
               <button
@@ -110,7 +110,7 @@ export function TabContainer({ userRole }: TabContainerProps) {
       <TabsContent value="spend">
         <div className="flex flex-col gap-4 lg:flex-row">
           {/* Left: input form */}
-          <div className="w-full shrink-0 lg:w-[300px]">
+          <div className="w-full shrink-0 lg:w-[400px]">
             {/* Input mode toggle */}
             <div className="mb-3 flex gap-2">
               <button
