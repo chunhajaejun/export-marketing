@@ -1,4 +1,19 @@
 node_modules/
 .superpowers/
+.claude/
+
+# 환경변수 (Supabase 키, API 시크릿 등)
 .env
 .env.local
+.env.production
+.env*.local
+
+# OS/IDE
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Next.js 빌드
+.next/
+out/
