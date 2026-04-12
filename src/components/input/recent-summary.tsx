@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { formatCurrency, formatCurrencyShort } from "@/lib/utils/currency-format";
+import { formatCurrencyShort } from "@/lib/utils/currency-format";
 
 interface DayData {
   date: string;
@@ -29,52 +28,19 @@ export function RecentSummary() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetch() {
-      const supabase = createClient();
-      const today = new Date();
-      const dates: string[] = [];
-      for (let i = 0; i < 4; i++) {
-        const d = new Date(today);
-        d.setDate(d.getDate() - i);
-        dates.push(d.toISOString().split("T")[0]);
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/data/recent-summary");
+        if (!res.ok) throw new Error("조회 실패");
+        const result = await res.json();
+        setDays(result);
+      } catch {
+        setDays([]);
+      } finally {
+        setLoading(false);
       }
-
-      const startDate = dates[dates.length - 1];
-      const endDate = dates[0];
-
-      const [{ data: calls }, { data: spend }] = await Promise.all([
-        supabase.from("call_reports").select("*").gte("date", startDate).lte("date", endDate),
-        supabase.from("ad_spend").select("*").gte("date", startDate).lte("date", endDate),
-      ]);
-
-      const result: DayData[] = dates.map((date) => {
-        const dayCalls = (calls || []).filter((c) => c.date === date);
-        const daySpend = (spend || []).filter((s) => s.date === date);
-
-        const total_calls = dayCalls.reduce((s, c) => s + (c.total_count || 0), 0);
-        const valid_calls = dayCalls.reduce((s, c) => s + (c.export_count || 0) + (c.used_car_count || 0) + (c.phone_naver_count || 0), 0);
-        const scrap = dayCalls.reduce((s, c) => s + (c.scrap_count || 0), 0);
-        const absence = dayCalls.reduce((s, c) => s + (c.absence_count || 0), 0);
-        const invalid = dayCalls.reduce((s, c) => s + (c.invalid_count || 0), 0);
-        const totalSpend = daySpend.reduce((s, sp) => s + (sp.amount || 0), 0);
-
-        return {
-          date,
-          total_calls,
-          valid_calls,
-          scrap,
-          absence,
-          invalid,
-          spend: totalSpend,
-          cpa_total: total_calls > 0 ? Math.round(totalSpend / total_calls) : null,
-          cpa_valid: valid_calls > 0 ? Math.round(totalSpend / valid_calls) : null,
-        };
-      });
-
-      setDays(result);
-      setLoading(false);
     }
-    fetch();
+    fetchData();
   }, []);
 
   if (loading) return <div className="text-sm text-[#64748b]">로딩 중...</div>;

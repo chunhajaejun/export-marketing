@@ -92,11 +92,14 @@ function groupByDateAndMedia(
   const groups: DateGroup[] = [];
   const sortedDates = Array.from(dateMap.keys()).sort((a, b) => b.localeCompare(a));
 
+  const ALL_MEDIA: MediaChannel[] = ["naver_web", "naver_landing", "danggeun", "meta", "google"];
+
   for (const date of sortedDates) {
     const mediaMap = dateMap.get(date)!;
-    const mediaRows = Array.from(mediaMap.entries()).map(([media, data]) => ({
+    // 모든 매체를 항상 표시 (0이어도)
+    const mediaRows = ALL_MEDIA.map((media) => ({
       media,
-      ...data,
+      ...(mediaMap.get(media) || { total_calls: 0, valid_calls: 0, scrap_count: 0, spend: 0 }),
     }));
     const subtotal = mediaRows.reduce(
       (acc, r) => ({
