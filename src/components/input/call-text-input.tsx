@@ -20,7 +20,7 @@ const MEDIA_LABELS: Record<MediaChannel, string> = {
 };
 
 interface CallTextInputProps {
-  onSaved: () => void;
+  onSaved: (date?: string) => void;
 }
 
 export function CallTextInput({ onSaved }: CallTextInputProps) {
@@ -73,9 +73,10 @@ export function CallTextInput({ onSaved }: CallTextInputProps) {
       if (!res.ok) throw new Error(result.error || "저장 실패");
 
       setSuccess(true);
+      const savedDate = parsed[0]?.date;
       setParsed(null);
       setText("");
-      onSaved();
+      onSaved(savedDate);
     } catch (err) {
       setError(err instanceof Error ? err.message : "저장 중 오류가 발생했습니다.");
     } finally {

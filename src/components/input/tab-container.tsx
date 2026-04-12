@@ -27,7 +27,8 @@ export function TabContainer({ userRole }: TabContainerProps) {
 
   const defaultTab = canAccessCalls ? "calls" : "spend";
 
-  function handleSaved() {
+  function handleSaved(date?: string) {
+    if (date) setSelectedDate(date);
     setRefreshKey((k) => k + 1);
   }
 
