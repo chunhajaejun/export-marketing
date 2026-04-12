@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 
 export function SignOutButton() {
   const router = useRouter();
@@ -12,8 +11,11 @@ export function SignOutButton() {
   };
 
   return (
-    <Button variant="outline" onClick={handleSignOut} className="w-full">
+    <button
+      onClick={handleSignOut}
+      className="text-sm text-[#64748b] hover:text-white hover:underline"
+    >
       로그아웃
-    </Button>
+    </button>
   );
 }
