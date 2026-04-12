@@ -70,7 +70,7 @@ export function FilterBar() {
 
   const presets: [Preset, string][] = [
     ["today", "오늘"],
-    ["week", "이번주"],
+    ["week", "일주일"],
     ["month", "이번달"],
     ["last_month", "지난달"],
   ];
