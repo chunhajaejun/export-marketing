@@ -58,7 +58,7 @@ export function SignupForm() {
       </div>
 
       <div>
-        <label className="text-sm text-[#94a3b8]">이메일 <span className="text-xs text-[#64748b]">(영문만 입력)</span></label>
+        <label className="text-sm text-[#94a3b8]">이메일</label>
         <div className="mt-1 flex items-center gap-1">
           <Input
             placeholder="username"
@@ -94,7 +94,7 @@ export function SignupForm() {
       </div>
 
       <div>
-        <label className="text-sm text-[#94a3b8]">전화번호 <span className="text-xs text-[#64748b]">(숫자만 → 자동 포맷)</span></label>
+        <label className="text-sm text-[#94a3b8]">전화번호</label>
         <Input
           placeholder="010-0000-0000"
           value={phone}
@@ -116,7 +116,7 @@ export function SignupForm() {
       </div>
 
       <div>
-        <label className="text-sm text-[#94a3b8]">소속 <span className="text-xs text-[#64748b]">(선택)</span></label>
+        <label className="text-sm text-[#94a3b8]">소속</label>
         <Input placeholder="예: (주)지엔에이 마케팅팀" value={organization} onChange={(e) => setOrganization(e.target.value)} className={`mt-1 ${inputStyle}`} />
       </div>
 
