@@ -1,0 +1,295 @@
+<h2>회원가입 / 로그인 / 비밀번호 찾기</h2>
+<p class="subtitle">PC + 모바일 | Supabase Auth 기반</p>
+
+<div class="section">
+  <h3>🔐 로그인</h3>
+  <div class="split">
+    <!-- PC -->
+    <div class="mockup">
+      <div class="mockup-header">PC 로그인</div>
+      <div class="mockup-body" style="padding:0;display:flex;justify-content:center;align-items:center;min-height:400px;background:#0f172a;">
+        <div style="width:360px;background:#1e293b;border-radius:12px;padding:32px;border:1px solid #334155;">
+          <div style="text-align:center;margin-bottom:24px;">
+            <div style="color:#fff;font-size:18px;font-weight:bold;margin-bottom:4px;">GNA 수출 마케팅</div>
+            <div style="color:#64748b;font-size:12px;">광고 성과 분석 대시보드</div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">이메일</div>
+            <input class="mock-input" style="width:100%;font-size:13px;padding:10px;" placeholder="email@example.com">
+          </div>
+          <div style="margin-bottom:20px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">비밀번호</div>
+            <input class="mock-input" style="width:100%;font-size:13px;padding:10px;" type="password" placeholder="••••••••">
+          </div>
+
+          <button class="mock-button" style="background:#3b82f6;color:#fff;width:100%;padding:12px;font-size:14px;font-weight:bold;margin-bottom:16px;">로그인</button>
+
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <a style="color:#3b82f6;cursor:pointer;">회원가입</a>
+            <a style="color:#64748b;cursor:pointer;">비밀번호 찾기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모바일 -->
+    <div class="mockup">
+      <div class="mockup-header">모바일 로그인 (375px)</div>
+      <div class="mockup-body" style="padding:0;display:flex;justify-content:center;">
+        <div style="width:375px;background:#0f172a;padding:40px 24px;border-left:1px solid #334155;border-right:1px solid #334155;min-height:400px;">
+          <div style="text-align:center;margin-bottom:30px;">
+            <div style="color:#fff;font-size:16px;font-weight:bold;margin-bottom:4px;">GNA 수출 마케팅</div>
+            <div style="color:#64748b;font-size:11px;">광고 성과 분석 대시보드</div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:4px;">이메일</div>
+            <input class="mock-input" style="width:100%;font-size:14px;padding:12px;" placeholder="email@example.com">
+          </div>
+          <div style="margin-bottom:18px;">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:4px;">비밀번호</div>
+            <input class="mock-input" style="width:100%;font-size:14px;padding:12px;" type="password" placeholder="••••••••">
+          </div>
+
+          <button class="mock-button" style="background:#3b82f6;color:#fff;width:100%;padding:14px;font-size:14px;font-weight:bold;margin-bottom:16px;">로그인</button>
+
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <a style="color:#3b82f6;cursor:pointer;">회원가입</a>
+            <a style="color:#64748b;cursor:pointer;">비밀번호 찾기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📝 회원가입</h3>
+  <div class="split">
+    <!-- PC -->
+    <div class="mockup">
+      <div class="mockup-header">PC 회원가입</div>
+      <div class="mockup-body" style="padding:0;display:flex;justify-content:center;align-items:center;min-height:500px;background:#0f172a;">
+        <div style="width:360px;background:#1e293b;border-radius:12px;padding:32px;border:1px solid #334155;">
+          <div style="text-align:center;margin-bottom:24px;">
+            <div style="color:#fff;font-size:18px;font-weight:bold;margin-bottom:4px;">회원가입</div>
+            <div style="color:#64748b;font-size:12px;">관리자 승인 후 이용 가능합니다</div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">이름</div>
+            <input class="mock-input" style="width:100%;font-size:13px;padding:10px;" placeholder="홍길동">
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">이메일 <span style="color:#64748b;font-size:10px;">(영문만 입력)</span></div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <input class="mock-input" style="flex:1;font-size:13px;padding:10px;" placeholder="username" value="hong">
+              <span style="color:#94a3b8;font-size:13px;">@</span>
+              <select class="mock-input" style="width:140px;font-size:12px;padding:10px;">
+                <option>naver.com</option>
+                <option>gmail.com</option>
+                <option>daum.net</option>
+                <option>kakao.com</option>
+                <option>hanmail.net</option>
+                <option>nate.com</option>
+                <option>직접입력</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">전화번호 <span style="color:#64748b;font-size:10px;">(숫자만 입력 → 자동 포맷)</span></div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <input class="mock-input" style="flex:1;font-size:13px;padding:10px;letter-spacing:1px;" placeholder="010-0000-0000" value="010-1234-5678">
+              <button class="mock-button" style="background:#334155;color:#94a3b8;font-size:11px;padding:10px 12px;white-space:nowrap;">인증 (추후)</button>
+            </div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">비밀번호</div>
+            <input class="mock-input" style="width:100%;font-size:13px;padding:10px;" type="password" placeholder="8자 이상">
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">비밀번호 확인</div>
+            <input class="mock-input" style="width:100%;font-size:13px;padding:10px;" type="password" placeholder="비밀번호 재입력">
+          </div>
+          <div style="margin-bottom:20px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">소속 (선택)</div>
+            <input class="mock-input" style="width:100%;font-size:13px;padding:10px;" placeholder="예: GNA마케팅팀, 당근대행사">
+          </div>
+
+          <button class="mock-button" style="background:#3b82f6;color:#fff;width:100%;padding:12px;font-size:14px;font-weight:bold;margin-bottom:12px;">가입 신청</button>
+
+          <div style="text-align:center;font-size:12px;">
+            <span style="color:#64748b;">이미 계정이 있으신가요?</span>
+            <a style="color:#3b82f6;cursor:pointer;margin-left:4px;">로그인</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모바일 -->
+    <div class="mockup">
+      <div class="mockup-header">모바일 회원가입 (375px)</div>
+      <div class="mockup-body" style="padding:0;display:flex;justify-content:center;">
+        <div style="width:375px;background:#0f172a;padding:32px 24px;border-left:1px solid #334155;border-right:1px solid #334155;">
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="color:#fff;font-size:16px;font-weight:bold;margin-bottom:4px;">회원가입</div>
+            <div style="color:#64748b;font-size:11px;">관리자 승인 후 이용 가능합니다</div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:3px;">이름</div>
+            <input class="mock-input" style="width:100%;font-size:14px;padding:12px;" placeholder="홍길동">
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:3px;">이메일 <span style="color:#64748b;font-size:9px;">(영문만)</span></div>
+            <div style="display:flex;gap:3px;align-items:center;">
+              <input class="mock-input" style="flex:1;font-size:13px;padding:10px;" placeholder="username" value="hong">
+              <span style="color:#94a3b8;font-size:12px;">@</span>
+              <select class="mock-input" style="width:120px;font-size:11px;padding:10px;">
+                <option>naver.com</option>
+                <option>gmail.com</option>
+                <option>daum.net</option>
+                <option>kakao.com</option>
+                <option>직접입력</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:3px;">전화번호 <span style="color:#64748b;font-size:9px;">(숫자만 → 자동 포맷)</span></div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <input class="mock-input" style="flex:1;font-size:13px;padding:10px;letter-spacing:1px;" placeholder="010-0000-0000" value="010-1234-5678">
+              <button class="mock-button" style="background:#334155;color:#94a3b8;font-size:10px;padding:10px 8px;white-space:nowrap;">인증(추후)</button>
+            </div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:3px;">비밀번호</div>
+            <input class="mock-input" style="width:100%;font-size:14px;padding:12px;" type="password" placeholder="8자 이상">
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:3px;">비밀번호 확인</div>
+            <input class="mock-input" style="width:100%;font-size:14px;padding:12px;" type="password" placeholder="비밀번호 재입력">
+          </div>
+          <div style="margin-bottom:18px;">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:3px;">소속 (선택)</div>
+            <input class="mock-input" style="width:100%;font-size:14px;padding:12px;" placeholder="예: GNA마케팅팀">
+          </div>
+
+          <button class="mock-button" style="background:#3b82f6;color:#fff;width:100%;padding:14px;font-size:14px;font-weight:bold;margin-bottom:12px;">가입 신청</button>
+
+          <div style="text-align:center;font-size:12px;">
+            <span style="color:#64748b;">이미 계정이 있으신가요?</span>
+            <a style="color:#3b82f6;cursor:pointer;margin-left:4px;">로그인</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>⏳ 승인 대기 화면</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">PC 승인 대기</div>
+      <div class="mockup-body" style="padding:0;display:flex;justify-content:center;align-items:center;min-height:300px;background:#0f172a;">
+        <div style="width:360px;background:#1e293b;border-radius:12px;padding:32px;border:1px solid #334155;text-align:center;">
+          <div style="width:48px;height:48px;border-radius:50%;background:#334155;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;">
+            <span style="color:#f59e0b;font-size:24px;">⏳</span>
+          </div>
+          <div style="color:#fff;font-size:16px;font-weight:bold;margin-bottom:8px;">승인 대기 중</div>
+          <div style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:20px;">
+            가입 신청이 완료되었습니다.<br>
+            관리자 승인 후 이용 가능합니다.
+          </div>
+          <div style="background:#0f172a;border-radius:8px;padding:12px;margin-bottom:16px;">
+            <div style="color:#64748b;font-size:11px;">가입 이메일</div>
+            <div style="color:#3b82f6;font-size:13px;font-weight:bold;">kim@agency.com</div>
+          </div>
+          <button class="mock-button" style="background:#334155;color:#94a3b8;width:100%;padding:10px;font-size:13px;">로그아웃</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mockup">
+      <div class="mockup-header">모바일 승인 대기 (375px)</div>
+      <div class="mockup-body" style="padding:0;display:flex;justify-content:center;">
+        <div style="width:375px;background:#0f172a;padding:60px 24px;border-left:1px solid #334155;border-right:1px solid #334155;text-align:center;">
+          <div style="width:48px;height:48px;border-radius:50%;background:#334155;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;">
+            <span style="color:#f59e0b;font-size:24px;">⏳</span>
+          </div>
+          <div style="color:#fff;font-size:15px;font-weight:bold;margin-bottom:8px;">승인 대기 중</div>
+          <div style="color:#94a3b8;font-size:12px;line-height:1.6;margin-bottom:16px;">
+            가입 신청이 완료되었습니다.<br>
+            관리자 승인 후 이용 가능합니다.
+          </div>
+          <div style="background:#1e293b;border-radius:8px;padding:12px;margin-bottom:16px;">
+            <div style="color:#64748b;font-size:10px;">가입 이메일</div>
+            <div style="color:#3b82f6;font-size:12px;font-weight:bold;">kim@agency.com</div>
+          </div>
+          <button class="mock-button" style="background:#334155;color:#94a3b8;width:100%;padding:10px;font-size:12px;">로그아웃</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🔑 비밀번호 찾기</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">PC 비밀번호 찾기</div>
+      <div class="mockup-body" style="padding:0;display:flex;justify-content:center;align-items:center;min-height:350px;background:#0f172a;">
+        <div style="width:360px;background:#1e293b;border-radius:12px;padding:32px;border:1px solid #334155;">
+          <div style="text-align:center;margin-bottom:24px;">
+            <div style="color:#fff;font-size:18px;font-weight:bold;margin-bottom:4px;">비밀번호 찾기</div>
+            <div style="color:#94a3b8;font-size:12px;line-height:1.5;">가입한 이메일을 입력하시면<br>비밀번호 재설정 링크를 보내드립니다</div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="color:#94a3b8;font-size:12px;margin-bottom:4px;">이메일</div>
+            <input class="mock-input" style="width:100%;font-size:13px;padding:10px;" placeholder="email@example.com">
+          </div>
+
+          <button class="mock-button" style="background:#3b82f6;color:#fff;width:100%;padding:12px;font-size:14px;font-weight:bold;margin-bottom:16px;">재설정 링크 보내기</button>
+
+          <div style="text-align:center;">
+            <a style="color:#64748b;font-size:12px;cursor:pointer;">← 로그인으로 돌아가기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mockup">
+      <div class="mockup-header">PC 이메일 발송 완료</div>
+      <div class="mockup-body" style="padding:0;display:flex;justify-content:center;align-items:center;min-height:350px;background:#0f172a;">
+        <div style="width:360px;background:#1e293b;border-radius:12px;padding:32px;border:1px solid #334155;text-align:center;">
+          <div style="width:48px;height:48px;border-radius:50%;background:#334155;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;">
+            <span style="color:#4ade80;font-size:24px;">✉</span>
+          </div>
+          <div style="color:#fff;font-size:16px;font-weight:bold;margin-bottom:8px;">이메일을 확인하세요</div>
+          <div style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:20px;">
+            <span style="color:#3b82f6;">kim@agency.com</span>으로<br>
+            비밀번호 재설정 링크를 보냈습니다.
+          </div>
+          <div style="background:#0f172a;border-radius:8px;padding:12px;font-size:11px;color:#64748b;margin-bottom:16px;">
+            이메일이 오지 않나요? 스팸 폴더를 확인하거나<br>
+            <a style="color:#3b82f6;cursor:pointer;">다시 보내기</a>를 눌러주세요.
+          </div>
+          <a style="color:#64748b;font-size:12px;cursor:pointer;">← 로그인으로 돌아가기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📋 인증 플로우 요약</h3>
+  <div style="background:#1e293b;border-radius:8px;padding:16px;font-size:12px;color:#e2e8f0;line-height:2;">
+    <div><strong style="color:#3b82f6;">1. 회원가입</strong> → 이름, 이메일, 비밀번호, 소속(선택) 입력 → 가입 신청</div>
+    <div><strong style="color:#f59e0b;">2. 승인 대기</strong> → 로그인하면 대기 화면 표시 (접근 차단)</div>
+    <div><strong style="color:#4ade80;">3. 관리자 승인</strong> → 사용자 관리 페이지에서 승인 + 역할 부여</div>
+    <div><strong style="color:#4ade80;">4. 로그인</strong> → 역할에 맞는 화면 접근 가능</div>
+    <div><strong style="color:#64748b;">비번 찾기</strong> → 이메일로 재설정 링크 발송 (Supabase 기본 기능)</div>
+  </div>
+</div>

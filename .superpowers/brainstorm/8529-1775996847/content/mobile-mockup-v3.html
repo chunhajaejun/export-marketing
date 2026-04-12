@@ -1,0 +1,427 @@
+<h2>수출 마케팅 대시보드 — 모바일 목업 v2</h2>
+<p class="subtitle">텍스트 기본 | 시간 자동추정 | 오늘+어제 | 스와이프 카드</p>
+
+<div class="section">
+  <h3>📱 1. 대시보드 — 일별 스와이프 카드 (7일)</h3>
+  <div class="mockup">
+    <div class="mockup-header">모바일 대시보드 — 일별 카드 스와이프 (375px)</div>
+    <div class="mockup-body" style="padding:0;display:flex;justify-content:center;">
+      <div style="width:375px;background:#0f172a;padding:16px;border-left:1px solid #334155;border-right:1px solid #334155;overflow:hidden;">
+
+        <!-- 필터 -->
+        <div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap;">
+          <button class="mock-button" style="background:#3b82f6;color:#fff;font-size:9px;padding:4px 8px;">이번주</button>
+          <button class="mock-button" style="font-size:9px;padding:4px 8px;">이번달</button>
+          <button class="mock-button" style="font-size:9px;padding:4px 8px;">지난달</button>
+          <button class="mock-button" style="font-size:9px;padding:4px 8px;">기간 선택</button>
+        </div>
+
+        <!-- 스와이프 인디케이터 (7일) -->
+        <div style="display:flex;justify-content:center;gap:4px;margin-bottom:8px;">
+          <div style="width:20px;height:3px;background:#3b82f6;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+        </div>
+
+        <!-- 카드 스와이프 영역 -->
+        <div style="display:flex;gap:10px;">
+          <!-- 오늘 카드 (현재 보이는) -->
+          <div style="width:340px;flex-shrink:0;background:linear-gradient(135deg,#1e3a5f,#1e293b);border-radius:10px;padding:14px;border:1px solid #334155;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="color:#fff;font-size:14px;font-weight:bold;">오늘 04/12 토</span>
+              <span style="color:#3b82f6;font-size:10px;background:#0f172a;padding:2px 8px;border-radius:10px;">09:30 기준</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+              <div style="background:#0f172a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="color:#94a3b8;font-size:9px;">콜량</div>
+                <div style="color:#fff;font-size:22px;font-weight:bold;">18</div>
+                <div style="color:#4ade80;font-size:9px;">유효 12</div>
+              </div>
+              <div style="background:#0f172a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="color:#94a3b8;font-size:9px;">소진액</div>
+                <div style="color:#fff;font-size:22px;font-weight:bold;">₩420K</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
+              <div style="background:#0f172a;border-radius:4px;padding:6px;text-align:center;">
+                <div style="color:#fbbf24;font-size:8px;">폐차</div>
+                <div style="color:#fbbf24;font-size:13px;font-weight:bold;">2</div>
+              </div>
+              <div style="background:#0f172a;border-radius:4px;padding:6px;text-align:center;">
+                <div style="color:#60a5fa;font-size:8px;">부재</div>
+                <div style="color:#60a5fa;font-size:13px;font-weight:bold;">2</div>
+              </div>
+              <div style="background:#0f172a;border-radius:4px;padding:6px;text-align:center;">
+                <div style="color:#f87171;font-size:8px;">무효</div>
+                <div style="color:#f87171;font-size:13px;font-weight:bold;">2</div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-around;padding-top:8px;border-top:1px solid #334155;">
+              <div style="text-align:center;">
+                <div style="color:#94a3b8;font-size:8px;">CPA 전체</div>
+                <div style="color:#e2e8f0;font-size:14px;font-weight:bold;">₩23,333</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="color:#94a3b8;font-size:8px;">CPA 유효</div>
+                <div style="color:#4ade80;font-size:14px;font-weight:bold;">₩35,000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 어제 카드 (다음 — 살짝 보임) -->
+          <div style="width:340px;flex-shrink:0;background:#1e293b;border-radius:10px;padding:14px;border:1px solid #334155;opacity:0.5;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="color:#e2e8f0;font-size:14px;font-weight:bold;">어제 04/11 금</span>
+              <span style="color:#64748b;font-size:10px;">확정</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="background:#0f172a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="color:#94a3b8;font-size:9px;">콜량</div>
+                <div style="color:#fff;font-size:22px;font-weight:bold;">52</div>
+              </div>
+              <div style="background:#0f172a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="color:#94a3b8;font-size:9px;">소진액</div>
+                <div style="color:#fff;font-size:22px;font-weight:bold;">₩850K</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;color:#64748b;font-size:9px;margin-top:8px;margin-bottom:12px;">← 스와이프하여 7일간 일별 데이터 보기 →</div>
+
+        <!-- 차트 -->
+        <div style="background:#1e293b;border-radius:6px;padding:12px;margin-bottom:8px;">
+          <div style="color:#94a3b8;font-size:10px;margin-bottom:8px;">7일 콜량 추이</div>
+          <div style="display:flex;align-items:end;gap:3px;height:50px;">
+            <div style="flex:1;text-align:center;"><div style="color:#94a3b8;font-size:8px;">25</div><div style="background:#3b82f6;width:100%;height:20px;border-radius:2px 2px 0 0;opacity:0.7;"></div><div style="color:#64748b;font-size:8px;">일</div></div>
+            <div style="flex:1;text-align:center;"><div style="color:#e2e8f0;font-size:8px;">58</div><div style="background:#3b82f6;width:100%;height:46px;border-radius:2px 2px 0 0;"></div><div style="color:#64748b;font-size:8px;">월</div></div>
+            <div style="flex:1;text-align:center;"><div style="color:#e2e8f0;font-size:8px;">61</div><div style="background:#3b82f6;width:100%;height:48px;border-radius:2px 2px 0 0;"></div><div style="color:#64748b;font-size:8px;">화</div></div>
+            <div style="flex:1;text-align:center;"><div style="color:#e2e8f0;font-size:8px;">55</div><div style="background:#3b82f6;width:100%;height:44px;border-radius:2px 2px 0 0;"></div><div style="color:#64748b;font-size:8px;">수</div></div>
+            <div style="flex:1;text-align:center;"><div style="color:#e2e8f0;font-size:8px;">48</div><div style="background:#3b82f6;width:100%;height:38px;border-radius:2px 2px 0 0;"></div><div style="color:#64748b;font-size:8px;">목</div></div>
+            <div style="flex:1;text-align:center;"><div style="color:#e2e8f0;font-size:8px;">52</div><div style="background:#3b82f6;width:100%;height:42px;border-radius:2px 2px 0 0;"></div><div style="color:#64748b;font-size:8px;">금</div></div>
+            <div style="flex:1;text-align:center;"><div style="color:#3b82f6;font-size:8px;">18</div><div style="background:#3b82f6;width:100%;height:14px;border-radius:2px 2px 0 0;opacity:0.5;"></div><div style="color:#3b82f6;font-size:8px;">오늘</div></div>
+          </div>
+        </div>
+
+        <div style="background:#1e293b;border-radius:6px;padding:12px;">
+          <div style="color:#94a3b8;font-size:10px;margin-bottom:8px;">매체별 비중</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:55px;height:55px;border-radius:50%;background:conic-gradient(#3b82f6 0% 37%, #f97316 37% 65%, #8b5cf6 65% 88%, #34d399 88% 100%);flex-shrink:0;"></div>
+            <div style="font-size:10px;color:#e2e8f0;line-height:1.8;">
+              <div><span style="display:inline-block;width:6px;height:6px;background:#3b82f6;border-radius:50%;margin-right:3px;"></span>네이버 37% (117)</div>
+              <div><span style="display:inline-block;width:6px;height:6px;background:#f97316;border-radius:50%;margin-right:3px;"></span>당근 28% (89)</div>
+              <div><span style="display:inline-block;width:6px;height:6px;background:#8b5cf6;border-radius:50%;margin-right:3px;"></span>메타 24% (76)</div>
+              <div><span style="display:inline-block;width:6px;height:6px;background:#34d399;border-radius:50%;margin-right:3px;"></span>구글 11% (35)</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📱 6. 매체별 — 스와이프 카드</h3>
+  <div class="mockup">
+    <div class="mockup-header">매체별 뷰 — 좌우 스와이프 (375px)</div>
+    <div class="mockup-body" style="padding:0;display:flex;justify-content:center;">
+      <div style="width:375px;background:#0f172a;padding:16px;border-left:1px solid #334155;border-right:1px solid #334155;overflow:hidden;">
+
+        <!-- 스와이프 인디케이터 -->
+        <div style="display:flex;justify-content:center;gap:4px;margin-bottom:10px;">
+          <div style="width:20px;height:3px;background:#3b82f6;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+          <div style="width:8px;height:3px;background:#334155;border-radius:2px;"></div>
+        </div>
+
+        <!-- 현재 카드 + 다음 카드 살짝 보이기 -->
+        <div style="display:flex;gap:10px;margin-left:0;">
+          <!-- 네이버 카드 (현재) -->
+          <div style="width:320px;flex-shrink:0;background:linear-gradient(135deg,#1e3a5f,#1e293b);border-radius:10px;padding:16px;border:1px solid #334155;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
+              <span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:50%;"></span>
+              <span style="color:#fff;font-size:14px;font-weight:bold;">네이버</span>
+              <span style="color:#64748b;font-size:10px;margin-left:auto;">04/12 기준</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+              <div style="background:#0f172a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="color:#94a3b8;font-size:9px;">콜량</div>
+                <div style="color:#fff;font-size:22px;font-weight:bold;">5</div>
+                <div style="color:#4ade80;font-size:9px;">유효 3 · 중고 2</div>
+              </div>
+              <div style="background:#0f172a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="color:#94a3b8;font-size:9px;">소진액</div>
+                <div style="color:#fff;font-size:22px;font-weight:bold;">₩120K</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+              <div style="background:#0f172a;border-radius:4px;padding:8px;text-align:center;">
+                <div style="color:#fbbf24;font-size:8px;">폐차</div>
+                <div style="color:#fbbf24;font-size:14px;font-weight:bold;">1</div>
+              </div>
+              <div style="background:#0f172a;border-radius:4px;padding:8px;text-align:center;">
+                <div style="color:#60a5fa;font-size:8px;">부재</div>
+                <div style="color:#60a5fa;font-size:14px;font-weight:bold;">2</div>
+              </div>
+              <div style="background:#0f172a;border-radius:4px;padding:8px;text-align:center;">
+                <div style="color:#f87171;font-size:8px;">무효</div>
+                <div style="color:#f87171;font-size:14px;font-weight:bold;">1</div>
+              </div>
+            </div>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid #334155;display:flex;justify-content:space-around;">
+              <div style="text-align:center;">
+                <div style="color:#94a3b8;font-size:8px;">CPA 전체</div>
+                <div style="color:#e2e8f0;font-size:13px;font-weight:bold;">₩24,000</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="color:#94a3b8;font-size:8px;">CPA 유효</div>
+                <div style="color:#4ade80;font-size:13px;font-weight:bold;">₩40,000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 당근 카드 (다음 — 살짝 보임) -->
+          <div style="width:320px;flex-shrink:0;background:#1e293b;border-radius:10px;padding:16px;border:1px solid #334155;opacity:0.6;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
+              <span style="display:inline-block;width:10px;height:10px;background:#f97316;border-radius:50%;"></span>
+              <span style="color:#fff;font-size:14px;font-weight:bold;">당근</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="background:#0f172a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="color:#94a3b8;font-size:9px;">콜량</div>
+                <div style="color:#fff;font-size:22px;font-weight:bold;">6</div>
+              </div>
+              <div style="background:#0f172a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="color:#94a3b8;font-size:9px;">소진액</div>
+                <div style="color:#fff;font-size:22px;font-weight:bold;">₩100K</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;color:#64748b;font-size:9px;margin-top:8px;">← 스와이프하여 다른 매체 보기 →</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📱 2. 문의 관리 — 텍스트 기본 + 시간 자동추정</h3>
+  <div class="mockup">
+    <div class="mockup-header">모바일 문의 관리 (375px) — 오전 10시 접속</div>
+    <div class="mockup-body" style="padding:0;display:flex;justify-content:center;">
+      <div style="width:375px;background:#0f172a;padding:16px;border-left:1px solid #334155;border-right:1px solid #334155;">
+
+        <div style="display:flex;gap:0;margin-bottom:10px;">
+          <div style="padding:8px 16px;background:#3b82f6;color:#fff;border-radius:6px 0 0 0;font-size:12px;font-weight:bold;flex:1;text-align:center;">문의 관리</div>
+          <div style="padding:8px 16px;background:#334155;color:#94a3b8;border-radius:0 6px 0 0;font-size:12px;flex:1;text-align:center;">광고비 관리</div>
+        </div>
+
+        <!-- 자동 추정 배너 -->
+        <div style="background:#1e3a5f;border:1px solid #3b82f6;border-radius:6px;padding:8px 12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="color:#3b82f6;font-size:10px;font-weight:bold;">오전 보고 모드</div>
+            <div style="color:#94a3b8;font-size:9px;">전일 합계 + 당일 00:00~10:00</div>
+          </div>
+          <button class="mock-button" style="background:#334155;color:#94a3b8;font-size:9px;padding:3px 8px;">변경</button>
+        </div>
+
+        <!-- 모드 토글 (텍스트가 기본) -->
+        <div style="display:flex;gap:4px;margin-bottom:10px;">
+          <button class="mock-button" style="background:#334155;color:#94a3b8;font-size:10px;padding:4px 8px;flex:1;">직접 입력</button>
+          <button class="mock-button" style="background:#3b82f6;color:#fff;font-size:10px;padding:4px 8px;flex:1;">텍스트 작성</button>
+        </div>
+
+        <!-- 텍스트 입력 -->
+        <div style="background:#1e293b;border-radius:6px;padding:12px;margin-bottom:8px;">
+          <textarea class="mock-input" style="width:100%;height:110px;font-size:10px;padding:6px;line-height:1.4;resize:none;font-family:monospace;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:4px;">2026 / 4 / 12 일요일
+00시~18시 기준
+
+투바이어 유입
+-전화: 0건
+-카톡: 2건
+-문자: 2건
+
+총4건 (내수2) (폐차1) (부재1)
+ㅡㅡㅡㅡㅡㅡㅡㅡ
+당근
+총 1건 (부재1)</textarea>
+          <button class="mock-button" style="background:#8b5cf6;color:#fff;width:100%;padding:6px;font-size:10px;margin-top:6px;">파싱하기</button>
+        </div>
+
+        <!-- 파싱 결과 -->
+        <div style="background:#1e293b;border-radius:6px;padding:10px;margin-bottom:8px;">
+          <div style="color:#fff;font-size:11px;font-weight:bold;margin-bottom:6px;">파싱 결과</div>
+          <div style="background:#0f172a;border-radius:4px;padding:8px;font-size:10px;margin-bottom:4px;">
+            <div style="color:#94a3b8;font-size:9px;">04/12 | 네이버</div>
+            <div style="display:flex;gap:6px;color:#e2e8f0;flex-wrap:wrap;margin-top:2px;">
+              <span style="color:#4ade80;">수출1</span>
+              <span style="color:#4ade80;">중고매입2</span>
+              <span style="color:#fbbf24;">폐차1</span>
+              <span style="color:#60a5fa;">부재1</span>
+            </div>
+          </div>
+          <div style="background:#0f172a;border-radius:4px;padding:8px;font-size:10px;">
+            <div style="color:#94a3b8;font-size:9px;">04/12 | 당근</div>
+            <div style="display:flex;gap:6px;color:#e2e8f0;margin-top:2px;">
+              <span style="color:#60a5fa;">부재1</span>
+            </div>
+          </div>
+        </div>
+        <button class="mock-button" style="background:#3b82f6;color:#fff;width:100%;padding:8px;font-size:11px;margin-bottom:14px;">저장</button>
+
+        <!-- 이력 -->
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:6px;">04/12 입력 이력</div>
+        <div style="background:#1e293b;border-radius:6px;overflow:hidden;margin-bottom:10px;">
+          <div style="overflow-x:auto;">
+            <table style="width:100%;min-width:300px;border-collapse:collapse;font-size:9px;text-align:center;">
+              <thead>
+                <tr style="background:#0f172a;color:#64748b;font-size:8px;">
+                  <th style="padding:6px 4px;">매체</th><th style="padding:6px 3px;">수출</th><th style="padding:6px 3px;">중고</th>
+                  <th style="padding:6px 3px;">폐차</th><th style="padding:6px 3px;color:#60a5fa;">부재</th><th style="padding:6px 3px;">무효</th><th style="padding:6px 3px;">계</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="color:#e2e8f0;border-top:1px solid #334155;">
+                  <td style="padding:5px 4px;"><span style="display:inline-block;width:4px;height:4px;background:#3b82f6;border-radius:50%;margin-right:2px;"></span>네이버</td>
+                  <td style="padding:5px;color:#4ade80;">3</td><td style="padding:5px;color:#4ade80;">2</td><td style="padding:5px;color:#fbbf24;">1</td>
+                  <td style="padding:5px;color:#60a5fa;">2</td><td style="padding:5px;color:#f87171;">1</td><td style="padding:5px;font-weight:bold;">9</td>
+                </tr>
+                <tr style="color:#e2e8f0;border-top:1px solid #334155;background:#1a2332;">
+                  <td style="padding:5px 4px;"><span style="display:inline-block;width:4px;height:4px;background:#f97316;border-radius:50%;margin-right:2px;"></span>당근</td>
+                  <td style="padding:5px;color:#4ade80;">0</td><td style="padding:5px;color:#4ade80;">0</td><td style="padding:5px;color:#fbbf24;">0</td>
+                  <td style="padding:5px;color:#60a5fa;">1</td><td style="padding:5px;color:#f87171;">0</td><td style="padding:5px;font-weight:bold;">1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 7. 부재 — 스와이프 액션 -->
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:6px;"><span style="color:#60a5fa;">부재 미처리</span> — 3건</div>
+        <div style="background:#1e293b;border-radius:6px;overflow:hidden;margin-bottom:4px;">
+          <!-- 일반 상태 -->
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #334155;">
+            <span style="color:#e2e8f0;font-size:11px;"><span style="display:inline-block;width:5px;height:5px;background:#3b82f6;border-radius:50%;margin-right:3px;"></span>네이버 #1</span>
+            <span style="color:#64748b;font-size:9px;">← 스와이프</span>
+          </div>
+          <!-- 스와이프된 상태 시뮬레이션 -->
+          <div style="position:relative;border-bottom:1px solid #334155;">
+            <div style="display:flex;position:relative;">
+              <div style="display:flex;align-items:center;padding:10px 12px;flex:1;background:#1e293b;transform:translateX(-40px);">
+                <span style="color:#e2e8f0;font-size:11px;"><span style="display:inline-block;width:5px;height:5px;background:#3b82f6;border-radius:50%;margin-right:3px;"></span>네이버 #2</span>
+              </div>
+              <div style="display:flex;gap:0;position:absolute;right:0;top:0;height:100%;">
+                <div style="background:#4ade80;color:#000;padding:0 10px;display:flex;align-items:center;font-size:9px;font-weight:bold;">수출</div>
+                <div style="background:#fbbf24;color:#000;padding:0 10px;display:flex;align-items:center;font-size:9px;font-weight:bold;">폐차</div>
+                <div style="background:#f87171;color:#fff;padding:0 10px;display:flex;align-items:center;font-size:9px;font-weight:bold;">무효</div>
+              </div>
+            </div>
+          </div>
+          <!-- 일반 상태 -->
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#1a2332;">
+            <span style="color:#e2e8f0;font-size:11px;"><span style="display:inline-block;width:5px;height:5px;background:#f97316;border-radius:50%;margin-right:3px;"></span>당근 #1</span>
+            <span style="color:#64748b;font-size:9px;">← 스와이프</span>
+          </div>
+        </div>
+        <div style="font-size:9px;color:#64748b;">← 왼쪽 스와이프로 상태 변경 | 변경 이력 자동 기록</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📱 3. 광고비 관리 — 텍스트 기본 + 4.반복 입력</h3>
+  <div class="mockup">
+    <div class="mockup-header">모바일 광고비 관리 (375px)</div>
+    <div class="mockup-body" style="padding:0;display:flex;justify-content:center;">
+      <div style="width:375px;background:#0f172a;padding:16px;border-left:1px solid #334155;border-right:1px solid #334155;">
+
+        <div style="display:flex;gap:0;margin-bottom:10px;">
+          <div style="padding:8px 16px;background:#334155;color:#94a3b8;border-radius:6px 0 0 0;font-size:12px;flex:1;text-align:center;">문의 관리</div>
+          <div style="padding:8px 16px;background:#3b82f6;color:#fff;border-radius:0 6px 0 0;font-size:12px;font-weight:bold;flex:1;text-align:center;">광고비 관리</div>
+        </div>
+
+        <!-- 4. 반복 입력 버튼 -->
+        <div style="background:#1e3a5f;border:1px solid #3b82f6;border-radius:6px;padding:8px 12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="color:#3b82f6;font-size:10px;font-weight:bold;">어제와 같은 매체로 입력</div>
+            <div style="color:#94a3b8;font-size:9px;">네이버, 당근 (04/11 입력 기준)</div>
+          </div>
+          <button class="mock-button" style="background:#3b82f6;color:#fff;font-size:9px;padding:4px 10px;">사용</button>
+        </div>
+
+        <div style="display:flex;gap:4px;margin-bottom:10px;">
+          <button class="mock-button" style="background:#334155;color:#94a3b8;font-size:10px;padding:4px 8px;flex:1;">직접 입력</button>
+          <button class="mock-button" style="background:#3b82f6;color:#fff;font-size:10px;padding:4px 8px;flex:1;">텍스트 작성</button>
+        </div>
+
+        <div style="background:#1e293b;border-radius:6px;padding:12px;margin-bottom:8px;">
+          <textarea class="mock-input" style="width:100%;height:60px;font-size:10px;padding:6px;line-height:1.4;resize:none;font-family:monospace;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:4px;">4/12 일요일
+
+네이버 소진액 : 120,000 원
+당근 소진액 : 100,000 원</textarea>
+          <button class="mock-button" style="background:#8b5cf6;color:#fff;width:100%;padding:6px;font-size:10px;margin-top:6px;">파싱하기</button>
+        </div>
+
+        <div style="background:#1e293b;border-radius:6px;padding:10px;margin-bottom:8px;">
+          <div style="color:#fff;font-size:11px;font-weight:bold;margin-bottom:6px;">파싱 결과</div>
+          <div style="background:#0f172a;border-radius:4px;padding:8px;font-size:10px;">
+            <div style="color:#94a3b8;font-size:9px;margin-bottom:4px;">04/12</div>
+            <div style="display:flex;justify-content:space-between;color:#e2e8f0;margin-bottom:2px;">
+              <span><span style="display:inline-block;width:4px;height:4px;background:#3b82f6;border-radius:50%;margin-right:2px;"></span>네이버</span>
+              <span style="font-weight:bold;">₩120,000</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;color:#e2e8f0;">
+              <span><span style="display:inline-block;width:4px;height:4px;background:#f97316;border-radius:50%;margin-right:2px;"></span>당근</span>
+              <span style="font-weight:bold;">₩100,000</span>
+            </div>
+          </div>
+        </div>
+        <button class="mock-button" style="background:#3b82f6;color:#fff;width:100%;padding:8px;font-size:11px;margin-bottom:14px;">저장</button>
+
+        <!-- 이력 -->
+        <div style="color:#94a3b8;font-size:10px;margin-bottom:6px;">04/12 입력 이력</div>
+        <div style="background:#1e293b;border-radius:6px;overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #334155;color:#e2e8f0;font-size:10px;">
+            <span><span style="display:inline-block;width:4px;height:4px;background:#3b82f6;border-radius:50%;margin-right:2px;"></span>네이버</span>
+            <span>₩120,000</span>
+            <span style="color:#4ade80;">CPA ₩24K</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #334155;background:#1a2332;color:#e2e8f0;font-size:10px;">
+            <span><span style="display:inline-block;width:4px;height:4px;background:#f97316;border-radius:50%;margin-right:2px;"></span>당근</span>
+            <span>₩100,000</span>
+            <span style="color:#4ade80;">CPA ₩20K</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 10px;color:#64748b;font-size:10px;">
+            <span><span style="display:inline-block;width:4px;height:4px;background:#8b5cf6;border-radius:50%;margin-right:2px;"></span>메타</span>
+            <span>미입력</span>
+            <span>—</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📱 적용된 기능 요약</h3>
+  <div style="background:#1e293b;border-radius:8px;padding:16px;font-size:12px;color:#e2e8f0;line-height:2;">
+    <div><strong style="color:#4ade80;">1.</strong> 텍스트 작성이 기본 모드 (직접 입력은 서브, 선택 가능)</div>
+    <div><strong style="color:#4ade80;">2.</strong> 시간 자동추정 — 08~13시: 오전 보고 / 17~23시: 퇴근 보고</div>
+    <div><strong style="color:#4ade80;">3.</strong> 소진액 텍스트 파싱 지원</div>
+    <div><strong style="color:#4ade80;">4.</strong> "어제와 같은 매체로 입력" 반복 기능</div>
+    <div><strong style="color:#4ade80;">5.</strong> 대시보드 기본값 오늘+어제 카드 (아래 7일 테이블)</div>
+    <div><strong style="color:#4ade80;">6.</strong> 매체별 좌우 스와이프 카드</div>
+    <div><strong style="color:#4ade80;">7.</strong> 부재 처리 스와이프 액션 (← 밀어서 상태 변경)</div>
+  </div>
+</div>

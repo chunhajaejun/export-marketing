@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라이드 2 — 회원가입/로그인</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: 1280px 720px; margin: 0; }
+  body { width:1280px; height:720px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#0f172a; color:#e2e8f0; overflow:hidden; }
+  .slide { width:1280px; height:720px; display:flex; flex-direction:column; padding:40px 60px; position:relative; }
+  .slide-header { display:flex; align-items:center; gap:16px; margin-bottom:24px; }
+  .slide-header img { height:32px; }
+  .slide-header .num { background:#3b82f6; color:#fff; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+  .slide-header .label { font-size:24px; font-weight:700; color:#fff; }
+  .content { display:flex; gap:40px; flex:1; }
+  .mockup-area { flex:1; display:flex; gap:24px; align-items:flex-start; }
+  .mock-panel { background:#1e293b; border-radius:12px; border:1px solid #334155; overflow:hidden; }
+  .mock-panel-header { background:#0f172a; padding:8px 16px; font-size:11px; color:#64748b; border-bottom:1px solid #334155; }
+  .mock-panel-body { padding:0; display:flex; justify-content:center; align-items:center; }
+  .login-card { width:320px; background:#1e293b; border-radius:12px; padding:28px; border:1px solid #334155; }
+  .login-title { text-align:center; margin-bottom:20px; }
+  .login-title h3 { color:#fff; font-size:16px; font-weight:700; margin-bottom:4px; }
+  .login-title p { color:#64748b; font-size:11px; }
+  .form-group { margin-bottom:14px; }
+  .form-label { color:#94a3b8; font-size:11px; margin-bottom:4px; }
+  .form-input { width:100%; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:10px; color:#e2e8f0; font-size:12px; outline:none; }
+  .btn-primary { width:100%; background:#3b82f6; color:#fff; border:none; border-radius:6px; padding:11px; font-size:13px; font-weight:700; cursor:pointer; margin-bottom:14px; }
+  .form-links { display:flex; justify-content:space-between; font-size:11px; }
+  .form-links a { cursor:pointer; }
+  .form-links .signup { color:#3b82f6; }
+  .form-links .forgot { color:#64748b; }
+  .signup-card { width:320px; background:#1e293b; border-radius:12px; padding:24px; border:1px solid #334155; }
+  .signup-card h3 { color:#fff; font-size:16px; font-weight:700; text-align:center; margin-bottom:4px; }
+  .signup-card .sub { color:#64748b; font-size:11px; text-align:center; margin-bottom:16px; }
+  .email-row { display:flex; gap:4px; align-items:center; }
+  .email-row input { flex:1; }
+  .email-row span { color:#94a3b8; font-size:12px; }
+  .email-row select { width:110px; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:8px; color:#e2e8f0; font-size:11px; }
+  .desc-area { flex:0 0 320px; display:flex; flex-direction:column; gap:16px; }
+  .desc-card { background:#1e293b; border:1px solid #334155; border-radius:10px; padding:20px; }
+  .desc-card h4 { color:#3b82f6; font-size:14px; font-weight:700; margin-bottom:10px; }
+  .desc-card ul { list-style:none; padding:0; }
+  .desc-card ul li { color:#94a3b8; font-size:12px; line-height:1.8; padding-left:14px; position:relative; }
+  .desc-card ul li::before { content:''; position:absolute; left:0; top:8px; width:6px; height:6px; border-radius:50%; background:#3b82f6; }
+  .mobile-frame { width:180px; background:#0f172a; border-radius:16px; border:2px solid #334155; padding:12px; }
+  .mobile-frame .m-title { text-align:center; color:#fff; font-size:12px; font-weight:700; margin-bottom:3px; }
+  .mobile-frame .m-sub { text-align:center; color:#64748b; font-size:9px; margin-bottom:12px; }
+  .mobile-frame .m-input { width:100%; background:#1e293b; border:1px solid #334155; border-radius:4px; padding:8px; color:#e2e8f0; font-size:10px; margin-bottom:8px; }
+  .mobile-frame .m-btn { width:100%; background:#3b82f6; color:#fff; border:none; border-radius:4px; padding:8px; font-size:11px; font-weight:700; }
+  .page-num { position:absolute; bottom:28px; right:40px; font-size:12px; color:#475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-header">
+    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <span class="num">02</span>
+    <span class="label">회원가입 / 로그인</span>
+  </div>
+  <div class="content">
+    <div class="mockup-area">
+      <!-- PC 로그인 -->
+      <div>
+        <div style="color:#64748b;font-size:10px;margin-bottom:6px;text-align:center;">PC 로그인</div>
+        <div style="background:#0f172a;border-radius:12px;border:1px solid #334155;padding:32px 24px;display:flex;justify-content:center;align-items:center;min-height:340px;">
+          <div class="login-card">
+            <div class="login-title">
+              <h3>(주)지엔에이 수출 마케팅</h3>
+              <p>광고 성과 분석 대시보드</p>
+            </div>
+            <div class="form-group">
+              <div class="form-label">이메일</div>
+              <input class="form-input" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+              <div class="form-label">비밀번호</div>
+              <input class="form-input" type="password" placeholder="--------">
+            </div>
+            <button class="btn-primary">로그인</button>
+            <div class="form-links">
+              <a class="signup">회원가입</a>
+              <a class="forgot">비밀번호 찾기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PC 회원가입 -->
+      <div>
+        <div style="color:#64748b;font-size:10px;margin-bottom:6px;text-align:center;">PC 회원가입</div>
+        <div style="background:#0f172a;border-radius:12px;border:1px solid #334155;padding:20px;min-height:340px;">
+          <div class="signup-card">
+            <h3>회원가입</h3>
+            <div class="sub">관리자 승인 후 이용 가능합니다</div>
+            <div class="form-group">
+              <div class="form-label">이름</div>
+              <input class="form-input" placeholder="홍길동" value="홍길동">
+            </div>
+            <div class="form-group">
+              <div class="form-label">이메일 <span style="color:#64748b;font-size:9px;">(영문만)</span></div>
+              <div class="email-row">
+                <input class="form-input" style="flex:1;" placeholder="username" value="hong">
+                <span>@</span>
+                <select class="form-input" style="width:100px;padding:8px;">
+                  <option>naver.com</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-label">전화번호</div>
+              <input class="form-input" placeholder="010-0000-0000" value="010-1234-5678">
+            </div>
+            <div class="form-group">
+              <div class="form-label">비밀번호</div>
+              <input class="form-input" type="password" placeholder="8자 이상">
+            </div>
+            <button class="btn-primary">가입 신청</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 모바일 -->
+      <div>
+        <div style="color:#64748b;font-size:10px;margin-bottom:6px;text-align:center;">모바일</div>
+        <div class="mobile-frame">
+          <div class="m-title">(주)지엔에이</div>
+          <div class="m-sub">수출 마케팅 대시보드</div>
+          <input class="m-input" placeholder="이메일">
+          <input class="m-input" type="password" placeholder="비밀번호">
+          <button class="m-btn">로그인</button>
+          <div style="display:flex;justify-content:space-between;font-size:9px;margin-top:8px;">
+            <span style="color:#3b82f6;">회원가입</span>
+            <span style="color:#64748b;">비밀번호 찾기</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-area">
+      <div class="desc-card">
+        <h4>인증 시스템 안내</h4>
+        <ul>
+          <li>이메일 + 비밀번호 기반 인증</li>
+          <li>회원가입 후 관리자 승인 필요</li>
+          <li>이메일 도메인 선택식 (naver, gmail 등)</li>
+          <li>전화번호 자동 포맷 (숫자만 입력)</li>
+          <li>소속 입력 (선택 사항)</li>
+          <li>비밀번호 찾기 지원</li>
+        </ul>
+      </div>
+      <div class="desc-card" style="background:#0f172a;">
+        <h4 style="color:#f97316;">승인 프로세스</h4>
+        <ul>
+          <li style="color:#e2e8f0;">가입 신청 <span style="color:#64748b;">&#8594;</span> 관리자 승인 <span style="color:#64748b;">&#8594;</span> 로그인 가능</li>
+          <li>미승인 상태에서는 로그인 차단</li>
+          <li>관리자가 역할(권한)을 직접 지정</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">2 / 9</div>
+</div>
+</body>
+</html>
