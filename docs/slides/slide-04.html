@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라이드 4 — 대시보드 모바일</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: 1280px 720px; margin: 0; }
+  body { width:1280px; height:720px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#0f172a; color:#e2e8f0; overflow:hidden; }
+  .slide { width:1280px; height:720px; display:flex; flex-direction:column; padding:32px 48px; position:relative; }
+  .slide-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; background:#ffffff; margin:-32px -48px 20px -48px; padding:12px 48px; border-bottom:1px solid #e2e8f0; }
+  .slide-header img { height:28px; }
+  .slide-header .num { background:#3b82f6; color:#fff; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+  .slide-header .label { font-size:22px; font-weight:700; color:#1e293b; }
+  .content { display:flex; gap:40px; flex:1; align-items:flex-start; }
+  .phones { display:flex; gap:24px; }
+  .phone-frame { width:280px; background:#0f172a; border-radius:24px; border:3px solid #334155; padding:16px; box-shadow:0 8px 32px rgba(0,0,0,0.4); }
+  .phone-label { text-align:center; color:#64748b; font-size:10px; margin-bottom:8px; }
+  .m-filter { display:flex; gap:4px; margin-bottom:8px; }
+  .m-fbtn { background:#1e293b; border:1px solid #334155; color:#94a3b8; font-size:8px; padding:3px 7px; border-radius:4px; }
+  .m-fbtn.active { background:#3b82f6; color:#fff; border-color:#3b82f6; }
+  .swipe-ind { display:flex; justify-content:center; gap:3px; margin-bottom:6px; }
+  .swipe-dot { height:3px; border-radius:2px; }
+  .swipe-dot.active { width:18px; background:#3b82f6; }
+  .swipe-dot.inactive { width:7px; background:#334155; }
+  .day-card { background:linear-gradient(135deg,#1e3a5f,#1e293b); border-radius:10px; padding:12px; border:1px solid #334155; margin-bottom:8px; }
+  .card-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .day-name { color:#fff; font-size:13px; font-weight:700; }
+  .day-badge { color:#3b82f6; font-size:9px; background:#0f172a; padding:2px 6px; border-radius:8px; }
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px; }
+  .stat-box { background:#0f172a; border-radius:6px; padding:8px; text-align:center; }
+  .stat-label { color:#94a3b8; font-size:8px; }
+  .stat-val { color:#fff; font-size:18px; font-weight:700; }
+  .stat-sub { font-size:8px; }
+  .stat-row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-bottom:6px; }
+  .stat-mini { background:#0f172a; border-radius:4px; padding:4px; text-align:center; }
+  .mini-label { font-size:7px; }
+  .mini-val { font-size:12px; font-weight:700; }
+  .cpa-row { display:flex; justify-content:space-around; padding-top:6px; border-top:1px solid #334155; }
+  .cpa-item { text-align:center; }
+  .cpa-label { color:#94a3b8; font-size:7px; }
+  .cpa-val { font-size:12px; font-weight:700; }
+  .peek-card { background:#1e293b; border-radius:10px; padding:10px; border:1px solid #334155; opacity:0.4; }
+  .swipe-hint { text-align:center; color:#64748b; font-size:8px; margin-top:4px; margin-bottom:8px; }
+  .m-chart { background:#1e293b; border-radius:6px; padding:10px; margin-bottom:6px; }
+  .m-chart-label { color:#94a3b8; font-size:9px; margin-bottom:6px; }
+  .m-bar-wrap { display:flex; align-items:end; gap:2px; height:40px; }
+  .m-bar-col { flex:1; text-align:center; }
+  .m-bar-v { font-size:7px; color:#94a3b8; margin-bottom:1px; }
+  .m-bar { background:#3b82f6; width:100%; border-radius:1px 1px 0 0; }
+  .m-bar-d { font-size:7px; color:#64748b; margin-top:1px; }
+  .m-donut-wrap { display:flex; align-items:center; gap:8px; }
+  .m-donut { width:44px; height:44px; border-radius:50%; background:conic-gradient(#3b82f6 0% 37%, #f97316 37% 65%, #8b5cf6 65% 88%, #34d399 88% 100%); flex-shrink:0; }
+  .m-legend { font-size:9px; line-height:1.7; }
+  .m-legend-dot { display:inline-block; width:5px; height:5px; border-radius:50%; margin-right:2px; }
+  .desc-side { flex:1; display:flex; flex-direction:column; gap:16px; padding:20px; background:#f8fafc; border-left:2px solid #e2e8f0; border-radius:0 10px 10px 0; }
+  .desc-area-title { font-size:18px; font-weight:800; color:#1e293b; margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid #3b82f6; }
+  .desc-card { background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:20px; }
+  .desc-card h4 { color:#3b82f6; font-size:17px; font-weight:700; margin-bottom:10px; }
+  .desc-card p { color:#334155; font-size:16px; line-height:1.7; }
+  .hl { color:#16a34a; font-weight:700; }
+  .page-num { position:absolute; bottom:20px; right:40px; font-size:12px; color:#475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-header">
+    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <span class="num">04</span>
+    <span class="label">대시보드 -- 모바일 뷰</span>
+  </div>
+  <div class="content">
+    <div class="phones">
+      <div>
+        <div class="phone-label">일별 스와이프 카드</div>
+        <div class="phone-frame">
+          <div class="m-filter">
+            <span class="m-fbtn active">이번주</span><span class="m-fbtn">이번달</span><span class="m-fbtn">지난달</span><span class="m-fbtn">기간 선택</span>
+          </div>
+          <div class="swipe-ind">
+            <div class="swipe-dot active"></div><div class="swipe-dot inactive"></div><div class="swipe-dot inactive"></div><div class="swipe-dot inactive"></div><div class="swipe-dot inactive"></div><div class="swipe-dot inactive"></div><div class="swipe-dot inactive"></div>
+          </div>
+          <div class="day-card">
+            <div class="card-top"><span class="day-name">오늘 04/12 토</span><span class="day-badge">09:30 기준</span></div>
+            <div class="stat-grid">
+              <div class="stat-box"><div class="stat-label">콜량</div><div class="stat-val">18</div><div class="stat-sub" style="color:#4ade80;">유효 12</div></div>
+              <div class="stat-box"><div class="stat-label">소진액</div><div class="stat-val">&#8361;420K</div></div>
+            </div>
+            <div class="stat-row3">
+              <div class="stat-mini"><div class="mini-label" style="color:#fbbf24;">폐차</div><div class="mini-val" style="color:#fbbf24;">2</div></div>
+              <div class="stat-mini"><div class="mini-label" style="color:#60a5fa;">부재</div><div class="mini-val" style="color:#60a5fa;">2</div></div>
+              <div class="stat-mini"><div class="mini-label" style="color:#f87171;">무효</div><div class="mini-val" style="color:#f87171;">2</div></div>
+            </div>
+            <div class="cpa-row">
+              <div class="cpa-item"><div class="cpa-label">CPA 전체</div><div class="cpa-val" style="color:#e2e8f0;">&#8361;23,333</div></div>
+              <div class="cpa-item"><div class="cpa-label">CPA 유효</div><div class="cpa-val" style="color:#4ade80;">&#8361;35,000</div></div>
+            </div>
+          </div>
+          <div class="peek-card">
+            <div class="card-top"><span class="day-name" style="color:#e2e8f0;">어제 04/11 금</span><span style="color:#64748b;font-size:9px;">확정</span></div>
+            <div class="stat-grid">
+              <div class="stat-box"><div class="stat-label">콜량</div><div class="stat-val">52</div></div>
+              <div class="stat-box"><div class="stat-label">소진액</div><div class="stat-val">&#8361;850K</div></div>
+            </div>
+          </div>
+          <div class="swipe-hint">&#8592; 스와이프하여 7일간 데이터 보기 &#8594;</div>
+          <div class="m-chart">
+            <div class="m-chart-label">7일 콜량 추이</div>
+            <div class="m-bar-wrap">
+              <div class="m-bar-col"><div class="m-bar-v">25</div><div class="m-bar" style="height:16px;opacity:0.7;"></div><div class="m-bar-d">일</div></div>
+              <div class="m-bar-col"><div class="m-bar-v">58</div><div class="m-bar" style="height:38px;"></div><div class="m-bar-d">월</div></div>
+              <div class="m-bar-col"><div class="m-bar-v">61</div><div class="m-bar" style="height:40px;"></div><div class="m-bar-d">화</div></div>
+              <div class="m-bar-col"><div class="m-bar-v">55</div><div class="m-bar" style="height:36px;"></div><div class="m-bar-d">수</div></div>
+              <div class="m-bar-col"><div class="m-bar-v">48</div><div class="m-bar" style="height:31px;"></div><div class="m-bar-d">목</div></div>
+              <div class="m-bar-col"><div class="m-bar-v">52</div><div class="m-bar" style="height:34px;"></div><div class="m-bar-d">금</div></div>
+              <div class="m-bar-col"><div class="m-bar-v" style="color:#3b82f6;">18</div><div class="m-bar" style="height:12px;opacity:0.5;"></div><div class="m-bar-d" style="color:#3b82f6;">오늘</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="phone-label">매체별 스와이프 카드</div>
+        <div class="phone-frame">
+          <div class="swipe-ind">
+            <div class="swipe-dot active"></div><div class="swipe-dot inactive"></div><div class="swipe-dot inactive"></div><div class="swipe-dot inactive"></div>
+          </div>
+          <div class="day-card">
+            <div class="card-top">
+              <span class="day-name" style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:8px;height:8px;background:#3b82f6;border-radius:50%;"></span>네이버</span>
+              <span style="color:#64748b;font-size:9px;">04/12 기준</span>
+            </div>
+            <div class="stat-grid">
+              <div class="stat-box"><div class="stat-label">콜량</div><div class="stat-val">5</div><div class="stat-sub" style="color:#4ade80;">유효 3</div></div>
+              <div class="stat-box"><div class="stat-label">소진액</div><div class="stat-val">&#8361;120K</div></div>
+            </div>
+            <div class="cpa-row">
+              <div class="cpa-item"><div class="cpa-label">CPA 전체</div><div class="cpa-val" style="color:#e2e8f0;">&#8361;24,000</div></div>
+              <div class="cpa-item"><div class="cpa-label">CPA 유효</div><div class="cpa-val" style="color:#4ade80;">&#8361;40,000</div></div>
+            </div>
+          </div>
+          <div class="peek-card">
+            <div class="card-top">
+              <span class="day-name" style="display:flex;align-items:center;gap:5px;color:#e2e8f0;"><span style="display:inline-block;width:8px;height:8px;background:#f97316;border-radius:50%;"></span>당근</span>
+            </div>
+            <div class="stat-grid">
+              <div class="stat-box"><div class="stat-label">콜량</div><div class="stat-val">6</div></div>
+              <div class="stat-box"><div class="stat-label">소진액</div><div class="stat-val">&#8361;100K</div></div>
+            </div>
+          </div>
+          <div class="swipe-hint">&#8592; 매체 카드 좌우 스와이프 &#8594;</div>
+          <div class="m-chart">
+            <div class="m-chart-label">매체별 비중</div>
+            <div class="m-donut-wrap">
+              <div class="m-donut"></div>
+              <div class="m-legend">
+                <div><span class="m-legend-dot" style="background:#3b82f6;"></span>네이버 37% (117)</div>
+                <div><span class="m-legend-dot" style="background:#f97316;"></span>당근 28% (89)</div>
+                <div><span class="m-legend-dot" style="background:#8b5cf6;"></span>메타 24% (76)</div>
+                <div><span class="m-legend-dot" style="background:#34d399;"></span>구글 11% (35)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="desc-side">
+      <div class="desc-area-title">기능 설명</div>
+      <div class="desc-card">
+        <h4>모바일 스와이프 UX</h4>
+        <p>모바일에서는 테이블 대신 <span class="hl">스와이프 카드 방식</span>으로 7일간 일별 데이터를 확인합니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#f97316;">매체별 전환</h4>
+        <p>매체별 뷰에서 네이버/당근/메타/구글 각 매체의 현황을 카드로 스와이프하며 비교합니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#4ade80;">핵심 지표 한눈에</h4>
+        <p>각 카드에 <span class="hl">콜량, 소진액, CPA</span>를 압축 표시하여 이동 중에도 빠르게 확인합니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">4 / 9</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라이드 6 — 광고비 관리</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: 1280px 720px; margin: 0; }
+  body { width:1280px; height:720px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#0f172a; color:#e2e8f0; overflow:hidden; }
+  .slide { width:1280px; height:720px; display:flex; flex-direction:column; padding:32px 48px; position:relative; }
+  .slide-header { display:flex; align-items:center; gap:16px; margin-bottom:16px; background:#ffffff; margin:-32px -48px 16px -48px; padding:12px 48px; border-bottom:1px solid #e2e8f0; }
+  .slide-header img { height:28px; }
+  .slide-header .num { background:#f97316; color:#fff; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+  .slide-header .label { font-size:22px; font-weight:700; color:#1e293b; }
+  .content { display:flex; gap:20px; flex:1; min-height:0; }
+  .two-col { display:flex; gap:16px; flex:1; }
+  .mockup-panel { flex:1; background:#1e293b; border-radius:10px; border:1px solid #334155; overflow:hidden; display:flex; flex-direction:column; }
+  .mock-head { background:#0f172a; padding:6px 16px; font-size:10px; color:#64748b; border-bottom:1px solid #334155; }
+  .mock-body { padding:14px; flex:1; }
+  .tab-row { display:flex; gap:0; margin-bottom:12px; }
+  .tab { padding:6px 14px; font-size:11px; border-radius:6px 6px 0 0; }
+  .tab.active { background:#3b82f6; color:#fff; font-weight:700; }
+  .tab.inactive { background:#334155; color:#94a3b8; }
+  .mode-toggle { display:flex; gap:4px; margin-bottom:10px; }
+  .mode-btn { flex:1; padding:4px 8px; font-size:10px; border-radius:4px; text-align:center; border:1px solid #334155; }
+  .mode-btn.active { background:#3b82f6; color:#fff; border-color:#3b82f6; }
+  .mode-btn.inactive { background:#334155; color:#94a3b8; }
+  .text-area-mock { width:100%; height:80px; background:#0f172a; border:1px solid #334155; border-radius:4px; padding:8px; font-size:10px; font-family:monospace; color:#e2e8f0; line-height:1.5; resize:none; }
+  .parse-btn { background:#8b5cf6; color:#fff; width:100%; padding:5px; font-size:10px; font-weight:700; border:none; border-radius:4px; margin-top:6px; cursor:pointer; }
+  .save-btn { background:#3b82f6; color:#fff; width:100%; padding:6px; font-size:11px; font-weight:700; border:none; border-radius:4px; margin-top:8px; cursor:pointer; }
+  .parse-result { background:#1e293b; border-radius:4px; padding:8px; margin-top:8px; }
+  .parse-item { background:#0f172a; border-radius:3px; padding:6px; font-size:10px; margin-bottom:4px; display:flex; justify-content:space-between; }
+  .dot { display:inline-block; width:5px; height:5px; border-radius:50%; margin-right:3px; }
+  .input-form { display:flex; gap:8px; margin-bottom:10px; }
+  .form-col { flex:1; }
+  .form-col label { color:#94a3b8; font-size:9px; display:block; margin-bottom:3px; }
+  .form-col input, .form-col select { width:100%; background:#0f172a; border:1px solid #334155; border-radius:4px; padding:5px; color:#e2e8f0; font-size:10px; }
+  .spend-box { background:#1e293b; border-radius:4px; padding:12px; }
+  .spend-box .spend-label { color:#fff; font-size:11px; font-weight:700; margin-bottom:8px; }
+  .spend-input-row { display:flex; align-items:center; gap:6px; margin-bottom:12px; }
+  .spend-input-row span { color:#e2e8f0; font-size:11px; }
+  .spend-input-row input { width:100px; background:#0f172a; border:1px solid #334155; border-radius:4px; padding:5px; color:#e2e8f0; font-size:11px; text-align:right; }
+  .auto-calc { padding-top:10px; border-top:1px solid #334155; }
+  .auto-calc .ac-label { color:#94a3b8; font-size:9px; margin-bottom:6px; }
+  .ac-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  .ac-box { background:#0f172a; border-radius:4px; padding:8px; text-align:center; }
+  .ac-box .ac-title { color:#94a3b8; font-size:8px; }
+  .ac-box .ac-val { font-size:12px; font-weight:700; }
+  /* 이력 테이블 */
+  .history-table { width:100%; border-collapse:collapse; font-size:10px; text-align:center; }
+  .history-table thead { background:#0f172a; }
+  .history-table th { padding:6px; color:#64748b; font-size:9px; }
+  .history-table td { padding:6px; border-top:1px solid #334155; }
+  .history-table tr:nth-child(odd) { background:#1a2332; }
+  .summary-box { background:#1e293b; border-radius:4px; padding:8px; margin-top:8px; }
+  .summary-row { display:flex; justify-content:space-between; font-size:11px; }
+  .c-green { color:#4ade80; }
+  .desc-side { width:260px; display:flex; flex-direction:column; gap:12px; background:#f8fafc; border-left:2px solid #e2e8f0; padding:16px; border-radius:0 10px 10px 0; }
+  .desc-area-title { font-size:18px; font-weight:800; color:#1e293b; margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid #3b82f6; }
+  .desc-card { background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
+  .desc-card h4 { font-size:17px; font-weight:700; margin-bottom:8px; }
+  .desc-card p { color:#334155; font-size:16px; line-height:1.6; }
+  .desc-card .hl { color:#16a34a; font-weight:700; }
+  .page-num { position:absolute; bottom:20px; right:40px; font-size:12px; color:#475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-header">
+    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <span class="num">06</span>
+    <span class="label">광고비 관리</span>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <!-- 텍스트 입력 -->
+      <div class="mockup-panel">
+        <div class="mock-head">텍스트 붙여넣기 모드</div>
+        <div class="mock-body">
+          <div class="tab-row">
+            <div class="tab inactive">문의 관리</div>
+            <div class="tab active">광고비 관리</div>
+          </div>
+          <div class="mode-toggle">
+            <div class="mode-btn inactive">직접 입력</div>
+            <div class="mode-btn active">텍스트 작성</div>
+          </div>
+          <div style="color:#fff;font-size:11px;font-weight:700;margin-bottom:6px;">소진액 텍스트 붙여넣기 / 직접 작성</div>
+          <textarea class="text-area-mock" readonly>4/10 금요일
+
+네이버 소진액 : 96,432 원
+당근 소진액 : 100,254 원</textarea>
+          <button class="parse-btn">파싱하기</button>
+          <div class="parse-result">
+            <div style="color:#94a3b8;font-size:9px;margin-bottom:4px;">파싱 결과 미리보기</div>
+            <div class="parse-item">
+              <span><span class="dot" style="background:#3b82f6;"></span>네이버</span>
+              <span style="font-weight:700;">&#8361;96,432</span>
+            </div>
+            <div class="parse-item">
+              <span><span class="dot" style="background:#f97316;"></span>당근</span>
+              <span style="font-weight:700;">&#8361;100,254</span>
+            </div>
+          </div>
+          <button class="save-btn">저장</button>
+
+          <!-- 우측 이력 -->
+          <div style="margin-top:12px;color:#94a3b8;font-size:10px;margin-bottom:4px;">04/12 입력 이력</div>
+          <div style="background:#1e293b;border-radius:4px;overflow:hidden;">
+            <table class="history-table">
+              <thead><tr><th style="text-align:left;padding-left:8px;">매체</th><th>소진액</th><th>콜량</th><th>단가(전체)</th><th>단가(유효)</th></tr></thead>
+              <tbody>
+                <tr><td style="text-align:left;padding-left:8px;"><span class="dot" style="background:#3b82f6;"></span>네이버</td><td>&#8361;120,000</td><td>9</td><td>&#8361;13,333</td><td class="c-green">&#8361;24,000</td></tr>
+                <tr><td style="text-align:left;padding-left:8px;"><span class="dot" style="background:#f97316;"></span>당근</td><td>&#8361;100,000</td><td>7</td><td>&#8361;14,286</td><td class="c-green">&#8361;20,000</td></tr>
+                <tr><td style="text-align:left;padding-left:8px;"><span class="dot" style="background:#8b5cf6;"></span>메타</td><td>&#8361;130,000</td><td>5</td><td>&#8361;26,000</td><td class="c-green">&#8361;43,333</td></tr>
+                <tr><td style="text-align:left;padding-left:8px;color:#64748b;"><span class="dot" style="background:#34d399;"></span>구글</td><td style="color:#64748b;">미입력</td><td>--</td><td>--</td><td>--</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="summary-box">
+            <div class="summary-row"><span style="color:#94a3b8;">오늘 총 소진액</span><span style="font-weight:700;">&#8361;350,000</span></div>
+            <div class="summary-row" style="margin-top:4px;"><span style="color:#94a3b8;font-size:10px;">평균 단가 (유효)</span><span class="c-green" style="font-weight:700;">&#8361;29,111</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 직접 입력 -->
+      <div class="mockup-panel">
+        <div class="mock-head">직접 입력 모드</div>
+        <div class="mock-body">
+          <div class="tab-row">
+            <div class="tab inactive">문의 관리</div>
+            <div class="tab active">광고비 관리</div>
+          </div>
+          <div class="mode-toggle">
+            <div class="mode-btn active">직접 입력</div>
+            <div class="mode-btn inactive">텍스트 작성</div>
+          </div>
+          <div class="input-form">
+            <div class="form-col"><label>날짜</label><input value="2026-04-10"></div>
+            <div class="form-col"><label>매체</label><select><option>네이버-홈페이지</option></select></div>
+          </div>
+          <div class="spend-box">
+            <div class="spend-label">소진액</div>
+            <div class="spend-input-row">
+              <span>&#8361;</span>
+              <input value="96,432">
+            </div>
+            <div class="auto-calc">
+              <div class="ac-label">자동 계산</div>
+              <div class="ac-grid">
+                <div class="ac-box">
+                  <div class="ac-title">단가 (전체)</div>
+                  <div class="ac-val" style="color:#e2e8f0;">&#8361;16,072</div>
+                </div>
+                <div class="ac-box">
+                  <div class="ac-title">단가 (유효)</div>
+                  <div class="ac-val c-green">&#8361;24,108</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="save-btn">저장</button>
+
+          <div style="margin-top:20px;background:#0f172a;border-radius:8px;padding:16px;">
+            <div style="color:#f97316;font-size:13px;font-weight:700;margin-bottom:8px;">자동 단가 계산</div>
+            <div style="color:#94a3b8;font-size:11px;line-height:1.7;">
+              소진액 입력 시 해당 날짜의 콜량을 기반으로<br>
+              <span style="color:#e2e8f0;font-weight:700;">단가(전체) = 소진액 / 전체 콜량</span><br>
+              <span class="c-green" style="font-weight:700;">단가(유효) = 소진액 / 유효 콜량</span><br>
+              이 자동 계산되어 대시보드에 반영됩니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-side">
+      <div class="desc-area-title">기능 설명</div>
+      <div class="desc-card">
+        <h4 style="color:#f97316;">이 화면에서</h4>
+        <p>각 매체의 일별 <span class="hl">광고 소진액을 입력</span>합니다. 텍스트 붙여넣기 또는 직접 입력 모드를 선택할 수 있습니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#3b82f6;">이력 확인</h4>
+        <p>입력된 소진액은 즉시 우측 이력에 반영되며, 콜량 대비 <span class="hl">단가(전체/유효)가 자동 계산</span>됩니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#8b5cf6;">미입력 알림</h4>
+        <p>아직 소진액이 입력되지 않은 매체는 <span style="color:#64748b;font-weight:700;">"미입력"</span>으로 표시되어 누락을 방지합니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">6 / 9</div>
+</div>
+</body>
+</html>

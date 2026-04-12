@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라이드 7 — 부재 처리</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: 1280px 720px; margin: 0; }
+  body { width:1280px; height:720px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#0f172a; color:#e2e8f0; overflow:hidden; }
+  .slide { width:1280px; height:720px; display:flex; flex-direction:column; padding:32px 48px; position:relative; }
+  .slide-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; background:#ffffff; margin:-32px -48px 20px -48px; padding:12px 48px; border-bottom:1px solid #e2e8f0; }
+  .slide-header img { height:28px; }
+  .slide-header .num { background:#60a5fa; color:#fff; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+  .slide-header .label { font-size:22px; font-weight:700; color:#1e293b; }
+  .content { display:flex; gap:24px; flex:1; min-height:0; }
+  .main-area { flex:1; display:flex; flex-direction:column; gap:16px; }
+  .section-label { color:#94a3b8; font-size:11px; margin-bottom:6px; }
+  .section-label .badge { color:#60a5fa; font-weight:700; }
+  /* 이력 테이블 */
+  .history-panel { background:#1e293b; border-radius:8px; overflow:hidden; }
+  .history-panel .panel-title { padding:10px 16px; color:#fff; font-size:13px; font-weight:700; border-bottom:1px solid #334155; display:flex; justify-content:space-between; align-items:center; }
+  table { width:100%; border-collapse:collapse; font-size:11px; text-align:center; }
+  thead tr { background:#0f172a; }
+  thead th { padding:8px 6px; color:#64748b; font-size:10px; }
+  tbody td { padding:7px 6px; border-top:1px solid #334155; }
+  tbody tr:nth-child(even) { background:#1a2332; }
+  .dot { display:inline-block; width:5px; height:5px; border-radius:50%; margin-right:3px; }
+  .c-green { color:#4ade80; }
+  .c-yellow { color:#fbbf24; }
+  .c-blue { color:#60a5fa; }
+  .c-red { color:#f87171; }
+  .total-row { background:#0f172a !important; color:#fff; font-weight:700; border-top:2px solid #3b82f6 !important; }
+  /* 부재 테이블 */
+  .absence-panel { background:#1e293b; border-radius:8px; overflow:hidden; flex:1; }
+  .absence-panel .panel-title { padding:10px 16px; border-bottom:1px solid #334155; display:flex; justify-content:space-between; align-items:center; }
+  .absence-panel .panel-title .title-text { color:#60a5fa; font-size:13px; font-weight:700; }
+  .absence-panel .panel-title .count { color:#fff; font-size:12px; background:#60a5fa; padding:2px 8px; border-radius:10px; }
+  .status-select { background:#0f172a; border:1px solid #334155; border-radius:4px; padding:3px 6px; color:#e2e8f0; font-size:10px; }
+  .note { font-size:10px; color:#64748b; padding:8px 16px; border-top:1px solid #334155; }
+  /* 흐름도 */
+  .flow-section { display:flex; gap:12px; align-items:center; background:#1e293b; border-radius:8px; padding:16px; }
+  .flow-step { background:#0f172a; border-radius:8px; padding:12px 16px; text-align:center; flex:1; }
+  .flow-step .step-num { color:#3b82f6; font-size:10px; font-weight:700; margin-bottom:4px; }
+  .flow-step .step-title { color:#fff; font-size:12px; font-weight:700; margin-bottom:4px; }
+  .flow-step .step-desc { color:#94a3b8; font-size:10px; }
+  .flow-arrow { color:#334155; font-size:20px; }
+  /* desc */
+  .desc-side { width:280px; display:flex; flex-direction:column; gap:12px; background:#f8fafc; border-left:2px solid #e2e8f0; padding:16px; border-radius:0 10px 10px 0; }
+  .desc-area-title { font-size:18px; font-weight:800; color:#1e293b; margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid #3b82f6; }
+  .desc-card { background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
+  .desc-card h4 { font-size:17px; font-weight:700; margin-bottom:8px; }
+  .desc-card p { color:#334155; font-size:16px; line-height:1.6; }
+  .desc-card .hl { color:#16a34a; font-weight:700; }
+  .page-num { position:absolute; bottom:20px; right:40px; font-size:12px; color:#475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-header">
+    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <span class="num">07</span>
+    <span class="label">부재 처리</span>
+  </div>
+  <div class="content">
+    <div class="main-area">
+      <!-- 이력 테이블 -->
+      <div class="history-panel">
+        <div class="panel-title">
+          <span>04/12 입력 이력</span>
+          <span style="color:#64748b;font-size:10px;">문의 관리 탭 우측 영역</span>
+        </div>
+        <table>
+          <thead><tr>
+            <th style="text-align:left;padding-left:12px;">매체</th><th>수출</th><th>중고</th><th>폐차</th><th class="c-blue">부재</th><th>무효</th><th>합계</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#3b82f6;"></span>네이버</td><td class="c-green">3</td><td class="c-green">2</td><td class="c-yellow">1</td><td class="c-blue">2</td><td class="c-red">1</td><td style="font-weight:700;">9</td></tr>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#f97316;"></span>당근</td><td class="c-green">4</td><td class="c-green">1</td><td class="c-yellow">1</td><td class="c-blue">1</td><td class="c-red">0</td><td style="font-weight:700;">7</td></tr>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#8b5cf6;"></span>메타</td><td class="c-green">2</td><td class="c-green">1</td><td class="c-yellow">0</td><td class="c-blue">1</td><td class="c-red">1</td><td style="font-weight:700;">5</td></tr>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#34d399;"></span>구글</td><td class="c-green">1</td><td class="c-green">0</td><td class="c-yellow">0</td><td class="c-blue">1</td><td class="c-red">0</td><td style="font-weight:700;">2</td></tr>
+            <tr class="total-row"><td style="text-align:left;padding-left:12px;">합계</td><td class="c-green">10</td><td class="c-green">4</td><td class="c-yellow">2</td><td class="c-blue">5</td><td class="c-red">2</td><td>23</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 부재 미처리 -->
+      <div class="absence-panel">
+        <div class="panel-title">
+          <span class="title-text">부재 미처리</span>
+          <span class="count">5건</span>
+        </div>
+        <table>
+          <thead><tr>
+            <th style="text-align:left;padding-left:12px;">매체</th><th>입력시간</th><th>상태변경</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#3b82f6;"></span>네이버 #1</td><td style="color:#64748b;">09:30</td><td><select class="status-select"><option>부재</option><option>수출가능</option><option>중고매입</option><option>폐차</option><option>무효</option></select></td></tr>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#3b82f6;"></span>네이버 #2</td><td style="color:#64748b;">09:30</td><td><select class="status-select"><option>부재</option><option>수출가능</option><option>중고매입</option><option>폐차</option><option>무효</option></select></td></tr>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#f97316;"></span>당근 #1</td><td style="color:#64748b;">09:30</td><td><select class="status-select"><option>부재</option><option>수출가능</option><option>중고매입</option><option>폐차</option><option>무효</option></select></td></tr>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#8b5cf6;"></span>메타 #1</td><td style="color:#64748b;">09:30</td><td><select class="status-select"><option>부재</option><option>수출가능</option><option>중고매입</option><option>폐차</option><option>무효</option></select></td></tr>
+            <tr><td style="text-align:left;padding-left:12px;"><span class="dot" style="background:#34d399;"></span>구글 #1</td><td style="color:#64748b;">09:30</td><td><select class="status-select"><option>부재</option><option>수출가능</option><option>중고매입</option><option>폐차</option><option>무효</option></select></td></tr>
+          </tbody>
+        </table>
+        <div class="note">* 상태 변경 시 이력 자동 기록 (변경자 / 시간 / 이전 &#8594; 이후)</div>
+      </div>
+
+      <!-- 흐름도 -->
+      <div class="flow-section">
+        <div class="flow-step">
+          <div class="step-num">STEP 1</div>
+          <div class="step-title">부재 입력</div>
+          <div class="step-desc">콜량 보고 시 부재 건수 입력</div>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <div class="step-num">STEP 2</div>
+          <div class="step-title">재통화 확인</div>
+          <div class="step-desc">부재 고객 재통화 후 결과 확인</div>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <div class="step-num">STEP 3</div>
+          <div class="step-title" style="color:#4ade80;">상태 변경</div>
+          <div class="step-desc">수출/중고/폐차/무효로 전환</div>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <div class="step-num">STEP 4</div>
+          <div class="step-title" style="color:#3b82f6;">통계 반영</div>
+          <div class="step-desc">대시보드에 실시간 반영</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-side">
+      <div class="desc-area-title">기능 설명</div>
+      <div class="desc-card">
+        <h4 style="color:#60a5fa;">이 화면에서</h4>
+        <p>문의 관리 탭 우측에 <span class="hl">부재 미처리 목록</span>이 표시됩니다. 재통화 후 결과를 드롭다운으로 선택하면 즉시 대시보드 통계에 반영됩니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#fbbf24;">왜 부재 관리가 필요한가?</h4>
+        <p>부재 건은 아직 유효/무효가 결정되지 않은 상태입니다. <span class="hl">정확한 전환율과 CPA 산출</span>을 위해 부재 건의 최종 상태를 추적 관리합니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#8b5cf6;">변경 이력 추적</h4>
+        <p>상태가 변경될 때마다 <span class="hl">누가, 언제, 어떤 값에서 어떤 값으로</span> 변경했는지 자동 기록되어 투명한 데이터 관리가 가능합니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">7 / 9</div>
+</div>
+</body>
+</html>

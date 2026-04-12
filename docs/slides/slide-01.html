@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라이드 1 — 서비스 소개</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: 1280px 720px; margin: 0; }
+  body { width:1280px; height:720px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#ffffff; color:#1e293b; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+  .slide { width:1280px; height:720px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; background:#ffffff; }
+  .header-bar { position:absolute; top:0; left:0; right:0; background:#ffffff; padding:12px 48px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #e2e8f0; }
+  .header-bar .header-company { font-size:16px; font-weight:700; color:#1e293b; }
+  .header-bar .header-company span { color:#3b82f6; }
+  .logo-img { width:180px; margin-bottom:28px; }
+  .title { font-size:42px; font-weight:800; color:#1e293b; margin-bottom:12px; letter-spacing:-1px; }
+  .subtitle { font-size:22px; color:#64748b; margin-bottom:48px; }
+  .features { display:flex; gap:24px; }
+  .feature-card { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:28px 24px; width:200px; text-align:center; }
+  .feature-icon { font-size:28px; margin-bottom:12px; }
+  .feature-title { font-size:17px; font-weight:700; color:#1e293b; margin-bottom:6px; }
+  .feature-desc { font-size:16px; color:#64748b; line-height:1.5; }
+  .footer { position:absolute; bottom:28px; font-size:12px; color:#94a3b8; }
+  .accent-blue { color:#3b82f6; }
+  .accent-green { color:#16a34a; }
+  .accent-orange { color:#ea580c; }
+  .accent-purple { color:#7c3aed; }
+  .page-num { position:absolute; bottom:28px; right:40px; font-size:12px; color:#94a3b8; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="header-bar"><span class="header-company"><span>(주)</span>지엔에이</span></div>
+  <img class="logo-img" src="../../public/logo_gna.png" alt="(주)지엔에이 로고">
+  <div class="title">수출 마케팅 대시보드</div>
+  <div class="subtitle">(주)지엔에이 — 광고 성과 분석 & 문의 관리 시스템</div>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon accent-blue">&#x1F4CA;</div>
+      <div class="feature-title">대시보드</div>
+      <div class="feature-desc">일별/매체별 콜량, 소진액, 단가를 한눈에 확인</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon accent-green">&#x270F;&#xFE0F;</div>
+      <div class="feature-title">문의 관리</div>
+      <div class="feature-desc">텍스트 붙여넣기 or 직접 입력으로 간편 보고</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon accent-orange">&#x1F4B0;</div>
+      <div class="feature-title">광고비 관리</div>
+      <div class="feature-desc">매체별 소진액 입력 및 자동 단가 계산</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon accent-purple">&#x1F464;</div>
+      <div class="feature-title">사용자 관리</div>
+      <div class="feature-desc">역할별 권한 분리 및 승인 관리</div>
+    </div>
+  </div>
+  <div class="footer">(주)지엔에이 | No.1 오토모빌리티 | 투고글로벌 / 투바이어 수출 마케팅 대행</div>
+  <div class="page-num">1 / 9</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라이드 8 — 사용자 관리</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: 1280px 720px; margin: 0; }
+  body { width:1280px; height:720px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#0f172a; color:#e2e8f0; overflow:hidden; }
+  .slide { width:1280px; height:720px; display:flex; flex-direction:column; padding:32px 48px; position:relative; }
+  .slide-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; background:#ffffff; margin:-32px -48px 20px -48px; padding:12px 48px; border-bottom:1px solid #e2e8f0; }
+  .slide-header img { height:28px; }
+  .slide-header .num { background:#8b5cf6; color:#fff; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+  .slide-header .label { font-size:22px; font-weight:700; color:#1e293b; }
+  .slide-header .badge { font-size:11px; color:#92400e; background:#fef3c7; padding:4px 10px; border-radius:12px; margin-left:8px; }
+  .content { display:flex; gap:24px; flex:1; min-height:0; }
+  .main-area { flex:1; display:flex; flex-direction:column; gap:16px; }
+  .user-table-wrap { background:#1e293b; border-radius:10px; overflow:hidden; border:1px solid #334155; }
+  .user-table-head { padding:12px 20px; border-bottom:1px solid #334155; display:flex; justify-content:space-between; align-items:center; }
+  .user-table-head .title { color:#fff; font-size:14px; font-weight:700; }
+  .user-table-head .info { color:#64748b; font-size:11px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  thead tr { background:#0f172a; }
+  thead th { padding:10px 12px; color:#94a3b8; font-size:11px; font-weight:600; }
+  tbody td { padding:10px 12px; border-top:1px solid #334155; }
+  tbody tr:nth-child(even) { background:#1a2332; }
+  .email { color:#2563eb; font-weight:700; }
+  .status-ok { color:#16a34a; font-weight:700; }
+  .status-wait { color:#dc2626; font-weight:700; }
+  .role-badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:10px; font-weight:700; }
+  .role-admin { background:rgba(22,163,74,0.15); color:#16a34a; }
+  .role-call { background:rgba(37,99,235,0.15); color:#2563eb; }
+  .role-spend { background:rgba(234,88,12,0.15); color:#ea580c; }
+  .role-viewer { background:rgba(148,163,184,0.15); color:#94a3b8; }
+  .btn-approve { background:#16a34a; color:#fff; border:none; border-radius:4px; padding:4px 14px; font-size:11px; font-weight:700; cursor:pointer; }
+  .btn-change { background:#334155; color:#e2e8f0; border:none; border-radius:4px; padding:4px 14px; font-size:11px; cursor:pointer; }
+  .role-select { background:#0f172a; border:1px solid #334155; border-radius:4px; padding:4px 8px; color:#e2e8f0; font-size:11px; }
+  /* 승인 프로세스 시각화 */
+  .process-flow { display:flex; gap:0; background:#1e293b; border-radius:10px; padding:20px; border:1px solid #334155; align-items:center; }
+  .pf-step { flex:1; text-align:center; }
+  .pf-step .pf-icon { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin:0 auto 8px; }
+  .pf-step .pf-title { color:#fff; font-size:12px; font-weight:700; margin-bottom:4px; }
+  .pf-step .pf-desc { color:#94a3b8; font-size:10px; }
+  .pf-arrow { color:#334155; font-size:24px; flex-shrink:0; padding:0 8px; }
+  .desc-side { width:280px; display:flex; flex-direction:column; gap:12px; background:#f8fafc; border-left:2px solid #e2e8f0; padding:16px; border-radius:0 10px 10px 0; }
+  .desc-area-title { font-size:18px; font-weight:800; color:#1e293b; margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid #3b82f6; }
+  .desc-card { background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
+  .desc-card h4 { font-size:17px; font-weight:700; margin-bottom:8px; }
+  .desc-card p { color:#334155; font-size:16px; line-height:1.6; }
+  .desc-card .hl { color:#16a34a; font-weight:700; }
+  .page-num { position:absolute; bottom:20px; right:40px; font-size:12px; color:#475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-header">
+    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <span class="num">08</span>
+    <span class="label">사용자 관리</span>
+    <span class="badge">관리자 전용</span>
+  </div>
+  <div class="content">
+    <div class="main-area">
+      <div class="user-table-wrap">
+        <div class="user-table-head">
+          <span class="title">사용자 목록</span>
+          <span class="info">관리자만 접근 가능</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left;">이메일</th>
+              <th>가입일</th>
+              <th>상태</th>
+              <th>역할</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="email" style="text-align:left;">admin@gna.com</td>
+              <td style="text-align:center;">04/01</td>
+              <td style="text-align:center;"><span class="status-ok">승인</span></td>
+              <td style="text-align:center;"><span class="role-badge role-admin">관리자</span></td>
+              <td style="text-align:center;color:#64748b;">--</td>
+            </tr>
+            <tr>
+              <td class="email" style="text-align:left;">kim@agency.com</td>
+              <td style="text-align:center;">04/10</td>
+              <td style="text-align:center;"><span class="status-wait">대기</span></td>
+              <td style="text-align:center;"><select class="role-select"><option>콜량보고</option><option>소진액보고</option><option>뷰어</option><option>관리자</option></select></td>
+              <td style="text-align:center;"><button class="btn-approve">승인</button></td>
+            </tr>
+            <tr>
+              <td class="email" style="text-align:left;">park@gna.com</td>
+              <td style="text-align:center;">04/05</td>
+              <td style="text-align:center;"><span class="status-ok">승인</span></td>
+              <td style="text-align:center;"><span class="role-badge role-spend">소진액보고</span></td>
+              <td style="text-align:center;"><button class="btn-change">변경</button></td>
+            </tr>
+            <tr>
+              <td class="email" style="text-align:left;">lee@gna.com</td>
+              <td style="text-align:center;">04/03</td>
+              <td style="text-align:center;"><span class="status-ok">승인</span></td>
+              <td style="text-align:center;"><span class="role-badge role-viewer">뷰어</span></td>
+              <td style="text-align:center;"><button class="btn-change">변경</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 승인 프로세스 -->
+      <div class="process-flow">
+        <div class="pf-step">
+          <div class="pf-icon" style="background:rgba(59,130,246,0.2);color:#3b82f6;">1</div>
+          <div class="pf-title">가입 신청</div>
+          <div class="pf-desc">사용자가 회원가입 폼 제출</div>
+        </div>
+        <div class="pf-arrow">&#8594;</div>
+        <div class="pf-step">
+          <div class="pf-icon" style="background:rgba(251,191,36,0.2);color:#fbbf24;">2</div>
+          <div class="pf-title">대기 상태</div>
+          <div class="pf-desc">관리자 승인 전까지 로그인 차단</div>
+        </div>
+        <div class="pf-arrow">&#8594;</div>
+        <div class="pf-step">
+          <div class="pf-icon" style="background:rgba(139,92,246,0.2);color:#8b5cf6;">3</div>
+          <div class="pf-title">역할 지정</div>
+          <div class="pf-desc">관리자가 권한 역할 선택</div>
+        </div>
+        <div class="pf-arrow">&#8594;</div>
+        <div class="pf-step">
+          <div class="pf-icon" style="background:rgba(22,163,74,0.2);color:#16a34a;">4</div>
+          <div class="pf-title">승인 완료</div>
+          <div class="pf-desc">해당 역할로 시스템 접근 가능</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-side">
+      <div class="desc-area-title">기능 설명</div>
+      <div class="desc-card">
+        <h4 style="color:#8b5cf6;">이 화면에서</h4>
+        <p>관리자는 가입 신청을 <span class="hl">승인/거부</span>하고, 각 사용자의 역할을 지정하거나 변경합니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#3b82f6;">역할 종류</h4>
+        <p>
+          <span style="color:#2563eb;font-weight:700;">콜량보고</span> -- 문의 입력 권한<br>
+          <span style="color:#ea580c;font-weight:700;">소진액보고</span> -- 광고비 입력 권한<br>
+          <span style="color:#94a3b8;font-weight:700;">뷰어</span> -- 대시보드 조회만<br>
+          <span style="color:#16a34a;font-weight:700;">관리자</span> -- 전체 접근
+        </p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#f97316;">보안</h4>
+        <p>Supabase RLS(Row Level Security) 기반으로 역할에 따라 <span class="hl">DB 레벨에서 접근 제어</span>가 적용됩니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">8 / 9</div>
+</div>
+</body>
+</html>

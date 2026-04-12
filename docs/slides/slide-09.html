@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라이드 9 — 역할별 권한 안내</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: 1280px 720px; margin: 0; }
+  body { width:1280px; height:720px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#0f172a; color:#e2e8f0; overflow:hidden; }
+  .slide { width:1280px; height:720px; display:flex; flex-direction:column; padding:32px 48px; position:relative; }
+  .slide-header { display:flex; align-items:center; gap:16px; margin-bottom:24px; background:#ffffff; margin:-32px -48px 24px -48px; padding:12px 48px; border-bottom:1px solid #e2e8f0; }
+  .slide-header img { height:28px; }
+  .slide-header .num { background:#4ade80; color:#0f172a; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+  .slide-header .label { font-size:22px; font-weight:700; color:#1e293b; }
+  .content { display:flex; gap:32px; flex:1; min-height:0; }
+  .matrix-area { flex:1; }
+  .perm-table-wrap { background:#1e293b; border-radius:10px; overflow:hidden; border:1px solid #334155; }
+  .perm-table-head { padding:12px 20px; border-bottom:1px solid #334155; }
+  .perm-table-head .title { color:#fff; font-size:14px; font-weight:700; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  thead tr { background:#0f172a; }
+  thead th { padding:12px 10px; color:#94a3b8; font-size:11px; font-weight:600; text-align:center; }
+  thead th:first-child { text-align:left; padding-left:20px; }
+  tbody td { padding:10px; border-top:1px solid #334155; text-align:center; }
+  tbody td:first-child { text-align:left; padding-left:20px; color:#e2e8f0; font-weight:600; }
+  tbody tr:nth-child(even) { background:#1a2332; }
+  .check { color:#4ade80; font-size:16px; font-weight:700; }
+  .cross { color:#334155; font-size:14px; }
+  .role-col { font-weight:700; }
+  .rc-admin { color:#16a34a; }
+  .rc-call { color:#2563eb; }
+  .rc-spend { color:#ea580c; }
+  .rc-viewer { color:#94a3b8; }
+  /* 역할 카드 */
+  .role-cards { display:flex; gap:12px; margin-top:20px; }
+  .role-card { flex:1; border-radius:10px; padding:20px; border:1px solid #334155; text-align:center; }
+  .role-card .rc-icon { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin:0 auto 10px; }
+  .role-card .rc-title { font-size:14px; font-weight:700; margin-bottom:6px; }
+  .role-card .rc-desc { font-size:16px; color:#94a3b8; line-height:1.6; }
+  /* 기술 스택 */
+  .tech-area { width:260px; display:flex; flex-direction:column; gap:12px; background:#f8fafc; border-left:2px solid #e2e8f0; padding:16px; border-radius:0 10px 10px 0; }
+  .desc-area-title { font-size:18px; font-weight:800; color:#1e293b; margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid #3b82f6; }
+  .tech-card { background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
+  .tech-card h4 { font-size:17px; font-weight:700; margin-bottom:8px; }
+  .tech-card p { color:#334155; font-size:16px; line-height:1.5; }
+  .tech-item { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #e2e8f0; }
+  .tech-item:last-child { border-bottom:none; }
+  .tech-item .ti-label { color:#64748b; font-size:16px; }
+  .tech-item .ti-val { color:#1e293b; font-size:16px; font-weight:600; }
+  .footer-bar { position:absolute; bottom:0; left:0; right:0; background:#1e293b; border-top:1px solid #334155; padding:14px 48px; display:flex; justify-content:space-between; align-items:center; }
+  .footer-bar .fl { display:flex; align-items:center; gap:12px; }
+  .footer-bar img { height:24px; }
+  .footer-bar .company { color:#94a3b8; font-size:12px; }
+  .footer-bar .right { color:#64748b; font-size:11px; }
+  .page-num { position:absolute; bottom:56px; right:40px; font-size:12px; color:#475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-header">
+    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <span class="num">09</span>
+    <span class="label">역할별 권한 안내</span>
+  </div>
+  <div class="content">
+    <div class="matrix-area">
+      <div class="perm-table-wrap">
+        <div class="perm-table-head">
+          <span class="title">기능별 권한 매트릭스</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>기능</th>
+              <th class="rc-admin">관리자</th>
+              <th class="rc-call">콜량보고</th>
+              <th class="rc-spend">소진액보고</th>
+              <th class="rc-viewer">뷰어</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>대시보드 조회</td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>문의(콜량) 입력</td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="cross">--</span></td>
+              <td><span class="cross">--</span></td>
+            </tr>
+            <tr>
+              <td>부재 상태 변경</td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="cross">--</span></td>
+              <td><span class="cross">--</span></td>
+            </tr>
+            <tr>
+              <td>광고비(소진액) 입력</td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="cross">--</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="cross">--</span></td>
+            </tr>
+            <tr>
+              <td>사용자 승인/관리</td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="cross">--</span></td>
+              <td><span class="cross">--</span></td>
+              <td><span class="cross">--</span></td>
+            </tr>
+            <tr>
+              <td>역할 변경</td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="cross">--</span></td>
+              <td><span class="cross">--</span></td>
+              <td><span class="cross">--</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="role-cards">
+        <div class="role-card" style="background:rgba(22,163,74,0.08);">
+          <div class="rc-icon" style="background:rgba(22,163,74,0.2);color:#16a34a;">&#9733;</div>
+          <div class="rc-title rc-admin">관리자</div>
+          <div class="rc-desc">모든 기능 접근<br>사용자 승인 및 역할 관리</div>
+        </div>
+        <div class="role-card" style="background:rgba(37,99,235,0.08);">
+          <div class="rc-icon" style="background:rgba(37,99,235,0.2);color:#2563eb;">&#9743;</div>
+          <div class="rc-title rc-call">콜량보고</div>
+          <div class="rc-desc">대시보드 조회<br>문의 입력 + 부재 처리</div>
+        </div>
+        <div class="role-card" style="background:rgba(234,88,12,0.08);">
+          <div class="rc-icon" style="background:rgba(234,88,12,0.2);color:#ea580c;">&#8361;</div>
+          <div class="rc-title rc-spend">소진액보고</div>
+          <div class="rc-desc">대시보드 조회<br>광고비 소진액 입력</div>
+        </div>
+        <div class="role-card" style="background:rgba(148,163,184,0.08);">
+          <div class="rc-icon" style="background:rgba(148,163,184,0.2);color:#94a3b8;">&#128065;</div>
+          <div class="rc-title rc-viewer">뷰어</div>
+          <div class="rc-desc">대시보드 조회만<br>입력 기능 없음</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-area">
+      <div class="desc-area-title">기능 설명</div>
+      <div class="tech-card">
+        <h4 style="color:#3b82f6;">기술 스택</h4>
+        <div class="tech-item"><span class="ti-label">Frontend</span><span class="ti-val" style="color:#3b82f6;">Next.js 14</span></div>
+        <div class="tech-item"><span class="ti-label">UI</span><span class="ti-val">Tailwind + shadcn/ui</span></div>
+        <div class="tech-item"><span class="ti-label">차트</span><span class="ti-val">Recharts</span></div>
+        <div class="tech-item"><span class="ti-label">Backend</span><span class="ti-val" style="color:#4ade80;">Supabase</span></div>
+        <div class="tech-item"><span class="ti-label">인증</span><span class="ti-val">Supabase Auth + RLS</span></div>
+        <div class="tech-item"><span class="ti-label">배포</span><span class="ti-val" style="color:#f97316;">Vercel</span></div>
+      </div>
+      <div class="tech-card">
+        <h4 style="color:#4ade80;">보안</h4>
+        <p>Row Level Security(RLS)로 역할 기반 DB 접근 제어. 외부 대행사 인원도 안전하게 접근 가능합니다.</p>
+      </div>
+      <div class="tech-card">
+        <h4 style="color:#f97316;">배포 환경</h4>
+        <p>Vercel 자동 배포. Git push 시 즉시 반영. 외부 접근 URL 제공.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <div class="fl">
+      <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+      <span class="company">(주)지엔에이 | No.1 오토모빌리티</span>
+    </div>
+    <span class="right">투고글로벌 / 투바이어 수출 마케팅 대행 -- 기능설명서 v2</span>
+  </div>
+  <div class="page-num">9 / 9</div>
+</div>
+</body>
+</html>

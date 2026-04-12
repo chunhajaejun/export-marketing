@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬라이드 3 — 대시보드 PC</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: 1280px 720px; margin: 0; }
+  body { width:1280px; height:720px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#0f172a; color:#e2e8f0; overflow:hidden; }
+  .slide { width:1280px; height:720px; display:flex; flex-direction:column; padding:32px 48px; position:relative; }
+  .slide-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; background:#ffffff; margin:-32px -48px 20px -48px; padding:12px 48px; border-bottom:1px solid #e2e8f0; }
+  .slide-header img { height:28px; }
+  .slide-header .num { background:#3b82f6; color:#fff; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+  .slide-header .label { font-size:22px; font-weight:700; color:#1e293b; }
+  .slide-header .badge { font-size:11px; color:#64748b; background:#f1f5f9; padding:4px 10px; border-radius:12px; margin-left:8px; }
+  .content { display:flex; gap:24px; flex:1; min-height:0; }
+  .mockup-main { flex:1; display:flex; flex-direction:column; gap:12px; }
+  .filter-bar { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .f-btn { background:#1e293b; border:1px solid #334155; color:#94a3b8; font-size:11px; padding:5px 12px; border-radius:6px; }
+  .f-btn.active { background:#3b82f6; color:#fff; border-color:#3b82f6; }
+  .f-input { background:#0f172a; border:1px solid #334155; color:#e2e8f0; font-size:11px; padding:5px 8px; border-radius:4px; width:100px; }
+  .f-select { background:#0f172a; border:1px solid #334155; color:#e2e8f0; font-size:11px; padding:5px 8px; border-radius:4px; }
+  .table-wrap { background:#1e293b; border-radius:8px; overflow:hidden; flex:1; }
+  table { width:100%; border-collapse:collapse; font-size:11px; text-align:center; }
+  thead tr { background:#0f172a; }
+  thead th { padding:8px 6px; color:#64748b; font-size:10px; font-weight:600; }
+  tbody td { padding:7px 6px; border-top:1px solid #334155; }
+  tbody tr:nth-child(odd) { background:#1a2332; }
+  .c-green { color:#4ade80; }
+  .c-red { color:#f87171; }
+  .c-yellow { color:#fbbf24; }
+  .c-blue { color:#3b82f6; }
+  .sep { border-left:2px solid #334155; }
+  .total-row { background:#0f172a !important; color:#fff; font-weight:700; font-size:12px; border-top:2px solid #3b82f6 !important; }
+  .charts { display:flex; gap:12px; }
+  .chart-card { background:#1e293b; border-radius:8px; padding:12px; flex:1; }
+  .chart-label { color:#94a3b8; font-size:10px; margin-bottom:8px; }
+  .bar-wrap { display:flex; align-items:end; gap:3px; height:60px; }
+  .bar-col { flex:1; text-align:center; }
+  .bar-val { color:#94a3b8; font-size:8px; margin-bottom:2px; }
+  .bar { background:#3b82f6; width:100%; border-radius:2px 2px 0 0; }
+  .bar-day { color:#64748b; font-size:8px; margin-top:2px; }
+  .donut-wrap { display:flex; align-items:center; gap:10px; }
+  .donut { width:55px; height:55px; border-radius:50%; background:conic-gradient(#3b82f6 0% 37%, #f97316 37% 65%, #8b5cf6 65% 88%, #34d399 88% 100%); flex-shrink:0; }
+  .legend { font-size:10px; line-height:1.8; }
+  .legend-dot { display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:3px; }
+  .desc-side { width:240px; display:flex; flex-direction:column; gap:12px; background:#f8fafc; border-left:2px solid #e2e8f0; padding:16px; border-radius:0 10px 10px 0; }
+  .desc-area-title { font-size:18px; font-weight:800; color:#1e293b; margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid #3b82f6; }
+  .desc-card { background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
+  .desc-card h4 { color:#3b82f6; font-size:17px; font-weight:700; margin-bottom:8px; }
+  .desc-card p { color:#334155; font-size:16px; line-height:1.6; }
+  .desc-card .highlight { color:#16a34a; font-weight:700; }
+  .tab-row { display:flex; gap:0; margin-bottom:8px; }
+  .tab { padding:6px 14px; font-size:11px; border-radius:6px 6px 0 0; }
+  .tab.active { background:#3b82f6; color:#fff; font-weight:700; }
+  .tab.inactive { background:#334155; color:#94a3b8; }
+  .page-num { position:absolute; bottom:20px; right:40px; font-size:12px; color:#475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-header">
+    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <span class="num">03</span>
+    <span class="label">대시보드 -- PC 뷰</span>
+    <span class="badge">일별 테이블 + 매체별 뷰</span>
+  </div>
+  <div class="content">
+    <div class="mockup-main">
+      <div class="tab-row">
+        <div class="tab active">기본 뷰 (일별 합산)</div>
+        <div class="tab inactive">매체별 뷰</div>
+      </div>
+      <div class="filter-bar">
+        <button class="f-btn">오늘</button>
+        <button class="f-btn active">이번주</button>
+        <button class="f-btn">이번달</button>
+        <button class="f-btn">지난달</button>
+        <input class="f-input" placeholder="시작일">
+        <span style="color:#94a3b8;font-size:11px;">~</span>
+        <input class="f-input" placeholder="종료일">
+        <select class="f-select"><option>전체 매체</option></select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th style="text-align:left;padding-left:12px;">날짜</th><th>전체</th><th class="c-green">유효</th><th class="c-red">무효</th><th class="c-yellow">폐차</th><th class="sep">소진액</th><th class="sep">단가(전체)</th><th>단가(유효)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="text-align:left;padding-left:12px;font-weight:700;">04/12 <span class="c-blue" style="font-size:9px;">오늘</span></td><td style="font-weight:700;font-size:14px;">18</td><td class="c-green">12</td><td class="c-red">4</td><td class="c-yellow">2</td><td class="sep">&#8361;420,000</td><td class="sep">&#8361;23,333</td><td class="c-green">&#8361;35,000</td></tr>
+            <tr><td style="text-align:left;padding-left:12px;">04/11 <span style="color:#64748b;font-size:9px;">금</span></td><td style="font-weight:700;font-size:14px;">52</td><td class="c-green">38</td><td class="c-red">8</td><td class="c-yellow">6</td><td class="sep">&#8361;850,000</td><td class="sep">&#8361;16,346</td><td class="c-green">&#8361;22,368</td></tr>
+            <tr><td style="text-align:left;padding-left:12px;">04/10 <span style="color:#64748b;font-size:9px;">목</span></td><td style="font-weight:700;font-size:14px;">48</td><td class="c-green">35</td><td class="c-red">7</td><td class="c-yellow">6</td><td class="sep">&#8361;820,000</td><td class="sep">&#8361;17,083</td><td class="c-green">&#8361;23,429</td></tr>
+            <tr><td style="text-align:left;padding-left:12px;">04/09 <span style="color:#64748b;font-size:9px;">수</span></td><td style="font-weight:700;font-size:14px;">55</td><td class="c-green">42</td><td class="c-red">8</td><td class="c-yellow">5</td><td class="sep">&#8361;880,000</td><td class="sep">&#8361;16,000</td><td class="c-green">&#8361;20,952</td></tr>
+            <tr><td style="text-align:left;padding-left:12px;">04/08 <span style="color:#64748b;font-size:9px;">화</span></td><td style="font-weight:700;font-size:14px;">61</td><td class="c-green">45</td><td class="c-red">10</td><td class="c-yellow">6</td><td class="sep">&#8361;900,000</td><td class="sep">&#8361;14,754</td><td class="c-green">&#8361;20,000</td></tr>
+            <tr class="total-row"><td style="text-align:left;padding-left:12px;">7일 합계</td><td style="font-size:14px;">317</td><td class="c-green">233</td><td class="c-red">50</td><td class="c-yellow">34</td><td class="sep">&#8361;5,000,000</td><td class="sep">&#8361;15,773</td><td class="c-green">&#8361;21,459</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="charts">
+        <div class="chart-card">
+          <div class="chart-label">일별 콜량 추이</div>
+          <div class="bar-wrap">
+            <div class="bar-col"><div class="bar-val">25</div><div class="bar" style="height:24px;opacity:0.7;"></div><div class="bar-day">일</div></div>
+            <div class="bar-col"><div class="bar-val">58</div><div class="bar" style="height:55px;"></div><div class="bar-day">월</div></div>
+            <div class="bar-col"><div class="bar-val">61</div><div class="bar" style="height:58px;"></div><div class="bar-day">화</div></div>
+            <div class="bar-col"><div class="bar-val">55</div><div class="bar" style="height:52px;"></div><div class="bar-day">수</div></div>
+            <div class="bar-col"><div class="bar-val">48</div><div class="bar" style="height:46px;"></div><div class="bar-day">목</div></div>
+            <div class="bar-col"><div class="bar-val">52</div><div class="bar" style="height:50px;"></div><div class="bar-day">금</div></div>
+            <div class="bar-col"><div class="bar-val" style="color:#3b82f6;">18</div><div class="bar" style="height:17px;opacity:0.5;"></div><div class="bar-day" style="color:#3b82f6;">오늘</div></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-label">매체별 콜량 비중 (7일)</div>
+          <div class="donut-wrap">
+            <div class="donut"></div>
+            <div class="legend">
+              <div><span class="legend-dot" style="background:#3b82f6;"></span>네이버 37% <span style="color:#64748b;">(117)</span></div>
+              <div><span class="legend-dot" style="background:#f97316;"></span>당근 28% <span style="color:#64748b;">(89)</span></div>
+              <div><span class="legend-dot" style="background:#8b5cf6;"></span>메타 24% <span style="color:#64748b;">(76)</span></div>
+              <div><span class="legend-dot" style="background:#34d399;"></span>구글 11% <span style="color:#64748b;">(35)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="desc-side">
+      <div class="desc-area-title">기능 설명</div>
+      <div class="desc-card">
+        <h4>이 화면에서</h4>
+        <p>기간별 필터와 매체 필터를 조합하여 <span class="highlight">일별 콜량, 유효/무효/폐차, 소진액, 건당 단가</span>를 테이블로 확인합니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#f97316;">매체별 뷰 전환</h4>
+        <p>탭을 전환하면 각 날짜별로 네이버/당근/메타/구글 매체를 펼쳐 확인하고, 접기/펼치기가 가능합니다.</p>
+      </div>
+      <div class="desc-card">
+        <h4 style="color:#8b5cf6;">차트 영역</h4>
+        <p>일별 콜량 추이 막대 차트와 매체별 비중 도넛 차트로 트렌드를 시각적으로 파악합니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">3 / 9</div>
+</div>
+</body>
+</html>
