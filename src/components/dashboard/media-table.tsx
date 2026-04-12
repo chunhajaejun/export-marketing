@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import {
   Table,
   TableBody,
@@ -97,11 +98,11 @@ export function MediaTable({ calls, spend, startDate, endDate }: MediaTableProps
           <TableRow className="border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]">
             <TableHead className="sticky left-0 z-10 bg-[#0f172a]" />
             {MEDIA_LIST.map((m) => (
-              <>
-                <TableHead key={`${m.key}-spend`} className="text-right text-[10px] text-[#64748b] border-l border-[#334155]">소진액</TableHead>
-                <TableHead key={`${m.key}-cpa1`} className="text-right text-[10px] text-[#64748b]">인입단가</TableHead>
-                <TableHead key={`${m.key}-cpa2`} className="text-right text-[10px] text-[#64748b]">유효단가</TableHead>
-              </>
+              <Fragment key={`${m.key}-sub`}>
+                <TableHead className="text-right text-[10px] text-[#64748b] border-l border-[#334155]">소진액</TableHead>
+                <TableHead className="text-right text-[10px] text-[#64748b]">인입단가</TableHead>
+                <TableHead className="text-right text-[10px] text-[#64748b]">유효단가</TableHead>
+              </Fragment>
             ))}
           </TableRow>
         </TableHeader>
@@ -114,8 +115,8 @@ export function MediaTable({ calls, spend, startDate, endDate }: MediaTableProps
               {MEDIA_LIST.map((m) => {
                 const d = getData(date, m.key);
                 return (
-                  <>
-                    <TableCell key={`${m.key}-${date}-s`} className="text-right text-xs border-l border-[#334155]" style={{ color: d.spend === 0 ? "#475569" : "#e2e8f0" }}>
+                  <Fragment key={`${m.key}-${date}`}>
+                    <TableCell className="text-right text-xs border-l border-[#334155]" style={{ color: d.spend === 0 ? "#475569" : "#e2e8f0" }}>
                       {d.spend > 0 ? formatCurrency(d.spend) : "0"}
                     </TableCell>
                     <TableCell key={`${m.key}-${date}-ct`} className="text-right text-xs" style={{ color: d.cpa_total === null ? "#475569" : "#e2e8f0" }}>
@@ -124,32 +125,32 @@ export function MediaTable({ calls, spend, startDate, endDate }: MediaTableProps
                     <TableCell key={`${m.key}-${date}-cv`} className="text-right text-xs" style={{ color: d.cpa_valid === null ? "#475569" : "#4ade80" }}>
                       {d.cpa_valid !== null ? formatCurrency(d.cpa_valid) : "-"}
                     </TableCell>
-                  </>
+                  </Fragment>
                 );
               })}
             </TableRow>
           ))}
+          {/* 합계 */}
+          <TableRow className="border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]" style={{ borderTop: "2px solid #3b82f6" }}>
+            <TableCell className="sticky left-0 z-10 bg-[#0f172a] font-bold text-white text-xs">합계</TableCell>
+            {MEDIA_LIST.map((m) => {
+              const t = getMediaTotal(m.key);
+              return (
+                <Fragment key={`${m.key}-total`}>
+                  <TableCell className="text-right text-xs font-bold text-white border-l border-[#334155]">
+                    {formatCurrency(t.spend)}
+                  </TableCell>
+                  <TableCell className="text-right text-xs font-bold text-white">
+                    {t.cpa_total !== null ? formatCurrency(t.cpa_total) : "-"}
+                  </TableCell>
+                  <TableCell className="text-right text-xs font-bold text-[#4ade80]">
+                    {t.cpa_valid !== null ? formatCurrency(t.cpa_valid) : "-"}
+                  </TableCell>
+                </Fragment>
+              );
+            })}
+          </TableRow>
         </TableBody>
-        {/* 합계 */}
-        <TableRow className="border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]" style={{ borderTop: "2px solid #3b82f6" }}>
-          <TableCell className="sticky left-0 z-10 bg-[#0f172a] font-bold text-white text-xs">합계</TableCell>
-          {MEDIA_LIST.map((m) => {
-            const t = getMediaTotal(m.key);
-            return (
-              <>
-                <TableCell key={`${m.key}-total-s`} className="text-right text-xs font-bold text-white border-l border-[#334155]">
-                  {formatCurrency(t.spend)}
-                </TableCell>
-                <TableCell key={`${m.key}-total-ct`} className="text-right text-xs font-bold text-white">
-                  {t.cpa_total !== null ? formatCurrency(t.cpa_total) : "-"}
-                </TableCell>
-                <TableCell key={`${m.key}-total-cv`} className="text-right text-xs font-bold text-[#4ade80]">
-                  {t.cpa_valid !== null ? formatCurrency(t.cpa_valid) : "-"}
-                </TableCell>
-              </>
-            );
-          })}
-        </TableRow>
       </Table>
     </div>
   );
