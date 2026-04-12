@@ -11,6 +11,13 @@ const EMAIL_DOMAINS = [
   "naver.com", "gmail.com", "daum.net", "kakao.com", "hanmail.net", "nate.com",
 ];
 
+function isStrongPassword(pw: string): boolean {
+  if (pw.length < 8) return false;
+  if (!/\d/.test(pw)) return false;
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw)) return false;
+  return true;
+}
+
 export function SignupForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -34,7 +41,7 @@ export function SignupForm() {
     if (!emailId.trim()) { setError("이메일 아이디를 입력해주세요."); return; }
     if (isCustomDomain && !customDomain.trim()) { setError("이메일 도메인을 입력해주세요."); return; }
     if (!isValidPhone(phone)) { setError("전화번호를 올바르게 입력해주세요. (010-0000-0000)"); return; }
-    if (password.length < 8) { setError("비밀번호는 8자 이상이어야 합니다."); return; }
+    if (!isStrongPassword(password)) { setError("비밀번호는 8자 이상, 숫자와 특수문자를 포함해야 합니다."); return; }
     if (password !== passwordConfirm) { setError("비밀번호가 일치하지 않습니다."); return; }
 
     setLoading(true);
@@ -49,16 +56,17 @@ export function SignupForm() {
   };
 
   const inputStyle = "bg-[#0f172a] border-[#334155] text-white";
+  const req = <span className="text-red-500 ml-0.5">*</span>;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       <div>
-        <label className="text-sm text-[#94a3b8]">이름</label>
+        <label className="text-sm text-[#94a3b8]">이름{req}</label>
         <Input placeholder="홍길동" value={name} onChange={(e) => setName(e.target.value)} className={`mt-1 ${inputStyle}`} />
       </div>
 
       <div>
-        <label className="text-sm text-[#94a3b8]">이메일</label>
+        <label className="text-sm text-[#94a3b8]">이메일{req}</label>
         <div className="mt-1 flex items-center gap-1">
           <Input
             placeholder="username"
@@ -94,7 +102,7 @@ export function SignupForm() {
       </div>
 
       <div>
-        <label className="text-sm text-[#94a3b8]">전화번호</label>
+        <label className="text-sm text-[#94a3b8]">전화번호{req}</label>
         <Input
           placeholder="010-0000-0000"
           value={phone}
@@ -106,17 +114,17 @@ export function SignupForm() {
       </div>
 
       <div>
-        <label className="text-sm text-[#94a3b8]">비밀번호</label>
-        <Input type="password" placeholder="8자 이상" value={password} onChange={(e) => setPassword(e.target.value)} className={`mt-1 ${inputStyle}`} />
+        <label className="text-sm text-[#94a3b8]">비밀번호{req}</label>
+        <Input type="password" placeholder="8자 이상, 숫자+특수문자 포함" value={password} onChange={(e) => setPassword(e.target.value)} className={`mt-1 ${inputStyle}`} />
       </div>
 
       <div>
-        <label className="text-sm text-[#94a3b8]">비밀번호 확인</label>
+        <label className="text-sm text-[#94a3b8]">비밀번호 확인{req}</label>
         <Input type="password" placeholder="비밀번호 재입력" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} className={`mt-1 ${inputStyle}`} />
       </div>
 
       <div>
-        <label className="text-sm text-[#94a3b8]">소속</label>
+        <label className="text-sm text-[#94a3b8]">소속 <span className="text-xs text-[#64748b]">(선택)</span></label>
         <Input placeholder="예: (주)지엔에이 마케팅팀" value={organization} onChange={(e) => setOrganization(e.target.value)} className={`mt-1 ${inputStyle}`} />
       </div>
 
@@ -125,6 +133,10 @@ export function SignupForm() {
       <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
         {loading ? "가입 중..." : "가입 신청"}
       </Button>
+
+      <p className="text-xs text-[#64748b] text-center">
+        <span className="text-red-500">*</span> 표시 항목은 필수 입력사항입니다.
+      </p>
     </form>
   );
 }
