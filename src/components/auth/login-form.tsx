@@ -5,14 +5,6 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import Link from "next/link";
 
 export function LoginForm() {
   const router = useRouter();
@@ -70,65 +62,31 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle className="text-xl">로그인</CardTitle>
-        <CardDescription>
-          (주)지엔에이 수출 마케팅 대시보드
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className="text-sm font-medium">
-              이메일
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="email@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="password" className="text-sm font-medium">
-              비밀번호
-            </label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="비밀번호"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
-
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "로그인 중..." : "로그인"}
-          </Button>
-
-          <div className="flex items-center justify-between text-sm">
-            <Link
-              href="/forgot-password"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              비밀번호 찾기
-            </Link>
-            <Link
-              href="/signup"
-              className="text-primary hover:underline"
-            >
-              회원가입
-            </Link>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="text-sm text-[#94a3b8]">이메일</label>
+        <Input
+          type="email"
+          placeholder="email@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="mt-1 bg-[#0f172a] border-[#334155] text-white"
+        />
+      </div>
+      <div>
+        <label className="text-sm text-[#94a3b8]">비밀번호</label>
+        <Input
+          type="password"
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="mt-1 bg-[#0f172a] border-[#334155] text-white"
+        />
+      </div>
+      {error && <p className="text-sm text-red-500">{error}</p>}
+      <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+        {loading ? "로그인 중..." : "로그인"}
+      </Button>
+    </form>
   );
 }
