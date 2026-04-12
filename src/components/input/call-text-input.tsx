@@ -186,13 +186,21 @@ export function CallTextInput({ onSaved }: CallTextInputProps) {
               {(item.channels.phone > 0 ||
                 item.channels.kakao > 0 ||
                 item.channels.sms > 0) && (
-                <div className="mt-1 text-xs text-[#94a3b8]">
-                  채널: 전화 {item.channels.phone} / 카톡 {item.channels.kakao}{" "}
-                  / 문자 {item.channels.sms}
+                <div className="mt-1 text-xs text-[#e2e8f0]">
+                  채널: <span className="text-[#3b82f6]">전화 {item.channels.phone}</span> / <span className="text-[#4ade80]">카톡 {item.channels.kakao}</span> / <span className="text-[#fbbf24]">문자 {item.channels.sms}</span>
                 </div>
               )}
             </div>
           ))}
+
+          {/* 총 유입량 */}
+          <div className="rounded-lg border border-[#334155] bg-[#0f172a] p-3 text-sm">
+            <span className="text-[#94a3b8]">총 유입량 : </span>
+            <span className="text-lg font-bold text-white">
+              {parsed.reduce((sum, item) => sum + item.export_count + item.used_car_count + item.scrap_count + item.absence_count + item.invalid_count + item.phone_count, 0)}
+            </span>
+            <span className="text-[#94a3b8]"> 콜</span>
+          </div>
 
           <Button
             onClick={handleSave}
