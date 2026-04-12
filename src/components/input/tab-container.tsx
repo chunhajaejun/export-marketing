@@ -93,28 +93,16 @@ export function TabContainer({ userRole }: TabContainerProps) {
             </div>
           </div>
 
-          {/* Right: history panels (오늘 + 어제 + 그저께) */}
-          <div className="min-w-0 flex-1 space-y-3">
-            {[0, 1, 2].map((offset) => {
-              const d = new Date();
-              d.setDate(d.getDate() - offset);
-              const date = d.toISOString().split("T")[0];
-              const label = offset === 0 ? "오늘" : offset === 1 ? "어제" : "그저께";
-              return (
-                <div key={date} className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded ${offset === 0 ? "bg-[#3b82f6]/20 text-[#3b82f6]" : "bg-[#334155] text-[#94a3b8]"}`}>{label}</span>
-                    <span className="text-xs text-[#64748b]">{date}</span>
-                  </div>
-                  <DailyHistory
-                    type="calls"
-                    selectedDate={date}
-                    onDateChange={setSelectedDate}
-                    refreshKey={refreshKey}
-                  />
-                </div>
-              );
-            })}
+          {/* Right: history table */}
+          <div className="min-w-0 flex-1">
+            <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
+              <DailyHistory
+                type="calls"
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                refreshKey={refreshKey}
+              />
+            </div>
           </div>
         </div>
       </TabsContent>
@@ -160,28 +148,16 @@ export function TabContainer({ userRole }: TabContainerProps) {
             </div>
           </div>
 
-          {/* Right: history panels (오늘 + 어제 + 그저께) */}
-          <div className="min-w-0 flex-1 space-y-3">
-            {[0, 1, 2].map((offset) => {
-              const d = new Date();
-              d.setDate(d.getDate() - offset);
-              const date = d.toISOString().split("T")[0];
-              const label = offset === 0 ? "오늘" : offset === 1 ? "어제" : "그저께";
-              return (
-                <div key={date} className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded ${offset === 0 ? "bg-[#3b82f6]/20 text-[#3b82f6]" : "bg-[#334155] text-[#94a3b8]"}`}>{label}</span>
-                    <span className="text-xs text-[#64748b]">{date}</span>
-                  </div>
-                  <DailyHistory
-                    type="spend"
-                    selectedDate={date}
-                    onDateChange={setSelectedDate}
-                    refreshKey={refreshKey}
-                  />
-                </div>
-              );
-            })}
+          {/* Right: history table */}
+          <div className="min-w-0 flex-1">
+            <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
+              <DailyHistory
+                type="spend"
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                refreshKey={refreshKey}
+              />
+            </div>
           </div>
         </div>
       </TabsContent>
