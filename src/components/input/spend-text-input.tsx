@@ -1,0 +1,156 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { parseSpendReport } from "@/lib/parsers/spend-report-parser";
+import { formatCurrency } from "@/lib/utils/currency-format";
+import { createClient } from "@/lib/supabase/client";
+import type { ParsedAdSpend, MediaChannel } from "@/lib/types";
+
+const MEDIA_LABELS: Record<MediaChannel, string> = {
+  naver_web: "네이버-홈페이지",
+  naver_landing: "네이버-랜딩",
+  danggeun: "당근",
+  meta: "메타",
+  google: "구글",
+};
+
+interface SpendTextInputProps {
+  onSaved: () => void;
+}
+
+export function SpendTextInput({ onSaved }: SpendTextInputProps) {
+  const [text, setText] = useState("");
+  const [parsed, setParsed] = useState<ParsedAdSpend[] | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleParse = useCallback(() => {
+    setError(null);
+    setSuccess(false);
+    const results = parseSpendReport(text);
+    if (results.length === 0) {
+      setError("파싱 결과가 없습니다. 텍스트 형식을 확인해 주세요.");
+      setParsed(null);
+      return;
+    }
+    setParsed(results);
+  }, [text]);
+
+  const handleSave = useCallback(async () => {
+    if (!parsed || parsed.length === 0) return;
+    setSaving(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("인증 정보가 없습니다.");
+
+      for (const item of parsed) {
+        const { error: upsertError } = await supabase
+          .from("ad_spend")
+          .upsert(
+            {
+              date: item.date,
+              media: item.media,
+              amount: item.amount,
+              reporter_id: user.id,
+            },
+            { onConflict: "date,media" }
+          );
+
+        if (upsertError) throw upsertError;
+      }
+
+      setSuccess(true);
+      setParsed(null);
+      setText("");
+      onSaved();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "저장 중 오류가 발생했습니다."
+      );
+    } finally {
+      setSaving(false);
+    }
+  }, [parsed, onSaved]);
+
+  return (
+    <div className="space-y-3">
+      {/* 텍스트 입력 */}
+      <textarea
+        className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:bg-input/30"
+        rows={6}
+        placeholder={`소진액 보고 텍스트를 붙여넣으세요...\n\n예시:\n4/10 금요일\n네이버 소진액 : 96,432 원\n당근 소진액 : 100,254 원`}
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value);
+          setParsed(null);
+          setSuccess(false);
+          setError(null);
+        }}
+      />
+
+      <Button onClick={handleParse} disabled={!text.trim()} className="w-full">
+        파싱하기
+      </Button>
+
+      {/* 에러 */}
+      {error && (
+        <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {error}
+        </div>
+      )}
+
+      {/* 성공 */}
+      {success && (
+        <div className="rounded-lg bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+          저장 완료
+        </div>
+      )}
+
+      {/* 파싱 결과 미리보기 */}
+      {parsed && parsed.length > 0 && (
+        <div className="space-y-2">
+          <h3 className="text-sm font-medium">파싱 결과</h3>
+          {parsed.map((item, i) => (
+            <div
+              key={`${item.date}-${item.media}-${i}`}
+              className="flex items-center justify-between rounded-lg border p-3 text-sm"
+            >
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">{item.date}</Badge>
+                <Badge>{MEDIA_LABELS[item.media]}</Badge>
+              </div>
+              <span className="font-semibold">
+                {formatCurrency(item.amount)}
+              </span>
+            </div>
+          ))}
+
+          {/* 합계 */}
+          <div className="flex items-center justify-between rounded-lg bg-muted px-3 py-2 text-sm">
+            <span className="font-medium">합계</span>
+            <span className="font-bold">
+              {formatCurrency(parsed.reduce((sum, item) => sum + item.amount, 0))}
+            </span>
+          </div>
+
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            className="w-full"
+          >
+            {saving ? "저장 중..." : "저장"}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}

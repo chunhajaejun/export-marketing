@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CallTextInput } from "./call-text-input";
 import { CallDirectInput } from "./call-direct-input";
+import { SpendTextInput } from "./spend-text-input";
+import { SpendDirectInput } from "./spend-direct-input";
 import { DailyHistory } from "./daily-history";
 import { AbsenceManager } from "./absence-manager";
 import { Button } from "@/components/ui/button";
@@ -17,6 +19,7 @@ interface TabContainerProps {
 export function TabContainer({ userRole }: TabContainerProps) {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const [inputMode, setInputMode] = useState<"text" | "direct">("text");
+  const [spendInputMode, setSpendInputMode] = useState<"text" | "direct">("text");
   const [refreshKey, setRefreshKey] = useState(0);
 
   const canAccessCalls = userRole === "call_reporter" || userRole === "admin";
@@ -93,8 +96,47 @@ export function TabContainer({ userRole }: TabContainerProps) {
       </TabsContent>
 
       <TabsContent value="spend">
-        <div className="flex items-center justify-center rounded-lg border border-dashed p-12 text-muted-foreground">
-          광고비 관리 탭 (Task 6에서 구현)
+        <div className="flex flex-col gap-4 lg:flex-row">
+          {/* 좌측: 입력 폼 */}
+          <div className="w-full shrink-0 lg:w-[300px]">
+            {/* 입력 모드 토글 */}
+            <div className="mb-3 flex gap-2">
+              <Button
+                variant={spendInputMode === "text" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSpendInputMode("text")}
+              >
+                텍스트 작성
+              </Button>
+              <Button
+                variant={spendInputMode === "direct" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSpendInputMode("direct")}
+              >
+                직접 입력
+              </Button>
+            </div>
+
+            {spendInputMode === "text" ? (
+              <SpendTextInput onSaved={handleSaved} />
+            ) : (
+              <SpendDirectInput
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                onSaved={handleSaved}
+              />
+            )}
+          </div>
+
+          {/* 우측: 이력 테이블 */}
+          <div className="min-w-0 flex-1">
+            <DailyHistory
+              type="spend"
+              selectedDate={selectedDate}
+              onDateChange={setSelectedDate}
+              refreshKey={refreshKey}
+            />
+          </div>
         </div>
       </TabsContent>
     </Tabs>
