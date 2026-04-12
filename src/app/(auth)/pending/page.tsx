@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { SignOutButton } from "./signout-button";
 
 export default async function PendingPage() {
@@ -8,7 +9,9 @@ export default async function PendingPage() {
 
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
+  // service_role로 프로필 조회 (RLS 우회)
+  const admin = createAdminClient();
+  const { data: profile } = await admin
     .from("profiles")
     .select("status, email")
     .eq("id", user.id)

@@ -52,25 +52,8 @@ export function LoginForm() {
       return;
     }
 
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      setError("로그인에 실패했습니다.");
-      setLoading(false);
-      return;
-    }
-
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("status")
-      .eq("id", user.id)
-      .single();
-
-    if (!profile || profile.status !== "approved") {
-      router.push("/pending");
-    } else {
-      router.push("/dashboard");
-    }
+    // 로그인 성공 → dashboard로 이동 (protected layout에서 승인 체크)
+    router.push("/dashboard");
   };
 
   const inputStyle = "bg-[#0f172a] border-[#334155] text-white";
