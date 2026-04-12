@@ -11,10 +11,10 @@ import {
 import type { CallReport, MediaChannel } from "@/lib/types";
 
 const MEDIA_COLORS: Record<string, string> = {
-  naver: "#3b82f6",
+  naver: "#03C75A",
   danggeun: "#f97316",
   meta: "#8b5cf6",
-  google: "#34d399",
+  google: "#EA4335",
 };
 
 const MEDIA_LABELS: Record<string, string> = {
@@ -85,6 +85,8 @@ export function MediaPieChart({ calls }: MediaPieChartProps) {
               borderRadius: "8px",
               color: "#e2e8f0",
             }}
+            labelStyle={{ color: "#e2e8f0" }}
+            itemStyle={{ color: "#e2e8f0" }}
             formatter={(value, name) => [`${value}건`, String(name)]}
           />
           <Legend

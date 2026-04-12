@@ -15,11 +15,11 @@ import { parseISO } from "date-fns";
 import type { CallReport, AdSpend, MediaChannel } from "@/lib/types";
 
 const MEDIA_LIST: { key: MediaChannel; label: string; color: string }[] = [
-  { key: "naver_web", label: "네이버(웹)", color: "#3b82f6" },
-  { key: "naver_landing", label: "네이버(랜딩)", color: "#3b82f6" },
+  { key: "naver_web", label: "네이버(웹)", color: "#03C75A" },
+  { key: "naver_landing", label: "네이버(랜딩)", color: "#03C75A" },
   { key: "danggeun", label: "당근", color: "#f97316" },
   { key: "meta", label: "메타", color: "#8b5cf6" },
-  { key: "google", label: "구글", color: "#34d399" },
+  { key: "google", label: "구글", color: "#EA4335" },
 ];
 
 interface MediaTableProps {

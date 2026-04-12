@@ -21,11 +21,11 @@ const MEDIA_LABELS: Record<MediaChannel, string> = {
 };
 
 const MEDIA_COLORS: Record<MediaChannel, string> = {
-  naver_web: "#3b82f6",
-  naver_landing: "#3b82f6",
+  naver_web: "#03C75A",
+  naver_landing: "#03C75A",
   danggeun: "#f97316",
   meta: "#8b5cf6",
-  google: "#34d399",
+  google: "#EA4335",
 };
 
 const MEDIA_ORDER: MediaChannel[] = [

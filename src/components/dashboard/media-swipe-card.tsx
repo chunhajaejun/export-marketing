@@ -12,10 +12,10 @@ const MEDIA_CONFIG: {
   color: string;
   channels: MediaChannel[];
 }[] = [
-  { group: "naver", label: "네이버", color: "#3b82f6", channels: ["naver_web", "naver_landing"] },
+  { group: "naver", label: "네이버", color: "#03C75A", channels: ["naver_web", "naver_landing"] },
   { group: "danggeun", label: "당근", color: "#f97316", channels: ["danggeun"] },
   { group: "meta", label: "메타", color: "#8b5cf6", channels: ["meta"] },
-  { group: "google", label: "구글", color: "#34d399", channels: ["google"] },
+  { group: "google", label: "구글", color: "#EA4335", channels: ["google"] },
 ];
 
 interface MediaSwipeCardProps {

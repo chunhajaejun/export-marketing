@@ -35,7 +35,16 @@ export function RecentSummary() {
     fetchData();
   }, []);
 
-  if (loading) return <div className="text-sm text-[#64748b]">로딩 중...</div>;
+  if (loading) return (
+    <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
+      <div className="mb-3 h-4 w-24 animate-pulse rounded bg-[#334155]" />
+      <div className="space-y-3">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-4 w-full animate-pulse rounded bg-[#334155]" />
+        ))}
+      </div>
+    </div>
+  );
 
   const dayLabels = (date: string) => {
     const d = new Date(date);

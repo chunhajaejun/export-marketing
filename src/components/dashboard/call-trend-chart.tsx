@@ -60,6 +60,8 @@ export function CallTrendChart({ data }: CallTrendChartProps) {
               borderRadius: "8px",
               color: "#e2e8f0",
             }}
+            labelStyle={{ color: "#e2e8f0" }}
+            itemStyle={{ color: "#e2e8f0" }}
             formatter={(value, name) => [
               `${value}건`,
               name === "total" ? "전체콜량" : "유효콜량",
