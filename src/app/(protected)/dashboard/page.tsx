@@ -162,9 +162,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               </div>
             </section>
 
-            {/* 매체별 뷰 */}
+            {/* 매체별 데이터 */}
             <section>
-              <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">매체별 뷰</h2>
+              <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">매체별 데이터</h2>
               <div className="overflow-hidden rounded-xl border border-[#334155] bg-[#1e293b]">
                 <MediaTable calls={filteredCalls} spend={filteredSpend} />
               </div>

@@ -18,7 +18,7 @@ const MEDIA_LABELS: Record<MediaChannel, string> = {
   naver_web: "네이버(웹)",
   naver_landing: "네이버(랜딩)",
   danggeun: "당근",
-  meta: "��타",
+  meta: "메타",
   google: "구글",
 };
 
@@ -30,24 +30,40 @@ const MEDIA_COLORS: Record<string, string> = {
   google: "#34d399",
 };
 
+const ALL_MEDIA: MediaChannel[] = [
+  "naver_web",
+  "naver_landing",
+  "danggeun",
+  "meta",
+  "google",
+];
+
 interface MediaTableProps {
   calls: CallReport[];
   spend: AdSpend[];
 }
 
+interface MediaRow {
+  media: MediaChannel;
+  total_calls: number;
+  export_count: number;
+  used_car_count: number;
+  scrap_count: number;
+  absence_count: number;
+  invalid_count: number;
+  spend: number;
+}
+
 interface DateGroup {
   date: string;
-  mediaRows: {
-    media: MediaChannel;
-    total_calls: number;
-    valid_calls: number;
-    scrap_count: number;
-    spend: number;
-  }[];
+  mediaRows: MediaRow[];
   subtotal: {
     total_calls: number;
-    valid_calls: number;
+    export_count: number;
+    used_car_count: number;
     scrap_count: number;
+    absence_count: number;
+    invalid_count: number;
     spend: number;
   };
 }
@@ -58,7 +74,18 @@ function groupByDateAndMedia(
 ): DateGroup[] {
   const dateMap = new Map<
     string,
-    Map<MediaChannel, { total_calls: number; valid_calls: number; scrap_count: number; spend: number }>
+    Map<
+      MediaChannel,
+      {
+        total_calls: number;
+        export_count: number;
+        used_car_count: number;
+        scrap_count: number;
+        absence_count: number;
+        invalid_count: number;
+        spend: number;
+      }
+    >
   >();
 
   for (const c of calls) {
@@ -66,13 +93,19 @@ function groupByDateAndMedia(
     const mediaMap = dateMap.get(c.date)!;
     const existing = mediaMap.get(c.media) || {
       total_calls: 0,
-      valid_calls: 0,
+      export_count: 0,
+      used_car_count: 0,
       scrap_count: 0,
+      absence_count: 0,
+      invalid_count: 0,
       spend: 0,
     };
     existing.total_calls += c.total_count;
-    existing.valid_calls += (c.valid_total ?? 0);
+    existing.export_count += c.export_count ?? 0;
+    existing.used_car_count += c.used_car_count ?? 0;
     existing.scrap_count += c.scrap_count;
+    existing.absence_count += c.absence_count;
+    existing.invalid_count += c.invalid_count + c.phone_naver_count;
     mediaMap.set(c.media, existing);
   }
 
@@ -81,8 +114,11 @@ function groupByDateAndMedia(
     const mediaMap = dateMap.get(s.date)!;
     const existing = mediaMap.get(s.media) || {
       total_calls: 0,
-      valid_calls: 0,
+      export_count: 0,
+      used_car_count: 0,
       scrap_count: 0,
+      absence_count: 0,
+      invalid_count: 0,
       spend: 0,
     };
     existing.spend += s.amount;
@@ -90,30 +126,60 @@ function groupByDateAndMedia(
   }
 
   const groups: DateGroup[] = [];
-  const sortedDates = Array.from(dateMap.keys()).sort((a, b) => b.localeCompare(a));
-
-  const ALL_MEDIA: MediaChannel[] = ["naver_web", "naver_landing", "danggeun", "meta", "google"];
+  // 날짜 정순 정렬 (ascending)
+  const sortedDates = Array.from(dateMap.keys()).sort((a, b) =>
+    a.localeCompare(b)
+  );
 
   for (const date of sortedDates) {
     const mediaMap = dateMap.get(date)!;
-    // 모든 매체를 항상 표시 (0이어도)
-    const mediaRows = ALL_MEDIA.map((media) => ({
+    const mediaRows: MediaRow[] = ALL_MEDIA.map((media) => ({
       media,
-      ...(mediaMap.get(media) || { total_calls: 0, valid_calls: 0, scrap_count: 0, spend: 0 }),
+      ...(mediaMap.get(media) || {
+        total_calls: 0,
+        export_count: 0,
+        used_car_count: 0,
+        scrap_count: 0,
+        absence_count: 0,
+        invalid_count: 0,
+        spend: 0,
+      }),
     }));
     const subtotal = mediaRows.reduce(
       (acc, r) => ({
         total_calls: acc.total_calls + r.total_calls,
-        valid_calls: acc.valid_calls + r.valid_calls,
+        export_count: acc.export_count + r.export_count,
+        used_car_count: acc.used_car_count + r.used_car_count,
         scrap_count: acc.scrap_count + r.scrap_count,
+        absence_count: acc.absence_count + r.absence_count,
+        invalid_count: acc.invalid_count + r.invalid_count,
         spend: acc.spend + r.spend,
       }),
-      { total_calls: 0, valid_calls: 0, scrap_count: 0, spend: 0 }
+      {
+        total_calls: 0,
+        export_count: 0,
+        used_car_count: 0,
+        scrap_count: 0,
+        absence_count: 0,
+        invalid_count: 0,
+        spend: 0,
+      }
     );
     groups.push({ date, mediaRows, subtotal });
   }
 
   return groups;
+}
+
+function ValCell({ value, color }: { value: number; color: string }) {
+  return (
+    <TableCell
+      className="text-right"
+      style={{ color: value === 0 ? "#475569" : color }}
+    >
+      {value}
+    </TableCell>
+  );
 }
 
 export function MediaTable({ calls, spend }: MediaTableProps) {
@@ -142,95 +208,159 @@ export function MediaTable({ calls, spend }: MediaTableProps) {
   if (groups.length === 0) {
     return (
       <div className="flex h-40 items-center justify-center text-sm text-[#94a3b8]">
-        데이���가 없습니다
+        데이터가 없습니다
       </div>
     );
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow className="border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]">
-          <TableHead className="text-[#94a3b8]">날짜 / 매체</TableHead>
-          <TableHead className="text-right text-[#94a3b8]">전체콜량</TableHead>
-          <TableHead className="text-right text-[#94a3b8]">유효</TableHead>
-          <TableHead className="text-right text-[#94a3b8]">폐차</TableHead>
-          <TableHead className="text-right text-[#94a3b8]">소진액</TableHead>
-          <TableHead className="text-right text-[#94a3b8]">CPA(전체)</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {groups.map((group) => {
-          const isOpen = expanded.has(group.date);
-          const cpaTotal =
-            group.subtotal.total_calls > 0
-              ? Math.round(group.subtotal.spend / group.subtotal.total_calls)
-              : null;
+    <div className="overflow-hidden rounded-xl">
+      <Table>
+        <TableHeader>
+          <TableRow className="border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]">
+            <TableHead className="text-[#64748b]">매체</TableHead>
+            <TableHead className="text-right text-[#64748b]">전체</TableHead>
+            <TableHead className="text-right text-[#64748b]">수출</TableHead>
+            <TableHead className="text-right text-[#64748b]">매입</TableHead>
+            <TableHead className="text-right text-[#64748b]">폐차</TableHead>
+            <TableHead className="text-right text-[#64748b]">부재</TableHead>
+            <TableHead className="text-right text-[#64748b]">무효</TableHead>
+            <TableHead className="text-right text-[#64748b]">소진액</TableHead>
+            <TableHead className="text-right text-[#64748b]">단가(전체)</TableHead>
+            <TableHead className="text-right text-[#64748b]">단가(유효)</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {groups.map((group, groupIdx) => {
+            const isOpen = expanded.has(group.date);
+            const cpaTotal =
+              group.subtotal.total_calls > 0
+                ? Math.round(group.subtotal.spend / group.subtotal.total_calls)
+                : null;
+            const validCalls =
+              group.subtotal.export_count + group.subtotal.used_car_count;
+            const cpaValid =
+              validCalls > 0
+                ? Math.round(group.subtotal.spend / validCalls)
+                : null;
 
-          return (
-            <Fragment key={group.date}>
-              <TableRow
-                className="cursor-pointer border-[#334155] hover:bg-[#334155]/50"
-                onClick={() => toggle(group.date)}
-              >
-                <TableCell className="font-medium text-[#e2e8f0]">
-                  <span className="mr-1.5 inline-block w-3 text-[#94a3b8]">
-                    {isOpen ? "▾" : "▸"}
-                  </span>
-                  {formatDateWithDay(parseISO(group.date))}
-                </TableCell>
-                <TableCell className="text-right font-semibold text-[#e2e8f0]">
-                  {group.subtotal.total_calls}
-                </TableCell>
-                <TableCell className="text-right font-semibold text-[#4ade80]">
-                  {group.subtotal.valid_calls}
-                </TableCell>
-                <TableCell className="text-right text-[#fbbf24]">
-                  {group.subtotal.scrap_count}
-                </TableCell>
-                <TableCell className="text-right text-[#e2e8f0]">
-                  {formatCurrency(group.subtotal.spend)}
-                </TableCell>
-                <TableCell className="text-right text-[#94a3b8]">
-                  {cpaTotal != null ? formatCurrency(cpaTotal) : "-"}
-                </TableCell>
-              </TableRow>
-              {isOpen &&
-                group.mediaRows.map((row) => {
-                  const mediaCpa =
-                    row.total_calls > 0
-                      ? Math.round(row.spend / row.total_calls)
-                      : null;
-                  return (
-                    <TableRow
-                      key={`${group.date}-${row.media}`}
-                      className="border-[#334155] bg-[#0f172a]/40 hover:bg-[#334155]/30"
-                    >
-                      <TableCell className="pl-8">
-                        <span style={{ color: MEDIA_COLORS[row.media] || "#94a3b8" }}>
-                          {MEDIA_LABELS[row.media] || row.media}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right text-[#e2e8f0]">{row.total_calls}</TableCell>
-                      <TableCell className="text-right text-[#4ade80]">
-                        {row.valid_calls}
-                      </TableCell>
-                      <TableCell className="text-right text-[#fbbf24]">
-                        {row.scrap_count}
-                      </TableCell>
-                      <TableCell className="text-right text-[#e2e8f0]">
-                        {formatCurrency(row.spend)}
-                      </TableCell>
-                      <TableCell className="text-right text-[#94a3b8]">
-                        {mediaCpa != null ? formatCurrency(mediaCpa) : "-"}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </Fragment>
-          );
-        })}
-      </TableBody>
-    </Table>
+            return (
+              <Fragment key={group.date}>
+                {/* Subtotal / date row */}
+                <TableRow
+                  className="cursor-pointer border-[#334155] bg-[#0f172a] hover:bg-[#0f172a]"
+                  style={{ borderTop: "2px solid #3b82f6" }}
+                  onClick={() => toggle(group.date)}
+                >
+                  <TableCell className="font-bold text-white">
+                    <span className="mr-1.5 inline-block w-3 text-[#94a3b8]">
+                      {isOpen ? "▾" : "▸"}
+                    </span>
+                    {formatDateWithDay(parseISO(group.date))}
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-white">
+                    {group.subtotal.total_calls}
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-white">
+                    {group.subtotal.export_count}
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-white">
+                    {group.subtotal.used_car_count}
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-white">
+                    {group.subtotal.scrap_count}
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-white">
+                    {group.subtotal.absence_count}
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-white">
+                    {group.subtotal.invalid_count}
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-white">
+                    {formatCurrency(group.subtotal.spend)}
+                  </TableCell>
+                  <TableCell className="text-right text-[#94a3b8]">
+                    {cpaTotal != null ? formatCurrency(cpaTotal) : "-"}
+                  </TableCell>
+                  <TableCell className="text-right text-[#94a3b8]">
+                    {cpaValid != null ? formatCurrency(cpaValid) : "-"}
+                  </TableCell>
+                </TableRow>
+                {isOpen &&
+                  group.mediaRows.map((row, rowIdx) => {
+                    const mediaCpaTotal =
+                      row.total_calls > 0
+                        ? Math.round(row.spend / row.total_calls)
+                        : null;
+                    const mediaValidCalls =
+                      row.export_count + row.used_car_count;
+                    const mediaCpaValid =
+                      mediaValidCalls > 0
+                        ? Math.round(row.spend / mediaValidCalls)
+                        : null;
+                    return (
+                      <TableRow
+                        key={`${group.date}-${row.media}`}
+                        className={`border-[#334155] hover:bg-[#334155]/50 ${
+                          rowIdx % 2 === 0 ? "bg-[#1e293b]" : "bg-[#1a2332]"
+                        }`}
+                      >
+                        <TableCell className="pl-8">
+                          <span
+                            className="mr-1.5 inline-block h-2 w-2 rounded-full"
+                            style={{
+                              backgroundColor:
+                                MEDIA_COLORS[row.media] || "#94a3b8",
+                            }}
+                          />
+                          <span
+                            style={{
+                              color: MEDIA_COLORS[row.media] || "#94a3b8",
+                            }}
+                          >
+                            {MEDIA_LABELS[row.media] || row.media}
+                          </span>
+                        </TableCell>
+                        <TableCell
+                          className="text-right"
+                          style={{
+                            color:
+                              row.total_calls === 0 ? "#475569" : "#e2e8f0",
+                          }}
+                        >
+                          {row.total_calls}
+                        </TableCell>
+                        <ValCell value={row.export_count} color="#4ade80" />
+                        <ValCell value={row.used_car_count} color="#4ade80" />
+                        <ValCell value={row.scrap_count} color="#fbbf24" />
+                        <ValCell value={row.absence_count} color="#60a5fa" />
+                        <ValCell value={row.invalid_count} color="#f87171" />
+                        <TableCell
+                          className="text-right"
+                          style={{
+                            color: row.spend === 0 ? "#475569" : "#e2e8f0",
+                          }}
+                        >
+                          {formatCurrency(row.spend)}
+                        </TableCell>
+                        <TableCell className="text-right text-[#94a3b8]">
+                          {mediaCpaTotal != null
+                            ? formatCurrency(mediaCpaTotal)
+                            : "-"}
+                        </TableCell>
+                        <TableCell className="text-right text-[#94a3b8]">
+                          {mediaCpaValid != null
+                            ? formatCurrency(mediaCpaValid)
+                            : "-"}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </Fragment>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
