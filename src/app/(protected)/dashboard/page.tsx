@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { subDays, format } from "date-fns";
 import type { CallReport, AdSpend, DailySummary, MediaChannel } from "@/lib/types";
 import { FilterBar } from "@/components/dashboard/filter-bar";
@@ -116,16 +117,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const endDate = (typeof params.end === "string" ? params.end : today);
   const mediaFilter = typeof params.media === "string" ? params.media : "all";
 
-  const supabase = await createClient();
+  const admin = createAdminClient();
 
   const [{ data: calls }, { data: spend }] = await Promise.all([
-    supabase
+    admin
       .from("call_reports")
       .select("*")
       .gte("date", startDate)
       .lte("date", endDate)
       .order("date", { ascending: false }),
-    supabase
+    admin
       .from("ad_spend")
       .select("*")
       .gte("date", startDate)

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { UserTable } from "@/components/admin/user-table";
 import type { Profile } from "@/lib/types";
 
@@ -14,7 +15,8 @@ export default async function AdminPage() {
     redirect("/login");
   }
 
-  const { data: profile } = await supabase
+  const admin = createAdminClient();
+  const { data: profile } = await admin
     .from("profiles")
     .select("role")
     .eq("id", user.id)
@@ -24,7 +26,7 @@ export default async function AdminPage() {
     redirect("/dashboard");
   }
 
-  const { data: users } = await supabase
+  const { data: users } = await admin
     .from("profiles")
     .select("*")
     .order("created_at", { ascending: false });

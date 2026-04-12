@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { TabContainer } from "@/components/input/tab-container";
 import type { UserRole } from "@/lib/types";
 
@@ -16,7 +17,8 @@ export default async function InputPage() {
     redirect("/login");
   }
 
-  const { data: profile } = await supabase
+  const admin = createAdminClient();
+  const { data: profile } = await admin
     .from("profiles")
     .select("role")
     .eq("id", user.id)
