@@ -44,7 +44,7 @@ export function TabContainer({ userRole }: TabContainerProps) {
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="calls">
+      <TabsContent value="calls" className="min-h-[500px]">
         <div className="flex flex-col gap-4 lg:flex-row">
           {/* Left: input form */}
           <div className="w-full shrink-0 lg:w-[400px]">
@@ -107,7 +107,7 @@ export function TabContainer({ userRole }: TabContainerProps) {
         </div>
       </TabsContent>
 
-      <TabsContent value="spend">
+      <TabsContent value="spend" className="min-h-[500px]">
         <div className="flex flex-col gap-4 lg:flex-row">
           {/* Left: input form */}
           <div className="w-full shrink-0 lg:w-[400px]">
