@@ -169,7 +169,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             {/* Daily summary table */}
             <section>
               <h2 className="mb-3 text-base font-semibold text-[#e2e8f0]">일별 합산</h2>
-              <div className="rounded-xl border border-[#334155] bg-[#1e293b] max-h-[480px] overflow-y-auto">
+              <div className="rounded-xl border border-[#334155] bg-[#1e293b] max-h-[400px] overflow-y-auto">
                 <DailyTable data={dailySummaries} />
               </div>
             </section>
