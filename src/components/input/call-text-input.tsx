@@ -54,46 +54,24 @@ export function CallTextInput({ onSaved }: CallTextInputProps) {
     setSuccess(false);
 
     try {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) throw new Error("인증 정보가 없습니다.");
+      const items = parsed.map((item) => ({
+        date: item.date,
+        media: item.media,
+        export_count: item.export_count,
+        used_car_count: item.used_car_count,
+        scrap_count: item.scrap_count,
+        absence_count: item.absence_count,
+        invalid_count: item.invalid_count,
+        phone_naver_count: item.phone_count,
+      }));
 
-      for (const item of parsed) {
-        const total =
-          item.export_count +
-          item.used_car_count +
-          item.scrap_count +
-          item.absence_count +
-          item.invalid_count +
-          item.phone_count;
-
-        const validTotal =
-          item.export_count + item.used_car_count + item.phone_count;
-
-        const { error: upsertError } = await supabase
-          .from("call_reports")
-          .upsert(
-            {
-              date: item.date,
-              media: item.media,
-              export_count: item.export_count,
-              used_car_count: item.used_car_count,
-              scrap_count: item.scrap_count,
-              absence_count: item.absence_count,
-              invalid_count: item.invalid_count,
-              phone_naver_count: item.phone_count,
-              valid_total: validTotal,
-              total_count: total,
-              reporter_id: user.id,
-              reported_at: new Date().toISOString(),
-            },
-            { onConflict: "date,media" }
-          );
-
-        if (upsertError) throw upsertError;
-      }
+      const res = await fetch("/api/data/save-calls", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "저장 실패");
 
       setSuccess(true);
       setParsed(null);

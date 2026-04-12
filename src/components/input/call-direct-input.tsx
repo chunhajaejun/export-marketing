@@ -64,21 +64,11 @@ export function CallDirectInput({
     setSuccess(false);
 
     try {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) throw new Error("인증 정보가 없습니다.");
-
-      const validTotal =
-        (values.export_count ?? 0) +
-        (values.used_car_count ?? 0) +
-        (values.phone_naver_count ?? 0);
-
-      const { error: upsertError } = await supabase
-        .from("call_reports")
-        .upsert(
-          {
+      const res = await fetch("/api/data/save-calls", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: [{
             date: selectedDate,
             media,
             export_count: values.export_count ?? 0,
@@ -87,15 +77,11 @@ export function CallDirectInput({
             absence_count: values.absence_count ?? 0,
             invalid_count: values.invalid_count ?? 0,
             phone_naver_count: values.phone_naver_count ?? 0,
-            valid_total: validTotal,
-            total_count: total,
-            reporter_id: user.id,
-            reported_at: new Date().toISOString(),
-          },
-          { onConflict: "date,media" }
-        );
-
-      if (upsertError) throw upsertError;
+          }],
+        }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "저장 실패");
 
       setSuccess(true);
       setValues(Object.fromEntries(FIELDS.map((f) => [f.key, 0])));

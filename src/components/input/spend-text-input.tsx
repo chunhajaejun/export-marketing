@@ -45,27 +45,13 @@ export function SpendTextInput({ onSaved }: SpendTextInputProps) {
     setSuccess(false);
 
     try {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) throw new Error("인증 정보가 없습니다.");
-
-      for (const item of parsed) {
-        const { error: upsertError } = await supabase
-          .from("ad_spend")
-          .upsert(
-            {
-              date: item.date,
-              media: item.media,
-              amount: item.amount,
-              reporter_id: user.id,
-            },
-            { onConflict: "date,media" }
-          );
-
-        if (upsertError) throw upsertError;
-      }
+      const res = await fetch("/api/data/save-spend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: parsed }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "저장 실패");
 
       setSuccess(true);
       setParsed(null);

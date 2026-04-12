@@ -131,25 +131,15 @@ export function SpendDirectInput({
     setSuccess(false);
 
     try {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) throw new Error("인증 정보가 없습니다.");
-
-      const { error: upsertError } = await supabase
-        .from("ad_spend")
-        .upsert(
-          {
-            date: selectedDate,
-            media,
-            amount,
-            reporter_id: user.id,
-          },
-          { onConflict: "date,media" }
-        );
-
-      if (upsertError) throw upsertError;
+      const res = await fetch("/api/data/save-spend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: [{ date: selectedDate, media, amount }],
+        }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "저장 실패");
 
       setSuccess(true);
       setAmountInput("");

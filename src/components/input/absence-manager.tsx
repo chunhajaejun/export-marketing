@@ -82,39 +82,18 @@ export function AbsenceManager({
       setProcessing(itemKey);
 
       try {
-        const supabase = createClient();
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) throw new Error("인증 정보가 없습니다.");
-
-        const targetField = RESOLUTION_FIELD_MAP[resolution];
-        if (!targetField) return;
-
-        const report = item.report;
-        const currentAbsence = report.absence_count;
-        const currentTarget =
-          (report[targetField as keyof CallReport] as number) ?? 0;
-
-        // Update call_reports: absence -1, target +1
-        const { error: updateError } = await supabase
-          .from("call_reports")
-          .update({
-            absence_count: currentAbsence - 1,
-            [targetField]: currentTarget + 1,
-          })
-          .eq("id", report.id);
-
-        if (updateError) throw updateError;
-
-        // Log the change
-        await supabase.from("call_report_logs").insert({
-          call_report_id: report.id,
-          field_changed: `absence_to_${resolution}`,
-          old_value: String(currentAbsence),
-          new_value: String(currentAbsence - 1),
-          changed_by: user.id,
+        const res = await fetch("/api/data/update-absence", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reportId: item.report.id,
+            field: "absence",
+            oldValue: "absence",
+            newValue: resolution,
+          }),
         });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || "변경 실패");
 
         // Remove item from local state
         setItems((prev) =>
