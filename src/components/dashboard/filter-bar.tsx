@@ -6,10 +6,10 @@ import { format, subDays, startOfMonth, endOfMonth, subMonths } from "date-fns";
 
 const MEDIA_OPTIONS = [
   { value: "all", label: "전체", color: "" },
-  { value: "naver", label: "네이버", color: "#3b82f6" },
+  { value: "naver", label: "네이버", color: "#03C75A" },
   { value: "danggeun", label: "당근", color: "#f97316" },
   { value: "meta", label: "메타", color: "#8b5cf6" },
-  { value: "google", label: "구글", color: "#34d399" },
+  { value: "google", label: "구글", color: "#EA4335" },
 ] as const;
 
 type Preset = "today" | "week" | "month" | "last_month";

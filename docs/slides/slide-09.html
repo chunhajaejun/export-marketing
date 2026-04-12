@@ -28,17 +28,15 @@
   .check { color:#4ade80; font-size:16px; font-weight:700; }
   .cross { color:#334155; font-size:14px; }
   .role-col { font-weight:700; }
-  .rc-admin { color:#16a34a; }
-  .rc-call { color:#2563eb; }
-  .rc-spend { color:#ea580c; }
+  .rc-master { color:#16a34a; }
+  .rc-inbound { color:#2563eb; }
+  .rc-media { color:#ea580c; }
   .rc-viewer { color:#94a3b8; }
-  /* 역할 카드 */
   .role-cards { display:flex; gap:12px; margin-top:20px; }
   .role-card { flex:1; border-radius:10px; padding:20px; border:1px solid #334155; text-align:center; }
   .role-card .rc-icon { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin:0 auto 10px; }
   .role-card .rc-title { font-size:14px; font-weight:700; margin-bottom:6px; }
   .role-card .rc-desc { font-size:16px; color:#94a3b8; line-height:1.6; }
-  /* 기술 스택 */
   .tech-area { width:260px; display:flex; flex-direction:column; gap:12px; background:#f8fafc; border-left:2px solid #e2e8f0; padding:16px; border-radius:0 10px 10px 0; }
   .desc-area-title { font-size:18px; font-weight:800; color:#1e293b; margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid #3b82f6; }
   .tech-card { background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
@@ -59,7 +57,7 @@
 <body>
 <div class="slide">
   <div class="slide-header">
-    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <img src="../../public/logo_gna.png" alt="수출 마케팅 대시보드">
     <span class="num">09</span>
     <span class="label">역할별 권한 안내</span>
   </div>
@@ -73,10 +71,10 @@
           <thead>
             <tr>
               <th>기능</th>
-              <th class="rc-admin">관리자</th>
-              <th class="rc-call">콜량보고</th>
-              <th class="rc-spend">소진액보고</th>
-              <th class="rc-viewer">뷰어</th>
+              <th class="rc-master">마스터</th>
+              <th class="rc-inbound">인바운드 매니저</th>
+              <th class="rc-media">미디어 매니저</th>
+              <th class="rc-viewer">열람자</th>
             </tr>
           </thead>
           <tbody>
@@ -129,22 +127,22 @@
       <div class="role-cards">
         <div class="role-card" style="background:rgba(22,163,74,0.08);">
           <div class="rc-icon" style="background:rgba(22,163,74,0.2);color:#16a34a;">&#9733;</div>
-          <div class="rc-title rc-admin">관리자</div>
+          <div class="rc-title rc-master">마스터</div>
           <div class="rc-desc">모든 기능 접근<br>사용자 승인 및 역할 관리</div>
         </div>
         <div class="role-card" style="background:rgba(37,99,235,0.08);">
           <div class="rc-icon" style="background:rgba(37,99,235,0.2);color:#2563eb;">&#9743;</div>
-          <div class="rc-title rc-call">콜량보고</div>
+          <div class="rc-title rc-inbound">인바운드 매니저</div>
           <div class="rc-desc">대시보드 조회<br>문의 입력 + 부재 처리</div>
         </div>
         <div class="role-card" style="background:rgba(234,88,12,0.08);">
           <div class="rc-icon" style="background:rgba(234,88,12,0.2);color:#ea580c;">&#8361;</div>
-          <div class="rc-title rc-spend">소진액보고</div>
+          <div class="rc-title rc-media">미디어 매니저</div>
           <div class="rc-desc">대시보드 조회<br>광고비 소진액 입력</div>
         </div>
         <div class="role-card" style="background:rgba(148,163,184,0.08);">
           <div class="rc-icon" style="background:rgba(148,163,184,0.2);color:#94a3b8;">&#128065;</div>
-          <div class="rc-title rc-viewer">뷰어</div>
+          <div class="rc-title rc-viewer">열람자</div>
           <div class="rc-desc">대시보드 조회만<br>입력 기능 없음</div>
         </div>
       </div>
@@ -174,10 +172,10 @@
 
   <div class="footer-bar">
     <div class="fl">
-      <img src="../../public/logo_gna.png" alt="(주)지엔에이">
-      <span class="company">(주)지엔에이 | No.1 오토모빌리티</span>
+      <img src="../../public/logo_gna.png" alt="수출 마케팅 대시보드">
+      <span class="company">수출 마케팅 대시보드</span>
     </div>
-    <span class="right">투고글로벌 / 투바이어 수출 마케팅 대행 -- 기능설명서 v2</span>
+    <span class="right">투고글로벌 / 투바이어 수출 마케팅 대행 -- 기능설명서 v3</span>
   </div>
   <div class="page-num">9 / 9</div>
 </div>

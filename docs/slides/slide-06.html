@@ -47,7 +47,6 @@
   .ac-box { background:#0f172a; border-radius:4px; padding:8px; text-align:center; }
   .ac-box .ac-title { color:#94a3b8; font-size:8px; }
   .ac-box .ac-val { font-size:12px; font-weight:700; }
-  /* 이력 테이블 */
   .history-table { width:100%; border-collapse:collapse; font-size:10px; text-align:center; }
   .history-table thead { background:#0f172a; }
   .history-table th { padding:6px; color:#64748b; font-size:9px; }
@@ -68,7 +67,7 @@
 <body>
 <div class="slide">
   <div class="slide-header">
-    <img src="../../public/logo_gna.png" alt="(주)지엔에이">
+    <img src="../../public/logo_gna.png" alt="수출 마케팅 대시보드">
     <span class="num">06</span>
     <span class="label">광고비 관리</span>
   </div>
@@ -105,11 +104,11 @@
           </div>
           <button class="save-btn">저장</button>
 
-          <!-- 우측 이력 -->
+          <!-- 이력 -->
           <div style="margin-top:12px;color:#94a3b8;font-size:10px;margin-bottom:4px;">04/12 입력 이력</div>
           <div style="background:#1e293b;border-radius:4px;overflow:hidden;">
             <table class="history-table">
-              <thead><tr><th style="text-align:left;padding-left:8px;">매체</th><th>소진액</th><th>콜량</th><th>단가(전체)</th><th>단가(유효)</th></tr></thead>
+              <thead><tr><th style="text-align:left;padding-left:8px;">매체</th><th>소진액</th><th>콜량</th><th>인입단가</th><th>유효단가</th></tr></thead>
               <tbody>
                 <tr><td style="text-align:left;padding-left:8px;"><span class="dot" style="background:#3b82f6;"></span>네이버</td><td>&#8361;120,000</td><td>9</td><td>&#8361;13,333</td><td class="c-green">&#8361;24,000</td></tr>
                 <tr><td style="text-align:left;padding-left:8px;"><span class="dot" style="background:#f97316;"></span>당근</td><td>&#8361;100,000</td><td>7</td><td>&#8361;14,286</td><td class="c-green">&#8361;20,000</td></tr>
@@ -120,7 +119,7 @@
           </div>
           <div class="summary-box">
             <div class="summary-row"><span style="color:#94a3b8;">오늘 총 소진액</span><span style="font-weight:700;">&#8361;350,000</span></div>
-            <div class="summary-row" style="margin-top:4px;"><span style="color:#94a3b8;font-size:10px;">평균 단가 (유효)</span><span class="c-green" style="font-weight:700;">&#8361;29,111</span></div>
+            <div class="summary-row" style="margin-top:4px;"><span style="color:#94a3b8;font-size:10px;">평균 유효단가</span><span class="c-green" style="font-weight:700;">&#8361;29,111</span></div>
           </div>
         </div>
       </div>
@@ -151,11 +150,11 @@
               <div class="ac-label">자동 계산</div>
               <div class="ac-grid">
                 <div class="ac-box">
-                  <div class="ac-title">단가 (전체)</div>
+                  <div class="ac-title">인입단가</div>
                   <div class="ac-val" style="color:#e2e8f0;">&#8361;16,072</div>
                 </div>
                 <div class="ac-box">
-                  <div class="ac-title">단가 (유효)</div>
+                  <div class="ac-title">유효단가</div>
                   <div class="ac-val c-green">&#8361;24,108</div>
                 </div>
               </div>
@@ -167,8 +166,8 @@
             <div style="color:#f97316;font-size:13px;font-weight:700;margin-bottom:8px;">자동 단가 계산</div>
             <div style="color:#94a3b8;font-size:11px;line-height:1.7;">
               소진액 입력 시 해당 날짜의 콜량을 기반으로<br>
-              <span style="color:#e2e8f0;font-weight:700;">단가(전체) = 소진액 / 전체 콜량</span><br>
-              <span class="c-green" style="font-weight:700;">단가(유효) = 소진액 / 유효 콜량</span><br>
+              <span style="color:#e2e8f0;font-weight:700;">인입단가 = 소진액 / 전체 콜량</span><br>
+              <span class="c-green" style="font-weight:700;">유효단가 = 소진액 / 유효 콜량</span><br>
               이 자동 계산되어 대시보드에 반영됩니다.
             </div>
           </div>
@@ -183,8 +182,8 @@
         <p>각 매체의 일별 <span class="hl">광고 소진액을 입력</span>합니다. 텍스트 붙여넣기 또는 직접 입력 모드를 선택할 수 있습니다.</p>
       </div>
       <div class="desc-card">
-        <h4 style="color:#3b82f6;">이력 확인</h4>
-        <p>입력된 소진액은 즉시 우측 이력에 반영되며, 콜량 대비 <span class="hl">단가(전체/유효)가 자동 계산</span>됩니다.</p>
+        <h4 style="color:#3b82f6;">자동 단가 계산</h4>
+        <p>입력된 소진액은 즉시 콜량 대비 <span class="hl">인입단가와 유효단가가 자동 계산</span>됩니다.</p>
       </div>
       <div class="desc-card">
         <h4 style="color:#8b5cf6;">미입력 알림</h4>
