@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { createClient } from "@/lib/supabase/client";
 import type { CallReport, MediaChannel } from "@/lib/types";
 
 const MEDIA_LABELS: Record<MediaChannel, string> = {
