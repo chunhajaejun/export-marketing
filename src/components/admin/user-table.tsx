@@ -36,6 +36,15 @@ function formatDate(dateStr: string) {
   });
 }
 
+const EMPTY_NEW_USER = {
+  email: "",
+  password: "",
+  name: "",
+  phone: "",
+  organization: "",
+  role: "viewer" as UserRole,
+};
+
 export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
   const [users, setUsers] = useState<Profile[]>(initialUsers);
   const [selectedRoles, setSelectedRoles] = useState<Record<string, UserRole>>(
@@ -43,6 +52,34 @@ export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
   );
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [newUser, setNewUser] = useState(EMPTY_NEW_USER);
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+
+  async function handleCreateUser() {
+    setCreating(true);
+    setCreateError(null);
+    try {
+      const res = await fetch("/api/admin/create-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "생성 실패");
+
+      if (data.profile) {
+        setUsers((prev) => [data.profile as Profile, ...prev]);
+      }
+      setNewUser(EMPTY_NEW_USER);
+      setCreateOpen(false);
+    } catch (err) {
+      setCreateError(err instanceof Error ? err.message : "생성 실패");
+    } finally {
+      setCreating(false);
+    }
+  }
 
   async function handleApprove(userId: string) {
     const role = selectedRoles[userId] || "viewer";
@@ -99,6 +136,138 @@ export function UserTable({ initialUsers }: { initialUsers: Profile[] }) {
 
   return (
     <div className="space-y-6">
+      {/* 신규 사용자 직접 생성 */}
+      <div className="rounded-xl border border-[#334155] bg-[#1e293b] p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-base font-semibold text-[#e2e8f0]">
+              신규 사용자 직접 생성
+            </h2>
+            <p className="mt-1 text-xs text-[#94a3b8]">
+              회원가입 신청 없이 관리자가 직접 계정을 만들어 즉시 승인 상태로 등록합니다.
+            </p>
+          </div>
+          <Button
+            size="sm"
+            variant={createOpen ? "ghost" : "default"}
+            onClick={() => {
+              setCreateOpen((v) => !v);
+              setCreateError(null);
+            }}
+          >
+            {createOpen ? "닫기" : "신규 생성"}
+          </Button>
+        </div>
+
+        {createOpen && (
+          <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-[#94a3b8]">
+                이메일 *
+              </label>
+              <input
+                type="email"
+                className="h-9 w-full rounded-md border border-[#334155] bg-[#0f172a] px-3 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
+                value={newUser.email}
+                onChange={(e) =>
+                  setNewUser((p) => ({ ...p, email: e.target.value }))
+                }
+                placeholder="user@example.com"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-[#94a3b8]">
+                비밀번호 * (8자 이상)
+              </label>
+              <input
+                type="text"
+                className="h-9 w-full rounded-md border border-[#334155] bg-[#0f172a] px-3 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
+                value={newUser.password}
+                onChange={(e) =>
+                  setNewUser((p) => ({ ...p, password: e.target.value }))
+                }
+                placeholder="초기 비밀번호"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-[#94a3b8]">
+                이름 *
+              </label>
+              <input
+                type="text"
+                className="h-9 w-full rounded-md border border-[#334155] bg-[#0f172a] px-3 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
+                value={newUser.name}
+                onChange={(e) =>
+                  setNewUser((p) => ({ ...p, name: e.target.value }))
+                }
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-[#94a3b8]">
+                역할 *
+              </label>
+              <select
+                className="h-9 w-full rounded-md border border-[#334155] bg-[#0f172a] px-3 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
+                value={newUser.role}
+                onChange={(e) =>
+                  setNewUser((p) => ({
+                    ...p,
+                    role: e.target.value as UserRole,
+                  }))
+                }
+              >
+                {ROLE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-[#94a3b8]">
+                연락처
+              </label>
+              <input
+                type="text"
+                className="h-9 w-full rounded-md border border-[#334155] bg-[#0f172a] px-3 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
+                value={newUser.phone}
+                onChange={(e) =>
+                  setNewUser((p) => ({ ...p, phone: e.target.value }))
+                }
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-[#94a3b8]">
+                소속
+              </label>
+              <input
+                type="text"
+                className="h-9 w-full rounded-md border border-[#334155] bg-[#0f172a] px-3 text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
+                value={newUser.organization}
+                onChange={(e) =>
+                  setNewUser((p) => ({ ...p, organization: e.target.value }))
+                }
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              {createError && (
+                <div className="mb-2 rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                  {createError}
+                </div>
+              )}
+              <Button
+                disabled={creating}
+                onClick={handleCreateUser}
+                className="bg-[#3b82f6] text-white hover:bg-[#3b82f6]/80"
+              >
+                {creating ? "생성 중..." : "계정 생성"}
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* 대기 사용자 */}
       {pendingUsers.length > 0 && (
         <div>
