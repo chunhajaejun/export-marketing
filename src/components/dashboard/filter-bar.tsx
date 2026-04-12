@@ -8,7 +8,7 @@ const MEDIA_OPTIONS = [
   { value: "all", label: "전체", color: "" },
   { value: "naver", label: "네이버", color: "#03C75A" },
   { value: "danggeun", label: "당근", color: "#f97316" },
-  { value: "meta", label: "메타", color: "#8b5cf6" },
+  { value: "meta", label: "메타", color: "#0668E1" },
   { value: "google", label: "구글", color: "#EA4335" },
 ] as const;
 

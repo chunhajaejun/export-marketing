@@ -24,7 +24,7 @@ const MEDIA_COLORS: Record<MediaChannel, string> = {
   naver_web: "#03C75A",
   naver_landing: "#03C75A",
   danggeun: "#f97316",
-  meta: "#8b5cf6",
+  meta: "#0668E1",
   google: "#EA4335",
 };
 

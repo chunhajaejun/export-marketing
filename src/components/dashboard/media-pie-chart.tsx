@@ -13,7 +13,7 @@ import type { CallReport, MediaChannel } from "@/lib/types";
 const MEDIA_COLORS: Record<string, string> = {
   naver: "#03C75A",
   danggeun: "#f97316",
-  meta: "#8b5cf6",
+  meta: "#0668E1",
   google: "#EA4335",
 };
 

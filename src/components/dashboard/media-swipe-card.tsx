@@ -14,7 +14,7 @@ const MEDIA_CONFIG: {
 }[] = [
   { group: "naver", label: "네이버", color: "#03C75A", channels: ["naver_web", "naver_landing"] },
   { group: "danggeun", label: "당근", color: "#f97316", channels: ["danggeun"] },
-  { group: "meta", label: "메타", color: "#8b5cf6", channels: ["meta"] },
+  { group: "meta", label: "메타", color: "#0668E1", channels: ["meta"] },
   { group: "google", label: "구글", color: "#EA4335", channels: ["google"] },
 ];
 
