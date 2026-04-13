@@ -11,21 +11,34 @@ export async function POST(request: NextRequest) {
   const admin = createAdminClient();
 
   for (const item of items) {
-    const total = (item.export_count || 0) + (item.used_car_count || 0) + (item.scrap_count || 0) +
-      (item.absence_count || 0) + (item.invalid_count || 0) + (item.phone_naver_count || 0);
-    const validTotal = (item.export_count || 0) + (item.used_car_count || 0) + (item.phone_naver_count || 0);
+    // 신규 모델: 직원은 전화량(phone_count) + 분류(유효수출/매입/폐차, 무효, 부재)만 입력.
+    // 총 = phone_count + API 웹문의(동적), 유효+무효+부재 = 총 이 되어야 함.
+    const phoneCount = item.phone_count ?? 0;
+    const manualWebCount = item.manual_web_count ?? 0;
+    const exportCount = item.export_count ?? 0;
+    const usedCarCount = item.used_car_count ?? 0;
+    const scrapCount = item.scrap_count ?? 0;
+    const absenceCount = item.absence_count ?? 0;
+    const invalidCount = item.invalid_count ?? 0;
+
+    const validTotal = exportCount + usedCarCount + scrapCount;
+    const classifiedTotal =
+      exportCount + usedCarCount + scrapCount + absenceCount + invalidCount;
 
     const { error } = await admin.from("call_reports").upsert(
       {
-        date: item.date, media: item.media,
-        export_count: item.export_count || 0,
-        used_car_count: item.used_car_count || 0,
-        scrap_count: item.scrap_count || 0,
-        absence_count: item.absence_count || 0,
-        invalid_count: item.invalid_count || 0,
-        phone_naver_count: item.phone_naver_count || 0,
+        date: item.date,
+        media: item.media,
+        phone_count: phoneCount,
+        manual_web_count: manualWebCount,
+        export_count: exportCount,
+        used_car_count: usedCarCount,
+        scrap_count: scrapCount,
+        absence_count: absenceCount,
+        invalid_count: invalidCount,
+        phone_naver_count: 0,
         valid_total: validTotal,
-        total_count: total,
+        total_count: classifiedTotal,
         reporter_id: user.id,
         reported_at: new Date().toISOString(),
       },
