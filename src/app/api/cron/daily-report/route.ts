@@ -5,6 +5,11 @@ import {
   sendTelegram,
   isInWindowKST,
 } from "@/lib/report/daily";
+import {
+  buildChangeSummary,
+  buildMetaCreativeReport,
+  buildNaverCampaignReport,
+} from "@/lib/report/additional";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -31,10 +36,24 @@ export async function GET(req: NextRequest) {
   }
 
   const report = await buildDailyReport();
+  const [changeBody, metaBody, naverBody] = await Promise.all([
+    buildChangeSummary(report.dateIso),
+    buildMetaCreativeReport(report.dateIso),
+    buildNaverCampaignReport(report.dateIso),
+  ]);
 
-  // preview 모드: 그룹 발송/DB 기록 없이 본문만 반환
+  // preview 모드: 그룹 발송/DB 기록 없이 본문만 반환 (배열로 4개)
   if (preview) {
-    return NextResponse.json({ preview: true, date: report.dateIso, body: report.body });
+    return NextResponse.json({
+      preview: true,
+      date: report.dateIso,
+      bodies: {
+        daily: report.body,
+        change: changeBody,
+        meta: metaBody,
+        naver: naverBody,
+      },
+    });
   }
 
   // 이미 발송된 날짜면 스킵
@@ -60,6 +79,9 @@ export async function GET(req: NextRequest) {
   }
 
   const messageId = await sendTelegram(report.body);
+  await sendTelegram(changeBody);
+  await sendTelegram(metaBody);
+  await sendTelegram(naverBody);
 
   await admin.from("daily_report_log").upsert(
     {
@@ -75,5 +97,6 @@ export async function GET(req: NextRequest) {
     sent: true,
     date: report.dateIso,
     message_id: messageId,
+    sent_messages: 4,
   });
 }
