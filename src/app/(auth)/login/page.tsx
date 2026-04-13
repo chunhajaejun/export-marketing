@@ -6,7 +6,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#0f172a] px-4">
       <div className="w-full max-w-sm rounded-xl border border-[#334155] bg-[#1e293b] p-8">
         <div className="mb-6 text-center">
-          <h1 className="text-xl font-bold text-white">투바이어</h1>
+          <h1 className="text-xl font-bold text-white">수출 마케팅 대시보드</h1>
           <p className="text-sm text-[#64748b]">광고 성과 분석 대시보드</p>
         </div>
         <LoginForm />

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "투바이어",
-  description: "투바이어 광고 성과 분석 대시보드",
+  title: "수출 마케팅 대시보드",
+  description: "광고 성과 분석 대시보드",
 };
 
 export default function RootLayout({

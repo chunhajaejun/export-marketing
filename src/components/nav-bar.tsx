@@ -54,7 +54,7 @@ export function NavBar({ userName, userRole, userOrganization }: NavBarProps) {
             href="/dashboard"
             className="text-sm font-bold text-white sm:text-base"
           >
-            투바이어
+            수출 마케팅 대시보드
           </Link>
 
           {/* Desktop nav */}
