@@ -50,14 +50,25 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
   const admin = createAdminClient();
   const { iso: dateIso, label: dateLabel } = kstYesterday();
 
+  // 7일 평균용 시작일 (어제 포함 7일: 어제, -1, ... , -6)
+  const weekAgo = new Date(dateIso);
+  weekAgo.setDate(weekAgo.getDate() - 6);
+  const weekAgoIso = weekAgo.toISOString().slice(0, 10);
+
   const [
     { data: callsToday },
+    { data: callsWeek },
     { data: spendToday },
     { data: naverStatsSpend },
     { data: naverCamps },
     { data: metaStatsSpend },
   ] = await Promise.all([
     admin.from("call_reports").select("*").eq("date", dateIso),
+    admin
+      .from("call_reports")
+      .select("date, total_count")
+      .gte("date", weekAgoIso)
+      .lte("date", dateIso),
     admin.from("ad_spend").select("*").eq("date", dateIso),
     admin
       .from("naver_ad_stats")
@@ -219,6 +230,19 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
   const cpaAll = totCalls > 0 ? Math.round(totSpend / totCalls) : 0;
   const cpaValid = totValid > 0 ? Math.round(totSpend / totValid) : 0;
 
+  // 7일 평균 문의량 (어제 포함)
+  const weekByDate = new Map<string, number>();
+  for (const r of (callsWeek ?? []) as Array<{ date: string; total_count: number }>) {
+    weekByDate.set(r.date, (weekByDate.get(r.date) ?? 0) + (r.total_count ?? 0));
+  }
+  const weekAvgCalls =
+    weekByDate.size > 0
+      ? Math.round(
+          Array.from(weekByDate.values()).reduce((s, v) => s + v, 0) /
+            weekByDate.size
+        )
+      : 0;
+
   // 본문
   const lines: string[] = [];
   lines.push("━━━━━━━━━━━━━━━━");
@@ -228,7 +252,9 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
   lines.push("");
   lines.push("📞  문의량");
   lines.push("");
-  lines.push(`  총 ${fmt(totCalls)}건`);
+  lines.push(
+    `  총 ${fmt(totCalls)}건${weekAvgCalls > 0 ? ` (지난 7일 평균 ${fmt(weekAvgCalls)}건)` : ""}`
+  );
   lines.push("");
   lines.push(`  ✅ 유효 ${fmt(totValid)}건`);
   lines.push(`     ├ 수출 ${fmt(totExport)}`);
@@ -243,8 +269,12 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
   lines.push("💰  지출 · 단가");
   lines.push("");
   lines.push(`  총 소진액    ${won(totSpend)}`);
-  lines.push(`  전체 단가    ${totCalls > 0 ? won(cpaAll) : "-"}`);
-  lines.push(`  유효 단가    ${totValid > 0 ? won(cpaValid) : "-"}  ⭐`);
+  lines.push(
+    `  전체 단가    ${totCalls > 0 ? won(cpaAll) : "-"}  (${fmt(totCalls)}건)`
+  );
+  lines.push(
+    `  유효 단가    ${totValid > 0 ? won(cpaValid) : "-"}  (${fmt(totValid)}건)  ⭐`
+  );
   lines.push("");
   lines.push("━━━━━━━━━━━━━━━━");
   lines.push("");
