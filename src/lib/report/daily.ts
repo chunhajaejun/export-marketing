@@ -141,9 +141,11 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
     }
   }
 
-  // total 재계산
+  // total 재계산: 기본 phone+web, 단 분류 합이 더 크면 레거시 데이터로 간주하고 분류 합을 채택
   for (const b of bucket.values()) {
-    b.total = b.phone + b.web;
+    const classified = b.valid + b.invalid + b.absence;
+    const newModel = b.phone + b.web;
+    b.total = Math.max(newModel, classified);
   }
 
   // 수동 광고비
