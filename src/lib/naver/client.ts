@@ -101,15 +101,31 @@ export interface NaverStatRow {
  * /stats 엔드포인트 — 지정한 캠페인/광고그룹/소재의 지정 기간 실적을 일별 또는 요약으로 반환.
  * ids: 최대 100개씩 배치. timeRange: {since, until} YYYY-MM-DD.
  */
-export async function getStats(
+export interface NaverDailyStat {
+  campaignId: string;
+  date: string;
+  impCnt: number;
+  clkCnt: number;
+  salesAmt: number;
+  ccnt: number;
+  convAmt: number;
+  ctr?: number;
+  cpc?: number;
+  avgRnk?: number;
+}
+
+/**
+ * /stats 단일 ID GET 호출. 캠페인 ID마다 일별 데이터 반환.
+ * Naver의 /stats는 ids 배열을 받지만 캠페인 단위 일별 데이터는 단일 id + breakdown=day가 안정적.
+ */
+export async function getCampaignDailyStats(
   creds: NaverCreds,
-  ids: string[],
+  campaignId: string,
   since: string,
   until: string
-): Promise<NaverStatRow[]> {
-  if (ids.length === 0) return [];
+): Promise<NaverDailyStat[]> {
   const query = {
-    ids: JSON.stringify(ids),
+    id: campaignId,
     fields: JSON.stringify([
       "impCnt",
       "clkCnt",
@@ -121,18 +137,17 @@ export async function getStats(
       "avgRnk",
     ]),
     timeRange: JSON.stringify({ since, until }),
-    datePreset: undefined,
     breakdown: "day",
-    StatType: "CAMPAIGN",
   };
-  const raw = await naverRequest<{ data: Array<NaverStatRow & { row: unknown }> }>(
+  const raw = await naverRequest<{ data: Array<Record<string, unknown>> }>(
     creds,
     "GET",
     "/stats",
     query
   );
   return (raw.data ?? []).map((r) => ({
-    id: r.id,
+    campaignId,
+    date: String(r.dateStart ?? r.statDt ?? r.date ?? until).slice(0, 10),
     impCnt: Number(r.impCnt ?? 0),
     clkCnt: Number(r.clkCnt ?? 0),
     salesAmt: Number(r.salesAmt ?? 0),

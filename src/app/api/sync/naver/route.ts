@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { loadNaverAccounts, listCampaigns, getStats } from "@/lib/naver/client";
+import {
+  loadNaverAccounts,
+  listCampaigns,
+  getCampaignDailyStats,
+} from "@/lib/naver/client";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -74,41 +78,41 @@ export async function GET(req: NextRequest) {
         continue;
       }
 
-      const batchSize = 30;
-      for (let i = 0; i < ids.length; i += batchSize) {
-        const batch = ids.slice(i, i + batchSize);
-        const rows = await getStats(acc.creds, batch, sinceStr, untilStr);
-        for (const row of rows) {
-          // row.id 는 캠페인 ID, 반환 스키마에 따라 date 필드 포함 — 응답 구조가 다를 수 있어 raw 필드로 안전 처리
-          const anyRow = row as unknown as Record<string, unknown>;
-          const date =
-            (anyRow.date as string) ||
-            (anyRow.statDt as string) ||
-            untilStr;
-          const impressions = Number(anyRow.impCnt ?? 0);
-          const clicks = Number(anyRow.clkCnt ?? 0);
-          const cost = Number(anyRow.salesAmt ?? 0);
-          const conversions = Number(anyRow.ccnt ?? 0);
-          const convValue = Number(anyRow.convAmt ?? 0);
-
-          const { error } = await admin.from("naver_ad_stats").upsert(
-            {
-              campaign_id: row.id,
-              date,
-              impressions,
-              clicks,
-              cost,
-              conversions,
-              conv_value: convValue,
-              ctr: row.ctr ?? null,
-              cpc: row.cpc ?? null,
-              avg_rank: row.avgRnk ?? null,
-              synced_at: new Date().toISOString(),
-            },
-            { onConflict: "campaign_id,date" }
+      for (const campaignId of ids) {
+        try {
+          const rows = await getCampaignDailyStats(
+            acc.creds,
+            campaignId,
+            sinceStr,
+            untilStr
           );
-          if (error) accReport.errors.push(`stats ${row.id}/${date}: ${error.message}`);
-          else accReport.stats_rows += 1;
+          for (const row of rows) {
+            const { error } = await admin.from("naver_ad_stats").upsert(
+              {
+                campaign_id: row.campaignId,
+                date: row.date,
+                impressions: row.impCnt,
+                clicks: row.clkCnt,
+                cost: row.salesAmt,
+                conversions: row.ccnt,
+                conv_value: row.convAmt,
+                ctr: row.ctr ?? null,
+                cpc: row.cpc ?? null,
+                avg_rank: row.avgRnk ?? null,
+                synced_at: new Date().toISOString(),
+              },
+              { onConflict: "campaign_id,date" }
+            );
+            if (error)
+              accReport.errors.push(
+                `stats ${row.campaignId}/${row.date}: ${error.message}`
+              );
+            else accReport.stats_rows += 1;
+          }
+        } catch (e) {
+          accReport.errors.push(
+            `stats ${campaignId}: ${e instanceof Error ? e.message : String(e)}`
+          );
         }
       }
 
