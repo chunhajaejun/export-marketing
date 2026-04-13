@@ -76,9 +76,9 @@ export function FilterBar() {
   ];
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#334155] bg-[#1e293b] p-4 sm:flex-row sm:items-center sm:gap-4">
+    <div className="flex flex-col gap-3 rounded-xl border border-[#334155] bg-[#1e293b] p-4 lg:flex-row lg:items-center lg:gap-4">
       {/* Preset buttons */}
-      <div className="flex gap-1.5">
+      <div className="flex flex-wrap gap-1.5">
         {presets.map(([key, label]) => (
           <button
             key={key}
@@ -112,7 +112,7 @@ export function FilterBar() {
       </div>
 
       {/* Media filter */}
-      <div className="flex gap-1.5">
+      <div className="flex flex-wrap gap-1.5">
         {MEDIA_OPTIONS.map((opt) => {
           const isActive = media === opt.value;
           return (
