@@ -8,6 +8,10 @@
     {
       "path": "/api/sync/meta",
       "schedule": "5 * * * *"
+    },
+    {
+      "path": "/api/cron/daily-report",
+      "schedule": "*/5 0-2 * * *"
     }
   ]
 }
