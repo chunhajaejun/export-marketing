@@ -89,7 +89,9 @@ export function webCountFor(
 }
 
 /**
- * 매체별 유효 웹문의 수 계산. API 매체면 API 값, 아니면 manual_web_count 사용.
+ * 매체별 유효 웹문의 수 계산.
+ * 우선순위: manual_web_count(>0) → API 값 → 0
+ * manual_web_count가 0이 아니면 override로 간주 (레거시 데이터 / 수기 보정 대응).
  */
 export function effectiveWebCount(
   media: string,
@@ -97,6 +99,7 @@ export function effectiveWebCount(
   date: string,
   manualWebCount: number
 ): number {
+  if (manualWebCount > 0) return manualWebCount;
   if (API_MEDIA.has(media)) return webCountFor(apiWebMap, date, media);
-  return manualWebCount;
+  return 0;
 }

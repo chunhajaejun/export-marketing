@@ -1,5 +1,10 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { loadApiWebCounts, webCountFor, API_MEDIA } from "@/lib/report/inquiry-sources";
+import {
+  loadApiWebCounts,
+  webCountFor,
+  effectiveWebCount,
+  API_MEDIA,
+} from "@/lib/report/inquiry-sources";
 
 const MEDIA_LABEL: Record<
   string,
@@ -119,9 +124,7 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
   for (const c of callRows) {
     const b = get(c.media);
     b.phone += c.phone_count ?? 0;
-    b.web += API_MEDIA.has(c.media)
-      ? webCountFor(apiWebMap, dateIso, c.media)
-      : c.manual_web_count ?? 0;
+    b.web += effectiveWebCount(c.media, apiWebMap, dateIso, c.manual_web_count ?? 0);
     b.validExport += c.export_count ?? 0;
     b.validUsedCar += c.used_car_count ?? 0;
     b.validScrap += c.scrap_count;
