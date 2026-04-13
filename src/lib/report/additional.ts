@@ -194,6 +194,9 @@ const META_LEAD_TYPES = [
   "lead",
   "onsite_conversion.lead_grouped",
   "offsite_conversion.custom.lead",
+  "purchase",
+  "offsite_conversion.fb_pixel_purchase",
+  "offsite_conversion.fb_pixel_lead",
 ];
 
 function leadsFromConversions(

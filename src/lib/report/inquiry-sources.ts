@@ -3,11 +3,15 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 // API 자동 집계 가능한 매체
 export const API_MEDIA = new Set(["naver_web", "naver_landing", "meta"]);
 
-// 메타 Lead 이벤트 후보 — 우선순위 순
+// 메타 전환 이벤트 후보 — 우선순위 순
+// 랜딩연결 광고는 Purchase 이벤트로 "문의"를 추적하고 있어 lead 외에도 purchase 포함
 const META_LEAD_ACTION_TYPES = [
   "lead",
   "onsite_conversion.lead_grouped",
   "offsite_conversion.custom.lead",
+  "purchase",
+  "offsite_conversion.fb_pixel_purchase",
+  "offsite_conversion.fb_pixel_lead",
 ];
 
 function extractMetaLeadCount(
