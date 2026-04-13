@@ -156,7 +156,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       .lte("date", endDate),
     admin
       .from("naver_campaigns")
-      .select("campaign_id")
+      .select("campaign_id, media_channel")
       .eq("is_whitelisted", true),
     admin
       .from("meta_ad_stats")
@@ -165,21 +165,23 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       .lte("date", endDate),
   ]);
 
-  // 네이버 자동 동기화 데이터를 ad_spend 형태로 합성. 화이트리스트만, 일자별 합산.
-  const whitelistSet = new Set(
-    (naverWhitelist ?? []).map((r) => r.campaign_id as string)
+  // 네이버 자동 동기화 데이터를 ad_spend 형태로 합성. 화이트리스트만, (날짜, 매체채널)별 합산.
+  const whitelistChannelMap = new Map<string, "naver_web" | "naver_landing">(
+    ((naverWhitelist ?? []) as Array<{
+      campaign_id: string;
+      media_channel: "naver_web" | "naver_landing";
+    }>).map((r) => [r.campaign_id, r.media_channel])
   );
-  const naverAutoByDate = new Map<string, number>();
+  const naverAutoByKey = new Map<string, number>();
   for (const row of (naverStats ?? []) as Array<{
     date: string;
     cost: number | string;
     campaign_id: string;
   }>) {
-    if (!whitelistSet.has(row.campaign_id)) continue;
-    naverAutoByDate.set(
-      row.date,
-      (naverAutoByDate.get(row.date) ?? 0) + Number(row.cost ?? 0)
-    );
+    const channel = whitelistChannelMap.get(row.campaign_id);
+    if (!channel) continue;
+    const key = `${row.date}|${channel}`;
+    naverAutoByKey.set(key, (naverAutoByKey.get(key) ?? 0) + Number(row.cost ?? 0));
   }
 
   // 메타 자동 데이터 — 광고계정 단위 일별 spend 합산
@@ -191,23 +193,30 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     );
   }
 
-  // 자동 데이터가 있는 날짜는 수동 항목 무시 (중복 방지)
-  const naverAutoDates = new Set(naverAutoByDate.keys());
+  // 자동 데이터가 있는 (날짜, 채널)은 수동 항목 무시 (중복 방지)
+  const autoChannelDates = new Set(naverAutoByKey.keys());
   const metaAutoDates = new Set(metaAutoByDate.keys());
   const manualSpend = ((spend as AdSpend[]) || []).filter((s) => {
-    if (s.media === "naver_web" && naverAutoDates.has(s.date)) return false;
+    if (
+      (s.media === "naver_web" || s.media === "naver_landing") &&
+      autoChannelDates.has(`${s.date}|${s.media}`)
+    )
+      return false;
     if (s.media === "meta" && metaAutoDates.has(s.date)) return false;
     return true;
   });
-  const naverAutoRows: AdSpend[] = Array.from(naverAutoByDate.entries()).map(
-    ([date, amount]) => ({
-      id: `naver-auto-${date}`,
-      date,
-      media: "naver_web",
-      amount,
-      reporter_id: "naver-api",
-      created_at: new Date().toISOString(),
-    })
+  const naverAutoRows: AdSpend[] = Array.from(naverAutoByKey.entries()).map(
+    ([key, amount]) => {
+      const [date, channel] = key.split("|") as [string, "naver_web" | "naver_landing"];
+      return {
+        id: `naver-auto-${channel}-${date}`,
+        date,
+        media: channel,
+        amount,
+        reporter_id: "naver-api",
+        created_at: new Date().toISOString(),
+      };
+    }
   );
   const metaAutoRows: AdSpend[] = Array.from(metaAutoByDate.entries()).map(
     ([date, amount]) => ({

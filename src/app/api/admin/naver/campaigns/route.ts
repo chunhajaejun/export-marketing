@@ -77,13 +77,19 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const campaignId = typeof body.campaignId === "string" ? body.campaignId : "";
-  const isWhitelisted = Boolean(body.isWhitelisted);
   if (!campaignId)
     return NextResponse.json({ error: "campaignId required" }, { status: 400 });
 
+  const patch: Record<string, unknown> = {};
+  if (typeof body.isWhitelisted === "boolean") patch.is_whitelisted = body.isWhitelisted;
+  if (body.mediaChannel === "naver_web" || body.mediaChannel === "naver_landing")
+    patch.media_channel = body.mediaChannel;
+  if (Object.keys(patch).length === 0)
+    return NextResponse.json({ error: "no update fields" }, { status: 400 });
+
   const { error } = await admin
     .from("naver_campaigns")
-    .update({ is_whitelisted: isWhitelisted })
+    .update(patch)
     .eq("campaign_id", campaignId);
   if (error)
     return NextResponse.json({ error: error.message }, { status: 500 });

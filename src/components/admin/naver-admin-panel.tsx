@@ -17,6 +17,7 @@ interface NaverCampaign {
   campaign_tp: string | null;
   status: string | null;
   is_whitelisted: boolean;
+  media_channel: "naver_web" | "naver_landing";
   last_synced_at: string | null;
 }
 
@@ -68,6 +69,31 @@ export function NaverAdminPanel({
       setCampaigns((prev) =>
         prev.map((c) =>
           c.campaign_id === campaignId ? { ...c, is_whitelisted: next } : c
+        )
+      );
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "실패");
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  async function changeMediaChannel(
+    campaignId: string,
+    next: "naver_web" | "naver_landing"
+  ) {
+    setLoading(campaignId);
+    try {
+      const res = await fetch("/api/admin/naver/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ campaignId, mediaChannel: next }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "저장 실패");
+      setCampaigns((prev) =>
+        prev.map((c) =>
+          c.campaign_id === campaignId ? { ...c, media_channel: next } : c
         )
       );
     } catch (e) {
@@ -178,18 +204,34 @@ export function NaverAdminPanel({
                       {c.campaign_id}
                     </div>
                   </div>
-                  <label className="flex shrink-0 items-center gap-2 text-sm text-[#e2e8f0]">
-                    <input
-                      type="checkbox"
-                      checked={c.is_whitelisted}
+                  <div className="flex shrink-0 items-center gap-3">
+                    <select
                       disabled={loading === c.campaign_id}
+                      value={c.media_channel}
                       onChange={(e) =>
-                        toggleWhitelist(c.campaign_id, e.target.checked)
+                        changeMediaChannel(
+                          c.campaign_id,
+                          e.target.value as "naver_web" | "naver_landing"
+                        )
                       }
-                      className="h-4 w-4 accent-[#3b82f6]"
-                    />
-                    동기화
-                  </label>
+                      className="h-8 rounded-md border border-[#334155] bg-[#0f172a] px-2 text-xs text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
+                    >
+                      <option value="naver_web">네이버 웹</option>
+                      <option value="naver_landing">네이버 랜딩</option>
+                    </select>
+                    <label className="flex items-center gap-2 text-sm text-[#e2e8f0]">
+                      <input
+                        type="checkbox"
+                        checked={c.is_whitelisted}
+                        disabled={loading === c.campaign_id}
+                        onChange={(e) =>
+                          toggleWhitelist(c.campaign_id, e.target.checked)
+                        }
+                        className="h-4 w-4 accent-[#3b82f6]"
+                      />
+                      동기화
+                    </label>
+                  </div>
                 </li>
               ))}
             </ul>
