@@ -136,6 +136,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     { data: spend },
     { data: naverStats },
     { data: naverWhitelist },
+    { data: metaStats },
   ] = await Promise.all([
     admin
       .from("call_reports")
@@ -157,6 +158,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       .from("naver_campaigns")
       .select("campaign_id")
       .eq("is_whitelisted", true),
+    admin
+      .from("meta_ad_stats")
+      .select("date, spend")
+      .gte("date", startDate)
+      .lte("date", endDate),
   ]);
 
   // 네이버 자동 동기화 데이터를 ad_spend 형태로 합성. 화이트리스트만, 일자별 합산.
@@ -176,11 +182,23 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     );
   }
 
-  // 자동 데이터가 있는 날짜는 수동 naver_web 항목 무시 (중복 방지)
-  const autoDates = new Set(naverAutoByDate.keys());
-  const manualSpend = ((spend as AdSpend[]) || []).filter(
-    (s) => !(s.media === "naver_web" && autoDates.has(s.date))
-  );
+  // 메타 자동 데이터 — 광고계정 단위 일별 spend 합산
+  const metaAutoByDate = new Map<string, number>();
+  for (const row of (metaStats ?? []) as Array<{ date: string; spend: number | string }>) {
+    metaAutoByDate.set(
+      row.date,
+      (metaAutoByDate.get(row.date) ?? 0) + Number(row.spend ?? 0)
+    );
+  }
+
+  // 자동 데이터가 있는 날짜는 수동 항목 무시 (중복 방지)
+  const naverAutoDates = new Set(naverAutoByDate.keys());
+  const metaAutoDates = new Set(metaAutoByDate.keys());
+  const manualSpend = ((spend as AdSpend[]) || []).filter((s) => {
+    if (s.media === "naver_web" && naverAutoDates.has(s.date)) return false;
+    if (s.media === "meta" && metaAutoDates.has(s.date)) return false;
+    return true;
+  });
   const naverAutoRows: AdSpend[] = Array.from(naverAutoByDate.entries()).map(
     ([date, amount]) => ({
       id: `naver-auto-${date}`,
@@ -191,9 +209,19 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       created_at: new Date().toISOString(),
     })
   );
+  const metaAutoRows: AdSpend[] = Array.from(metaAutoByDate.entries()).map(
+    ([date, amount]) => ({
+      id: `meta-auto-${date}`,
+      date,
+      media: "meta",
+      amount,
+      reporter_id: "meta-api",
+      created_at: new Date().toISOString(),
+    })
+  );
 
   let filteredCalls = (calls as CallReport[]) || [];
-  let filteredSpend: AdSpend[] = [...manualSpend, ...naverAutoRows];
+  let filteredSpend: AdSpend[] = [...manualSpend, ...naverAutoRows, ...metaAutoRows];
 
   if (mediaFilter !== "all" && MEDIA_FILTER_MAP[mediaFilter]) {
     const allowedChannels = MEDIA_FILTER_MAP[mediaFilter];
