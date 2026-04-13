@@ -131,7 +131,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   const admin = createAdminClient();
 
-  const [{ data: calls }, { data: spend }] = await Promise.all([
+  const [
+    { data: calls },
+    { data: spend },
+    { data: naverStats },
+    { data: naverWhitelist },
+  ] = await Promise.all([
     admin
       .from("call_reports")
       .select("*")
@@ -143,10 +148,52 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       .select("*")
       .gte("date", startDate)
       .lte("date", endDate),
+    admin
+      .from("naver_ad_stats")
+      .select("date, cost, campaign_id")
+      .gte("date", startDate)
+      .lte("date", endDate),
+    admin
+      .from("naver_campaigns")
+      .select("campaign_id")
+      .eq("is_whitelisted", true),
   ]);
 
+  // 네이버 자동 동기화 데이터를 ad_spend 형태로 합성. 화이트리스트만, 일자별 합산.
+  const whitelistSet = new Set(
+    (naverWhitelist ?? []).map((r) => r.campaign_id as string)
+  );
+  const naverAutoByDate = new Map<string, number>();
+  for (const row of (naverStats ?? []) as Array<{
+    date: string;
+    cost: number | string;
+    campaign_id: string;
+  }>) {
+    if (!whitelistSet.has(row.campaign_id)) continue;
+    naverAutoByDate.set(
+      row.date,
+      (naverAutoByDate.get(row.date) ?? 0) + Number(row.cost ?? 0)
+    );
+  }
+
+  // 자동 데이터가 있는 날짜는 수동 naver_web 항목 무시 (중복 방지)
+  const autoDates = new Set(naverAutoByDate.keys());
+  const manualSpend = ((spend as AdSpend[]) || []).filter(
+    (s) => !(s.media === "naver_web" && autoDates.has(s.date))
+  );
+  const naverAutoRows: AdSpend[] = Array.from(naverAutoByDate.entries()).map(
+    ([date, amount]) => ({
+      id: `naver-auto-${date}`,
+      date,
+      media: "naver_web",
+      amount,
+      reporter_id: "naver-api",
+      created_at: new Date().toISOString(),
+    })
+  );
+
   let filteredCalls = (calls as CallReport[]) || [];
-  let filteredSpend = (spend as AdSpend[]) || [];
+  let filteredSpend: AdSpend[] = [...manualSpend, ...naverAutoRows];
 
   if (mediaFilter !== "all" && MEDIA_FILTER_MAP[mediaFilter]) {
     const allowedChannels = MEDIA_FILTER_MAP[mediaFilter];
