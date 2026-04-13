@@ -156,17 +156,15 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
   }
 
   // 메타 자동
-  const metaAutoSpend = ((metaStats ?? []) as Array<{
+  const metaRows = (metaStats ?? []) as Array<{
     spend: number | string;
     clicks: number | string;
-  }>).reduce(
-    (acc, r) => {
-      acc.spend += Number(r.spend ?? 0);
-      acc.clicks += Number(r.clicks ?? 0);
-      return acc;
-    },
-    { spend: 0, clicks: 0 }
-  );
+  }>;
+  const metaAutoSpend: { spend: number; clicks: number } = { spend: 0, clicks: 0 };
+  for (const r of metaRows) {
+    metaAutoSpend.spend += Number(r.spend ?? 0);
+    metaAutoSpend.clicks += Number(r.clicks ?? 0);
+  }
   if (metaAutoSpend.spend > 0 || metaAutoSpend.clicks > 0) {
     const b = get("meta");
     b.spend = metaAutoSpend.spend;
