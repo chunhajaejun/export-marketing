@@ -246,7 +246,7 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
   // 본문
   const lines: string[] = [];
   lines.push("━━━━━━━━━━━━━━━━");
-  lines.push("📊 GNA 수출마케팅 일일 리포트");
+  lines.push("📊 (주)투바이어 일일 리포트");
   lines.push(`📅 ${dateLabel}`);
   lines.push("━━━━━━━━━━━━━━━━");
   lines.push("");

@@ -156,7 +156,7 @@ export async function buildChangeSummary(dateIso: string): Promise<string> {
 
   const lines: string[] = [];
   lines.push("━━━━━━━━━━━━━━━━");
-  lines.push("📈 GNA 변화 요약");
+  lines.push("📈 (주)투바이어 변화 요약");
   lines.push(`📅 ${formatLabel(dateIso)}`);
   lines.push("━━━━━━━━━━━━━━━━");
   lines.push("");
