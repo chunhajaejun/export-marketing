@@ -23,13 +23,19 @@ export async function GET(req: NextRequest) {
   }
 
   const force = req.nextUrl.searchParams.get("force") === "1";
+  const preview = req.nextUrl.searchParams.get("preview") === "1";
   const admin = createAdminClient();
 
-  if (!force && !isInWindowKST()) {
+  if (!force && !preview && !isInWindowKST()) {
     return NextResponse.json({ skipped: "outside window (09:30–12:00 KST)" });
   }
 
   const report = await buildDailyReport();
+
+  // preview 모드: 그룹 발송/DB 기록 없이 본문만 반환
+  if (preview) {
+    return NextResponse.json({ preview: true, date: report.dateIso, body: report.body });
+  }
 
   // 이미 발송된 날짜면 스킵
   const { data: existing } = await admin
