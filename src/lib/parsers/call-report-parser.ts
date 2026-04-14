@@ -58,10 +58,10 @@ function parseSection(section: string): ParsedCallReport | null {
   const total = totalMatch ? parseInt(totalMatch[1], 10) : 0;
 
   // 카테고리별 건수 파싱
-  const usedCar = parseCategoryCount(section, /\(내수\s*(\d+)\)/);
-  const scrap = parseCategoryCount(section, /\(폐차\s*(\d+)\)/);
-  const absence = parseCategoryCount(section, /\(부재\s*(\d+)\)/);
-  const invalid = parseCategoryCount(section, /\(무효\s*(\d+)\)/);
+  const usedCar = parseCategoryCount(section, /\(?내수\)?\s*[:：]?\s*(\d+)\s*건?/);
+  const scrap = parseCategoryCount(section, /\(?폐차\)?\s*[:：]?\s*(\d+)\s*건?/);
+  const absence = parseCategoryCount(section, /\(?부재\)?\s*[:：]?\s*(\d+)\s*건?/);
+  const invalid = parseCategoryCount(section, /\(?무효\)?\s*[:：]?\s*(\d+)\s*건?/);
 
   // 수출 건수 = 총건수 - (내수 + 폐차 + 부재 + 무효)
   const exportCount = Math.max(
