@@ -16,7 +16,7 @@ export default async function NaverAdminPage() {
     .select("role")
     .eq("id", user.id)
     .single();
-  if (!profile || profile.role !== "admin") redirect("/dashboard");
+  if (!profile) redirect("/dashboard");
 
   const { data: accounts } = await admin
     .from("naver_accounts")

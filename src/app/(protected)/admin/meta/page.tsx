@@ -16,7 +16,7 @@ export default async function MetaAdminPage() {
     .select("role")
     .eq("id", user.id)
     .single();
-  if (!profile || profile.role !== "admin") redirect("/dashboard");
+  if (!profile) redirect("/dashboard");
 
   const { data: accounts } = await admin
     .from("meta_ad_accounts")
