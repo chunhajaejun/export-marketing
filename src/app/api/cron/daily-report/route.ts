@@ -73,20 +73,17 @@ export async function GET(req: NextRequest) {
   // 발송 조건: 텍스트 입력 경로 + 직접 입력 경로 양쪽 모두 저장된 기록이 있어야 함.
   // (input_source: 'text' / 'direct' / 'both')
   if (!force) {
-    const [{ data: sourcesRows }, { data: spendRows }] = await Promise.all([
-      admin.from("call_reports").select("input_source").eq("date", report.dateIso),
+    const [{ data: callRows }, { data: spendRows }] = await Promise.all([
+      admin.from("call_reports").select("id").eq("date", report.dateIso).limit(1),
       admin.from("ad_spend").select("id").eq("date", report.dateIso).limit(1),
     ]);
-    const sources = (sourcesRows ?? []).map((r) => r.input_source as string);
-    const hasText = sources.some((s) => s === "text" || s === "both");
-    const hasDirect = sources.some((s) => s === "direct" || s === "both");
+    const hasCall = (callRows ?? []).length > 0;
     const hasSpend = (spendRows ?? []).length > 0;
-    if (!hasText || !hasDirect || !hasSpend) {
+    if (!hasCall || !hasSpend) {
       return NextResponse.json({
-        skipped: "awaiting required inputs",
+        skipped: "awaiting inputs",
         date: report.dateIso,
-        has_text: hasText,
-        has_direct: hasDirect,
+        has_call: hasCall,
         has_spend: hasSpend,
       });
     }
