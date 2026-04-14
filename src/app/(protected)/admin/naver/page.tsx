@@ -32,7 +32,7 @@ export default async function NaverAdminPage() {
   since.setDate(since.getDate() - 7);
   const { data: stats } = await admin
     .from("naver_ad_stats")
-    .select("campaign_id, date, impressions, clicks, cost, ctr, cpc")
+    .select("campaign_id, date, impressions, clicks, cost, ctr, cpc, conversions")
     .gte("date", since.toISOString().slice(0, 10))
     .order("date", { ascending: false });
 

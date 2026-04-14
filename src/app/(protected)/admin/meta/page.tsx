@@ -35,7 +35,7 @@ export default async function MetaAdminPage() {
   since.setDate(since.getDate() - 7);
   const { data: adStats } = await admin
     .from("meta_ad_stats")
-    .select("ad_id, date, impressions, clicks, spend, ctr, cpc")
+    .select("ad_id, date, impressions, clicks, spend, ctr, cpc, conversions")
     .gte("date", since.toISOString().slice(0, 10))
     .order("date", { ascending: false });
 

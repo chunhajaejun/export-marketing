@@ -32,6 +32,15 @@ interface MetaStat {
   spend: number;
   ctr: number | null;
   cpc: number | null;
+  conversions: Array<{ action_type: string; value: string }> | null;
+}
+
+function lpvFromConversions(
+  c: Array<{ action_type: string; value: string }> | null
+): number {
+  if (!c) return 0;
+  const hit = c.find((a) => a.action_type === "landing_page_view");
+  return hit ? Number(hit.value ?? 0) : 0;
 }
 
 export function MetaAdminPanel({
@@ -140,53 +149,59 @@ export function MetaAdminPanel({
                 <span className="ml-auto text-xs text-[#94a3b8]">{cAds.length} 광고</span>
               </div>
               {cAds.length > 0 && (
-                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                <ul className="space-y-2">
                   {cAds.map((ad) => (
                     <li
                       key={ad.ad_id}
-                      className="flex items-center gap-3 rounded-md border border-[#334155] bg-[#0f172a] p-2"
+                      className="rounded-md border border-[#334155] bg-[#0f172a] p-3"
                     >
-                      {ad.thumbnail_url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={ad.thumbnail_url}
-                          alt={ad.name}
-                          className="h-12 w-12 shrink-0 rounded object-cover"
-                        />
-                      ) : (
-                        <div className="h-12 w-12 shrink-0 rounded bg-[#334155]" />
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate text-xs font-semibold text-[#e2e8f0]">
-                          {ad.name}
+                      <div className="flex items-center gap-3">
+                        {ad.thumbnail_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={ad.thumbnail_url}
+                            alt={ad.name}
+                            className="h-12 w-12 shrink-0 rounded object-cover"
+                          />
+                        ) : (
+                          <div className="h-12 w-12 shrink-0 rounded bg-[#334155]" />
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm font-semibold text-[#e2e8f0]">
+                            {ad.name}
+                          </div>
+                          <div className="mt-0.5 flex flex-wrap gap-1">
+                            {ad.status && (
+                              <span className="rounded bg-[#334155] px-1.5 py-0.5 text-[10px] text-[#94a3b8]">{ad.status}</span>
+                            )}
+                            {ad.adlabels?.map((l) => (
+                              <span
+                                key={l.id}
+                                className="rounded bg-[#334155] px-1.5 py-0.5 text-[10px] text-[#94a3b8]"
+                              >
+                                {l.name}
+                              </span>
+                            ))}
+                          </div>
                         </div>
-                        <div className="mt-0.5 flex flex-wrap gap-1">
-                          {ad.status && (
-                            <span className="text-[10px] text-[#94a3b8]">{ad.status}</span>
-                          )}
-                          {ad.adlabels?.map((l) => (
-                            <span
-                              key={l.id}
-                              className="rounded bg-[#334155] px-1 text-[10px] text-[#94a3b8]"
-                            >
-                              {l.name}
-                            </span>
-                          ))}
-                        </div>
-                        {(() => {
-                          const st = adStatMap.get(ad.ad_id);
-                          if (!st) return null;
-                          const cpc = Number(st.clicks) > 0 ? Math.round(Number(st.spend) / Number(st.clicks)) : null;
-                          return (
-                            <div className="mt-1.5 flex flex-wrap gap-2 text-[10px] text-[#94a3b8]">
-                              <span>{st.date}</span>
-                              <span>CTR <span className="text-[#3b82f6]">{st.ctr !== null ? Number(st.ctr).toFixed(2) + "%" : "-"}</span></span>
-                              <span>유입단가 <span className="text-[#4ade80]">{cpc !== null ? "₩" + cpc.toLocaleString() : "-"}</span></span>
-                              <span>소진 <span className="text-[#e2e8f0]">₩{Number(st.spend).toLocaleString()}</span></span>
-                            </div>
-                          );
-                        })()}
                       </div>
+                      {(() => {
+                        const st = adStatMap.get(ad.ad_id);
+                        if (!st) return null;
+                        const lpv = lpvFromConversions(st.conversions);
+                        const inflowCost = lpv > 0 ? Math.round(Number(st.spend) / lpv) : null;
+                        return (
+                          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 rounded-md bg-[#1e293b] px-3 py-2 text-xs text-[#94a3b8]">
+                            <span>{st.date} 기준</span>
+                            <span>노출 <span className="text-[#e2e8f0]">{Number(st.impressions).toLocaleString()}</span></span>
+                            <span>클릭 <span className="text-[#e2e8f0]">{Number(st.clicks).toLocaleString()}</span></span>
+                            <span>CTR <span className="text-[#3b82f6]">{st.ctr !== null ? Number(st.ctr).toFixed(2) + "%" : "-"}</span></span>
+                            <span>유입수 <span className="text-[#e2e8f0]">{lpv.toLocaleString()}</span></span>
+                            <span>유입단가 <span className="text-[#4ade80]">{inflowCost !== null ? "₩" + inflowCost.toLocaleString() : "-"}</span></span>
+                            <span>소진 <span className="text-[#e2e8f0]">₩{Number(st.spend).toLocaleString()}</span></span>
+                          </div>
+                        );
+                      })()}
                     </li>
                   ))}
                 </ul>

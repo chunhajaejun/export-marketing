@@ -27,6 +27,7 @@ interface NaverStat {
   impressions: number;
   clicks: number;
   cost: number;
+  conversions: number;
   ctr: number | null;
   cpc: number | null;
 }
@@ -205,65 +206,67 @@ export function NaverAdminPanel({
           ) : (
             <ul className="divide-y divide-[#334155]">
               {accCampaigns.map((c) => (
-                <li
-                  key={c.campaign_id}
-                  className="flex items-center justify-between gap-3 py-3"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="truncate text-sm font-semibold text-[#e2e8f0]">
-                        {c.name || "(이름 없음)"}
-                      </span>
-                      {c.status && (
-                        <Badge variant="secondary" className="text-[10px]">
-                          {c.status}
-                        </Badge>
-                      )}
+                <li key={c.campaign_id} className="py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="truncate text-sm font-semibold text-[#e2e8f0]">
+                          {c.name || "(이름 없음)"}
+                        </span>
+                        {c.status && (
+                          <Badge variant="secondary" className="text-[10px]">
+                            {c.status}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="mt-1 truncate font-mono text-xs text-[#94a3b8]">
+                        {c.campaign_id}
+                      </div>
                     </div>
-                    <div className="mt-1 truncate font-mono text-xs text-[#94a3b8]">
-                      {c.campaign_id}
-                    </div>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-3">
-                    <select
-                      disabled={loading === c.campaign_id}
-                      value={c.media_channel}
-                      onChange={(e) =>
-                        changeMediaChannel(
-                          c.campaign_id,
-                          e.target.value as "naver_web" | "naver_landing"
-                        )
-                      }
-                      className="h-8 rounded-md border border-[#334155] bg-[#0f172a] px-2 text-xs text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
-                    >
-                      <option value="naver_web">네이버 웹</option>
-                      <option value="naver_landing">네이버 랜딩</option>
-                    </select>
-                    <label className="flex items-center gap-2 text-sm text-[#e2e8f0]">
-                      <input
-                        type="checkbox"
-                        checked={c.is_whitelisted}
+                    <div className="flex shrink-0 items-center gap-3">
+                      <select
                         disabled={loading === c.campaign_id}
+                        value={c.media_channel}
                         onChange={(e) =>
-                          toggleWhitelist(c.campaign_id, e.target.checked)
+                          changeMediaChannel(
+                            c.campaign_id,
+                            e.target.value as "naver_web" | "naver_landing"
+                          )
                         }
-                        className="h-4 w-4 accent-[#3b82f6]"
-                      />
-                      동기화
-                    </label>
+                        className="h-8 rounded-md border border-[#334155] bg-[#0f172a] px-2 text-xs text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none"
+                      >
+                        <option value="naver_web">네이버 웹</option>
+                        <option value="naver_landing">네이버 랜딩</option>
+                      </select>
+                      <label className="flex items-center gap-2 text-sm text-[#e2e8f0]">
+                        <input
+                          type="checkbox"
+                          checked={c.is_whitelisted}
+                          disabled={loading === c.campaign_id}
+                          onChange={(e) =>
+                            toggleWhitelist(c.campaign_id, e.target.checked)
+                          }
+                          className="h-4 w-4 accent-[#3b82f6]"
+                        />
+                        동기화
+                      </label>
+                    </div>
                   </div>
                   {(() => {
                     const st = statMap.get(c.campaign_id);
                     if (!st) return null;
-                    const cpc = Number(st.clicks) > 0 ? Math.round(Number(st.cost) / Number(st.clicks)) : null;
+                    const conv = Number(st.conversions ?? 0);
+                    const cost = Number(st.cost);
+                    const inflowCost = conv > 0 ? Math.round(cost / conv) : null;
                     return (
-                      <div className="mt-2 flex flex-wrap gap-3 rounded-md bg-[#0f172a] px-3 py-2 text-xs text-[#94a3b8]">
+                      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 rounded-md bg-[#0f172a] px-3 py-2 text-xs text-[#94a3b8]">
                         <span>{st.date} 기준</span>
                         <span>노출 <span className="text-[#e2e8f0]">{Number(st.impressions).toLocaleString()}</span></span>
                         <span>클릭 <span className="text-[#e2e8f0]">{Number(st.clicks).toLocaleString()}</span></span>
                         <span>CTR <span className="text-[#3b82f6]">{st.ctr !== null ? Number(st.ctr).toFixed(2) + "%" : "-"}</span></span>
-                        <span>유입단가 <span className="text-[#4ade80]">{cpc !== null ? "₩" + cpc.toLocaleString() : "-"}</span></span>
-                        <span>소진 <span className="text-[#e2e8f0]">₩{Number(st.cost).toLocaleString()}</span></span>
+                        <span>유입수 <span className="text-[#e2e8f0]">{conv.toLocaleString()}</span></span>
+                        <span>유입단가 <span className="text-[#4ade80]">{inflowCost !== null ? "₩" + inflowCost.toLocaleString() : "-"}</span></span>
+                        <span>소진 <span className="text-[#e2e8f0]">₩{cost.toLocaleString()}</span></span>
                       </div>
                     );
                   })()}
