@@ -3,14 +3,14 @@ import type { ParsedCallReport, MediaChannel } from "../types";
 /**
  * 콜량 보고 텍스트를 파싱하여 구조화된 데이터로 변환
  *
- * 섹션 구분: "ㅡㅡㅡ" 구분선 기준
+ * 섹션 구분: "ㅡㅡㅡ" 또는 "---" 구분선 기준
  * 매체 판별: 섹션 내 키워드 (당근/메타/구글), 미표기시 naver_web
  */
 export function parseCallReport(text: string): ParsedCallReport[] {
   if (!text || !text.trim()) return [];
 
-  // "ㅡ" 3개 이상 연속을 구분선으로 사용하여 섹션 분할
-  const sections = text.split(/ㅡ{3,}/);
+  // "ㅡ" 3개 이상 또는 "-" 3개 이상을 구분선으로 섹션 분할
+  const sections = text.split(/[-]{3,}|[ㅡ]{3,}/);
   const results: ParsedCallReport[] = [];
 
   for (const section of sections) {
@@ -52,22 +52,26 @@ function parseSection(section: string): ParsedCallReport | null {
     section,
     /[-\-]?\s*메타\s*[:：]\s*(\d+)\s*건/
   );
+  const webCount = parseChannelCount(
+    section,
+    /[-\-]?\s*웹문의\s*[:：]\s*(\d+)\s*건/
+  );
 
   // 총 건수 파싱
   const totalMatch = section.match(/총\s*(\d+)\s*건/);
   const total = totalMatch ? parseInt(totalMatch[1], 10) : 0;
 
   // 카테고리별 건수 파싱
-  const usedCar = parseCategoryCount(section, /\(?내수\)?\s*[:：]?\s*(\d+)\s*건?/);
+  const exportDirect = parseCategoryCount(section, /\(?수출\)?\s*[:：]?\s*(\d+)\s*건?/);
+  const usedCar = parseCategoryCount(section, /\(?(?:내수|매입)\)?\s*[:：]?\s*(\d+)\s*건?/);
   const scrap = parseCategoryCount(section, /\(?폐차\)?\s*[:：]?\s*(\d+)\s*건?/);
   const absence = parseCategoryCount(section, /\(?부재\)?\s*[:：]?\s*(\d+)\s*건?/);
   const invalid = parseCategoryCount(section, /\(?무효\)?\s*[:：]?\s*(\d+)\s*건?/);
 
-  // 수출 건수 = 총건수 - (내수 + 폐차 + 부재 + 무효)
-  const exportCount = Math.max(
-    0,
-    total - usedCar - scrap - absence - invalid
-  );
+  // 수출 건수: 직접 파싱되면 사용, 없으면 총건수에서 나머지 빼서 계산
+  const exportCount = exportDirect > 0
+    ? exportDirect
+    : Math.max(0, total - usedCar - scrap - absence - invalid);
 
   return {
     date,
@@ -80,17 +84,30 @@ function parseSection(section: string): ParsedCallReport | null {
     phone_count: phone,
     channels: {
       phone,
-      kakao: kakao + metaCount, // 메타 채널도 kakao와 같은 인입 경로
+      kakao: kakao + metaCount + webCount,
       sms,
     },
   };
 }
 
 function detectMedia(section: string): MediaChannel {
-  // 섹션 텍스트에서 매체 키워드 탐색 (날짜 이전 또는 전체에서)
-  if (/당근/i.test(section)) return "danggeun";
-  if (/메타/i.test(section)) return "meta";
-  if (/구글/i.test(section)) return "google";
+  // 날짜 이전 텍스트에서 매체 키워드 탐색
+  const dateIdx = section.search(/\d{4}\s*\/\s*\d{1,2}\s*\/\s*\d{1,2}/);
+  const beforeDate = dateIdx > 0 ? section.slice(0, dateIdx) : "";
+
+  // 날짜 앞에 매체 키워드가 있으면 우선 사용
+  if (beforeDate) {
+    if (/당근/i.test(beforeDate)) return "danggeun";
+    if (/메타/i.test(beforeDate)) return "meta";
+    if (/구글/i.test(beforeDate)) return "google";
+  }
+
+  // 없으면 전체에서 첫 줄 기준으로 탐색
+  const firstLine = section.split(/\n/)[0].trim();
+  if (/^당근/.test(firstLine)) return "danggeun";
+  if (/^메타/.test(firstLine)) return "meta";
+  if (/^구글/.test(firstLine)) return "google";
+
   return "naver_web";
 }
 
