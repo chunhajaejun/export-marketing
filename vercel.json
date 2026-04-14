@@ -3,11 +3,11 @@
   "crons": [
     {
       "path": "/api/sync/naver",
-      "schedule": "0 * * * *"
+      "schedule": "*/15 * * * *"
     },
     {
       "path": "/api/sync/meta",
-      "schedule": "5 * * * *"
+      "schedule": "2-59/15 * * * *"
     },
     {
       "path": "/api/cron/daily-report",
