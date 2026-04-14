@@ -24,14 +24,26 @@ interface MetaAd {
   adlabels: Array<{ id: string; name: string }>;
 }
 
+interface MetaStat {
+  ad_id: string;
+  date: string;
+  impressions: number;
+  clicks: number;
+  spend: number;
+  ctr: number | null;
+  cpc: number | null;
+}
+
 export function MetaAdminPanel({
   accounts,
   ads,
   campaigns,
+  latestStats = [],
 }: {
   accounts: MetaAccount[];
   ads: MetaAd[];
   campaigns: MetaCampaign[];
+  latestStats?: MetaStat[];
 }) {
   const [syncing, setSyncing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -57,6 +69,14 @@ export function MetaAdminPanel({
       setResult(e instanceof Error ? e.message : "실패");
     } finally {
       setSyncing(false);
+    }
+  }
+
+  // 소재별 최신 날짜 통계
+  const adStatMap = new Map<string, MetaStat>();
+  for (const s of latestStats) {
+    if (!adStatMap.has(s.ad_id)) {
+      adStatMap.set(s.ad_id, s);
     }
   }
 
@@ -153,6 +173,19 @@ export function MetaAdminPanel({
                             </span>
                           ))}
                         </div>
+                        {(() => {
+                          const st = adStatMap.get(ad.ad_id);
+                          if (!st) return null;
+                          const cpc = Number(st.clicks) > 0 ? Math.round(Number(st.spend) / Number(st.clicks)) : null;
+                          return (
+                            <div className="mt-1.5 flex flex-wrap gap-2 text-[10px] text-[#94a3b8]">
+                              <span>{st.date}</span>
+                              <span>CTR <span className="text-[#3b82f6]">{st.ctr !== null ? Number(st.ctr).toFixed(2) + "%" : "-"}</span></span>
+                              <span>유입단가 <span className="text-[#4ade80]">{cpc !== null ? "₩" + cpc.toLocaleString() : "-"}</span></span>
+                              <span>소진 <span className="text-[#e2e8f0]">₩{Number(st.spend).toLocaleString()}</span></span>
+                            </div>
+                          );
+                        })()}
                       </div>
                     </li>
                   ))}

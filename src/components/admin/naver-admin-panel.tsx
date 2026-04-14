@@ -21,12 +21,24 @@ interface NaverCampaign {
   last_synced_at: string | null;
 }
 
+interface NaverStat {
+  campaign_id: string;
+  date: string;
+  impressions: number;
+  clicks: number;
+  cost: number;
+  ctr: number | null;
+  cpc: number | null;
+}
+
 export function NaverAdminPanel({
   initialAccounts,
   initialCampaigns,
+  latestStats = [],
 }: {
   initialAccounts: NaverAccount[];
   initialCampaigns: NaverCampaign[];
+  latestStats?: NaverStat[];
 }) {
   const [accounts] = useState(initialAccounts);
   const [campaigns, setCampaigns] = useState(initialCampaigns);
@@ -127,6 +139,14 @@ export function NaverAdminPanel({
       setSyncResult(e instanceof Error ? e.message : "실패");
     } finally {
       setSyncing(false);
+    }
+  }
+
+  // 캠페인별 최신 날짜 통계 (date 내림차순이라 첫 번째가 최신)
+  const statMap = new Map<string, NaverStat>();
+  for (const s of latestStats) {
+    if (!statMap.has(s.campaign_id)) {
+      statMap.set(s.campaign_id, s);
     }
   }
 
@@ -232,6 +252,21 @@ export function NaverAdminPanel({
                       동기화
                     </label>
                   </div>
+                  {(() => {
+                    const st = statMap.get(c.campaign_id);
+                    if (!st) return null;
+                    const cpc = Number(st.clicks) > 0 ? Math.round(Number(st.cost) / Number(st.clicks)) : null;
+                    return (
+                      <div className="mt-2 flex flex-wrap gap-3 rounded-md bg-[#0f172a] px-3 py-2 text-xs text-[#94a3b8]">
+                        <span>{st.date} 기준</span>
+                        <span>노출 <span className="text-[#e2e8f0]">{Number(st.impressions).toLocaleString()}</span></span>
+                        <span>클릭 <span className="text-[#e2e8f0]">{Number(st.clicks).toLocaleString()}</span></span>
+                        <span>CTR <span className="text-[#3b82f6]">{st.ctr !== null ? Number(st.ctr).toFixed(2) + "%" : "-"}</span></span>
+                        <span>유입단가 <span className="text-[#4ade80]">{cpc !== null ? "₩" + cpc.toLocaleString() : "-"}</span></span>
+                        <span>소진 <span className="text-[#e2e8f0]">₩{Number(st.cost).toLocaleString()}</span></span>
+                      </div>
+                    );
+                  })()}
                 </li>
               ))}
             </ul>

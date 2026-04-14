@@ -31,6 +31,14 @@ export default async function MetaAdminPage() {
     .from("meta_campaigns")
     .select("campaign_id, name, status, adlabels");
 
+  const since = new Date();
+  since.setDate(since.getDate() - 7);
+  const { data: adStats } = await admin
+    .from("meta_ad_stats")
+    .select("ad_id, date, impressions, clicks, spend, ctr, cpc")
+    .gte("date", since.toISOString().slice(0, 10))
+    .order("date", { ascending: false });
+
   return (
     <main className="min-h-screen bg-[#0f172a]">
       <div className="mx-auto max-w-6xl px-4 py-6">
@@ -39,6 +47,7 @@ export default async function MetaAdminPage() {
           accounts={accounts ?? []}
           ads={ads ?? []}
           campaigns={campaigns ?? []}
+          latestStats={adStats ?? []}
         />
       </div>
     </main>
