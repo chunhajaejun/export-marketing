@@ -161,7 +161,7 @@ export function CallTextInput({ onSaved }: CallTextInputProps) {
                   {item.date}
                 </span>
                 <span className="rounded bg-[#3b82f6]/20 px-2 py-0.5 text-xs text-[#3b82f6]">
-                  {MEDIA_LABELS[item.media]}
+                  {MEDIA_LABELS[item.media]} ({item.export_count + item.used_car_count + item.scrap_count + item.absence_count + item.invalid_count}건)
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs">
