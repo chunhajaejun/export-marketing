@@ -56,12 +56,13 @@ export function CallTextInput({ onSaved }: CallTextInputProps) {
       const items = parsed.map((item) => ({
         date: item.date,
         media: item.media,
+        phone_count: item.phone_count,
         export_count: item.export_count,
         used_car_count: item.used_car_count,
         scrap_count: item.scrap_count,
         absence_count: item.absence_count,
         invalid_count: item.invalid_count,
-        phone_naver_count: item.phone_count,
+        input_source: "text",
       }));
 
       const res = await fetch("/api/data/save-calls", {

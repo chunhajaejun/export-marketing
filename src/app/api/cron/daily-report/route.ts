@@ -70,12 +70,24 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  // 콜 데이터 없으면 발송 안 하고 대기 (단 12:00 근처에서 여전히 없으면 경고 발송)
-  if (!report.hasCallData && !force) {
-    return NextResponse.json({
-      skipped: "no call data yet",
-      date: report.dateIso,
-    });
+  // 발송 조건: 텍스트 입력 경로 + 직접 입력 경로 양쪽 모두 저장된 기록이 있어야 함.
+  // (input_source: 'text' / 'direct' / 'both')
+  if (!force) {
+    const { data: sourcesRows } = await admin
+      .from("call_reports")
+      .select("input_source")
+      .eq("date", report.dateIso);
+    const sources = (sourcesRows ?? []).map((r) => r.input_source as string);
+    const hasText = sources.some((s) => s === "text" || s === "both");
+    const hasDirect = sources.some((s) => s === "direct" || s === "both");
+    if (!hasText || !hasDirect) {
+      return NextResponse.json({
+        skipped: "awaiting both input sources",
+        date: report.dateIso,
+        has_text: hasText,
+        has_direct: hasDirect,
+      });
+    }
   }
 
   const messageId = await sendTelegram(report.body);

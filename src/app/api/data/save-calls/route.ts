@@ -15,6 +15,25 @@ export async function POST(request: NextRequest) {
     // 총 = phone_count + API 웹문의(동적), 유효+무효+부재 = 총 이 되어야 함.
     const phoneCount = item.phone_count ?? 0;
     const manualWebCount = item.manual_web_count ?? 0;
+    const incomingSource: "text" | "direct" =
+      item.input_source === "text" ? "text" : "direct";
+
+    // 기존 레코드의 input_source 확인 후 병합
+    const { data: existing } = await admin
+      .from("call_reports")
+      .select("input_source")
+      .eq("date", item.date)
+      .eq("media", item.media)
+      .maybeSingle();
+    const currentSource = existing?.input_source as
+      | "text"
+      | "direct"
+      | "both"
+      | null
+      | undefined;
+    let nextSource: "text" | "direct" | "both" = incomingSource;
+    if (currentSource === "both") nextSource = "both";
+    else if (currentSource && currentSource !== incomingSource) nextSource = "both";
     const exportCount = item.export_count ?? 0;
     const usedCarCount = item.used_car_count ?? 0;
     const scrapCount = item.scrap_count ?? 0;
@@ -31,6 +50,7 @@ export async function POST(request: NextRequest) {
         media: item.media,
         phone_count: phoneCount,
         manual_web_count: manualWebCount,
+        input_source: nextSource,
         export_count: exportCount,
         used_car_count: usedCarCount,
         scrap_count: scrapCount,

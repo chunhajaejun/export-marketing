@@ -53,7 +53,6 @@ export function CallDirectInput({
   onSaved,
 }: CallDirectInputProps) {
   const [media, setMedia] = useState<MediaChannel>("naver_web");
-  const [phoneCount, setPhoneCount] = useState(0);
   const [manualWebCount, setManualWebCount] = useState(0);
   const [values, setValues] = useState<FieldValues>(() =>
     Object.fromEntries(CLASSIFICATION_FIELDS.map((f) => [f.key, 0]))
@@ -66,7 +65,8 @@ export function CallDirectInput({
 
   const rules = MEDIA_RULES[media];
   const webCount = rules.hasApi ? (apiWebCount ?? 0) : manualWebCount;
-  const totalInquiry = (rules.hasPhone ? phoneCount : 0) + webCount;
+  // 이 화면은 "분류만" 입력. 전화량은 텍스트 입력창에서만 등록.
+  const totalInquiry = webCount;
   const classificationSum =
     (values.export_count ?? 0) +
     (values.used_car_count ?? 0) +
@@ -125,8 +125,9 @@ export function CallDirectInput({
             {
               date: selectedDate,
               media,
-              phone_count: rules.hasPhone ? phoneCount : 0,
+              // 분류 전용 입력. phone_count는 텍스트 경로에서만 설정 → 여기서는 건드리지 않음
               manual_web_count: rules.hasManualWeb ? manualWebCount : 0,
+              input_source: "direct",
               export_count: values.export_count ?? 0,
               used_car_count: values.used_car_count ?? 0,
               scrap_count: values.scrap_count ?? 0,
@@ -140,7 +141,6 @@ export function CallDirectInput({
       if (!res.ok) throw new Error(result.error || "저장 실패");
 
       setSuccess(true);
-      setPhoneCount(0);
       setManualWebCount(0);
       setValues(Object.fromEntries(CLASSIFICATION_FIELDS.map((f) => [f.key, 0])));
       onSaved();
@@ -152,7 +152,6 @@ export function CallDirectInput({
   }, [
     selectedDate,
     media,
-    phoneCount,
     manualWebCount,
     values,
     rules,
@@ -191,26 +190,7 @@ export function CallDirectInput({
         </select>
       </div>
 
-      {/* 전화량 */}
-      {rules.hasPhone && (
-        <div className="flex items-center gap-2">
-          <label className="w-[110px] shrink-0 text-xs font-medium text-[#e2e8f0]">
-            📞 전화량
-          </label>
-          <input
-            type="number"
-            min={0}
-            className="h-8 w-[90px] rounded-md border border-[#334155] bg-[#0f172a] px-2 text-center text-sm text-[#e2e8f0] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
-            value={phoneCount || ""}
-            onChange={(e) => {
-              const n = parseInt(e.target.value, 10);
-              setPhoneCount(isNaN(n) ? 0 : Math.max(0, n));
-              setSuccess(false);
-            }}
-            placeholder="0"
-          />
-        </div>
-      )}
+      {/* 전화량은 텍스트 입력창(보고서 파싱)에서만 등록됩니다. 이 화면에서는 입력 불가. */}
 
       {/* 웹문의 */}
       <div className="flex items-center gap-2">
