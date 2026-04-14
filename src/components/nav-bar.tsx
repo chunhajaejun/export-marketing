@@ -77,7 +77,13 @@ export function NavBar({ userName, userRole, userOrganization }: NavBarProps) {
 
           {/* Desktop right side */}
           <div className="hidden items-center gap-3 md:flex">
-            <span className="text-sm text-[#94a3b8]">{userName}{userOrganization ? ` \u00B7 ${userOrganization}` : ""}</span>
+            <Link
+              href="/profile"
+              className="text-sm text-[#94a3b8] hover:text-[#e2e8f0]"
+              title="내 정보"
+            >
+              {userName}{userOrganization ? ` \u00B7 ${userOrganization}` : ""}
+            </Link>
             <Button
               size="sm"
               variant="ghost"
@@ -124,7 +130,13 @@ export function NavBar({ userName, userRole, userOrganization }: NavBarProps) {
             })}
           </div>
           <div className="border-t border-[#334155] px-4 py-3">
-            <p className="mb-2 text-sm text-[#94a3b8]">{userName}{userOrganization ? ` \u00B7 ${userOrganization}` : ""}</p>
+            <Link
+              href="/profile"
+              onClick={() => setMobileOpen(false)}
+              className="mb-2 block text-sm text-[#94a3b8] hover:text-[#e2e8f0]"
+            >
+              {userName}{userOrganization ? ` \u00B7 ${userOrganization}` : ""} · 내 정보
+            </Link>
             <Button
               size="sm"
               variant="ghost"
