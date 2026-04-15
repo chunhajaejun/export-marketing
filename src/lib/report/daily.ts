@@ -305,6 +305,8 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
       lines.push(`   무효 ${fmt(b.invalid)} · 부재 ${fmt(b.absence)}`);
     }
     lines.push(`   소진 ${won(b.spend)}`);
+    const cpaT = b.total > 0 ? Math.round(b.spend / b.total) : 0;
+    lines.push(`   문의 단가 ${b.total > 0 ? won(cpaT) : "-"}`);
     const cpaV = b.valid > 0 ? Math.round(b.spend / b.valid) : 0;
     lines.push(`   유효 단가 ${b.valid > 0 ? won(cpaV) : "-"}`);
     if (meta.hasApi && b.clicks > 0 && b.total > 0) {

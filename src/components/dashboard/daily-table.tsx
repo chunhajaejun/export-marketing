@@ -64,7 +64,7 @@ export function DailyTable({ data }: DailyTableProps) {
     totals.total_calls > 0
       ? Math.round(totals.total_spend / totals.total_calls)
       : null;
-  const totalValidCalls = totals.export_count + totals.used_car_count;
+  const totalValidCalls = totals.export_count + totals.used_car_count + totals.scrap_count;
   const totalCpaValid =
     totalValidCalls > 0
       ? Math.round(totals.total_spend / totalValidCalls)

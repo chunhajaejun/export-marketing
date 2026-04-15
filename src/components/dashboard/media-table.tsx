@@ -54,7 +54,7 @@ export function MediaTable({ calls, spend, startDate, endDate }: MediaTableProps
     const ms = spend.filter((s) => s.date === date && s.media === media);
     const totalSpend = ms.reduce((s, sp) => s + (sp.amount || 0), 0);
     const totalCalls = mc.reduce((s, c) => s + (c.total_count || 0), 0);
-    const validCalls = mc.reduce((s, c) => s + (c.export_count || 0) + (c.used_car_count || 0) + (c.phone_naver_count || 0), 0);
+    const validCalls = mc.reduce((s, c) => s + (c.export_count || 0) + (c.used_car_count || 0) + c.scrap_count, 0);
     return {
       spend: totalSpend,
       calls: totalCalls,
@@ -70,7 +70,7 @@ export function MediaTable({ calls, spend, startDate, endDate }: MediaTableProps
     const ms = spend.filter((s) => s.media === media);
     const totalSpend = ms.reduce((s, sp) => s + (sp.amount || 0), 0);
     const totalCalls = mc.reduce((s, c) => s + (c.total_count || 0), 0);
-    const validCalls = mc.reduce((s, c) => s + (c.export_count || 0) + (c.used_car_count || 0) + (c.phone_naver_count || 0), 0);
+    const validCalls = mc.reduce((s, c) => s + (c.export_count || 0) + (c.used_car_count || 0) + c.scrap_count, 0);
     return {
       spend: totalSpend,
       calls: totalCalls,

@@ -29,7 +29,7 @@ export async function GET() {
     const daySpend = (spend || []).filter((s: any) => s.date === date);
 
     const total_calls = dayCalls.reduce((s: number, c: any) => s + (c.total_count || 0), 0);
-    const valid_calls = dayCalls.reduce((s: number, c: any) => s + (c.export_count || 0) + (c.used_car_count || 0) + (c.phone_naver_count || 0), 0);
+    const valid_calls = dayCalls.reduce((s: number, c: any) => s + (c.export_count || 0) + (c.used_car_count || 0) + (c.scrap_count || 0), 0);
     const scrap = dayCalls.reduce((s: number, c: any) => s + (c.scrap_count || 0), 0);
     const absence = dayCalls.reduce((s: number, c: any) => s + (c.absence_count || 0), 0);
     const invalid = dayCalls.reduce((s: number, c: any) => s + (c.invalid_count || 0), 0);

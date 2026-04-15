@@ -270,7 +270,7 @@ function SpendTable({
             const validCalls =
               (r?.export_count ?? 0) +
               (r?.used_car_count ?? 0) +
-              (r?.phone_naver_count ?? 0);
+              (r?.scrap_count ?? 0);
             const cpaTotal = calls > 0 ? Math.round(spend / calls) : null;
             const cpaValid =
               validCalls > 0 ? Math.round(spend / validCalls) : null;
@@ -311,12 +311,12 @@ function SpendTable({
                 : "-"}
             </TableCell>
             <TableCell className="text-right font-bold text-[#94a3b8]">
-              {totals.export_count + totals.used_car_count + totals.phone_naver_count > 0
+              {totals.export_count + totals.used_car_count + totals.scrap_count > 0
                 ? Math.round(
                     totals.spend /
                       (totals.export_count +
                         totals.used_car_count +
-                        totals.phone_naver_count)
+                        totals.scrap_count)
                   ).toLocaleString()
                 : "-"}
             </TableCell>

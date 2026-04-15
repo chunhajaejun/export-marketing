@@ -46,7 +46,7 @@ export function MediaSwipeCard({ calls, spend, startDate, endDate }: MediaSwipeC
     const mc = calls.filter((c) => c.date === currentDate && cfg.channels.includes(c.media));
     const ms = spend.filter((s) => s.date === currentDate && cfg.channels.includes(s.media));
     const totalCalls = mc.reduce((s, c) => s + c.total_count, 0);
-    const validCalls = mc.reduce((s, c) => s + (c.export_count ?? 0) + (c.used_car_count ?? 0) + (c.phone_naver_count ?? 0), 0);
+    const validCalls = mc.reduce((s, c) => s + (c.export_count ?? 0) + (c.used_car_count ?? 0) + c.scrap_count, 0);
     const totalSpend = ms.reduce((s, sp) => s + sp.amount, 0);
     return {
       ...cfg,
