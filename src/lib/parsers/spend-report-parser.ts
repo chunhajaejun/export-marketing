@@ -27,7 +27,7 @@ export function parseSpendReport(text: string): ParsedAdSpend[] {
 
   // 각 매체별 소진액 파싱
   const spendPattern =
-    /(네이버|당근|메타|구글)\s*소진액\s*[:：]\s*([\d,]+)\s*원/g;
+    /(네이버|당근|메타|구글)\s*소진액\s*[:：]\s*([\d,]+)\s*원?/g;
   let match: RegExpExecArray | null;
 
   while ((match = spendPattern.exec(text)) !== null) {
