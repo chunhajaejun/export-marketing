@@ -66,7 +66,9 @@ function parseSection(section: string): ParsedCallReport | null {
   const usedCar = parseCategoryCount(section, /\(?(?:내수|매입)\)?\s*[:：]?\s*(\d+)\s*건?/);
   const scrap = parseCategoryCount(section, /\(?폐차\)?\s*[:：]?\s*(\d+)\s*건?/);
   const absence = parseCategoryCount(section, /\(?부재\)?\s*[:：]?\s*(\d+)\s*건?/);
-  const invalid = parseCategoryCount(section, /\(?무효\)?\s*[:：]?\s*(\d+)\s*건?/);
+  const invalidBase = parseCategoryCount(section, /\(?무효\)?\s*[:：]?\s*(\d+)\s*건?/);
+  const testCount = parseCategoryCount(section, /\(?(?:테스트|test)\)?\s*[:：]?\s*(\d+)\s*건?/i);
+  const invalid = invalidBase + testCount;
 
   // 수출 건수: 직접 파싱되면 사용, 없으면 총건수에서 나머지 빼서 계산
   const exportCount = exportDirect > 0
