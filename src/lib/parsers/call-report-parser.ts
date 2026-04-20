@@ -27,16 +27,18 @@ export function parseCallReport(text: string): ParsedCallReport[] {
 }
 
 function parseSection(section: string): ParsedCallReport | null {
-  // 날짜 파싱: "2026 / 4 / 11" 또는 "2026/4/11"
+  // 날짜 파싱: "2026 / 4 / 11", "2026/4/11", 없으면 오늘
   const dateMatch = section.match(
     /(\d{4})\s*\/\s*(\d{1,2})\s*\/\s*(\d{1,2})/
   );
-  if (!dateMatch) return null;
-
-  const year = dateMatch[1];
-  const month = dateMatch[2].padStart(2, "0");
-  const day = dateMatch[3].padStart(2, "0");
-  const date = `${year}-${month}-${day}`;
+  let date: string;
+  if (dateMatch) {
+    date = `${dateMatch[1]}-${dateMatch[2].padStart(2, "0")}-${dateMatch[3].padStart(2, "0")}`;
+  } else {
+    const now = new Date();
+    const kst = new Date(now.getTime() + 9 * 3600 * 1000);
+    date = kst.toISOString().slice(0, 10);
+  }
 
   // 매체 판별
   const media = detectMedia(section);
