@@ -198,7 +198,7 @@ export function CallTextInput({ onSaved }: CallTextInputProps) {
           <div className="rounded-lg border border-[#334155] bg-[#0f172a] p-3 text-sm">
             <span className="text-[#94a3b8]">총 유입량 : </span>
             <span className="text-lg font-bold text-white">
-              {parsed.reduce((sum, item) => sum + item.export_count + item.used_car_count + item.scrap_count + item.absence_count + item.invalid_count + item.phone_count, 0)}
+              {parsed.reduce((sum, item) => sum + item.export_count + item.used_car_count + item.scrap_count + item.absence_count + item.invalid_count, 0)}
             </span>
             <span className="text-[#94a3b8]"> 콜</span>
           </div>
