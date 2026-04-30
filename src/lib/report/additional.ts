@@ -48,6 +48,7 @@ async function aggregateForDate(
     { data: naverSpend },
     { data: naverCamps },
     { data: metaSpend },
+    { data: daangnSpend },
   ] = await Promise.all([
     admin.from("call_reports").select("*").eq("date", dateIso),
     admin.from("ad_spend").select("amount, media").eq("date", dateIso),
@@ -60,6 +61,7 @@ async function aggregateForDate(
       .select("campaign_id, media_channel")
       .eq("is_whitelisted", true),
     admin.from("meta_ad_stats").select("spend").eq("date", dateIso),
+    admin.from("daangn_ad_stats").select("cost").eq("date", dateIso),
   ]);
 
   const apiWebMap = await loadApiWebCounts(admin, dateIso, dateIso);
@@ -126,6 +128,13 @@ async function aggregateForDate(
     metaSpendTotal += Number(r.spend ?? 0);
   }
   if (metaSpendTotal > 0) manualSpendByMedia.set("meta", metaSpendTotal);
+
+  // 당근 자동
+  let daangnSpendTotal = 0;
+  for (const r of (daangnSpend ?? []) as Array<{ cost: number | string }>) {
+    daangnSpendTotal += Number(r.cost ?? 0);
+  }
+  if (daangnSpendTotal > 0) manualSpendByMedia.set("danggeun", daangnSpendTotal);
 
   for (const amt of manualSpendByMedia.values()) totSpend += amt;
 

@@ -19,7 +19,7 @@ const MEDIA_LABEL: Record<
   },
   meta: { icon: "🔵", name: "메타", hasApi: true, hasPhone: false },
   google: { icon: "🔴", name: "구글", hasApi: false, hasPhone: false },
-  danggeun: { icon: "🟠", name: "당근", hasApi: false, hasPhone: true },
+  danggeun: { icon: "🟠", name: "당근", hasApi: true, hasPhone: false },
 };
 const ORDER = ["naver_web", "naver_landing", "meta", "google", "danggeun"];
 
@@ -62,6 +62,7 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
     { data: naverStatsSpend },
     { data: naverCamps },
     { data: metaStatsSpend },
+    { data: daangnStatsSpend },
   ] = await Promise.all([
     admin.from("call_reports").select("*").eq("date", dateIso),
     admin
@@ -79,6 +80,7 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
       .select("campaign_id, media_channel")
       .eq("is_whitelisted", true),
     admin.from("meta_ad_stats").select("date, spend, clicks").eq("date", dateIso),
+    admin.from("daangn_ad_stats").select("date, cost, clicks").eq("date", dateIso),
   ]);
 
   const callRows = (callsToday ?? []) as Array<{
@@ -206,6 +208,22 @@ export async function buildDailyReport(): Promise<DailyAggregate> {
     const b = get("meta");
     b.spend = metaAuto.spend;
     b.clicks = metaAuto.clicks;
+  }
+
+  // 당근 자동 광고비 + 클릭수
+  const daangnRows = (daangnStatsSpend ?? []) as Array<{
+    cost: number | string;
+    clicks: number | string;
+  }>;
+  const daangnAuto = { spend: 0, clicks: 0 };
+  for (const r of daangnRows) {
+    daangnAuto.spend += Number(r.cost ?? 0);
+    daangnAuto.clicks += Number(r.clicks ?? 0);
+  }
+  if (daangnAuto.spend > 0 || daangnAuto.clicks > 0) {
+    const b = get("danggeun");
+    b.spend = daangnAuto.spend;
+    b.clicks = daangnAuto.clicks;
   }
 
   // 총계

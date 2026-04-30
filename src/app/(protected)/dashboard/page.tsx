@@ -137,6 +137,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     { data: naverStats },
     { data: naverWhitelist },
     { data: metaStats },
+    { data: daangnStats },
   ] = await Promise.all([
     admin
       .from("call_reports")
@@ -161,6 +162,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     admin
       .from("meta_ad_stats")
       .select("date, spend")
+      .gte("date", startDate)
+      .lte("date", endDate),
+    admin
+      .from("daangn_ad_stats")
+      .select("date, cost")
       .gte("date", startDate)
       .lte("date", endDate),
   ]);
@@ -193,9 +199,19 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     );
   }
 
+  // 당근 자동 데이터 — 일별 cost 합산
+  const daangnAutoByDate = new Map<string, number>();
+  for (const row of (daangnStats ?? []) as Array<{ date: string; cost: number | string }>) {
+    daangnAutoByDate.set(
+      row.date,
+      (daangnAutoByDate.get(row.date) ?? 0) + Number(row.cost ?? 0)
+    );
+  }
+
   // 자동 데이터가 있는 (날짜, 채널)은 수동 항목 무시 (중복 방지)
   const autoChannelDates = new Set(naverAutoByKey.keys());
   const metaAutoDates = new Set(metaAutoByDate.keys());
+  const daangnAutoDates = new Set(daangnAutoByDate.keys());
   const manualSpend = ((spend as AdSpend[]) || []).filter((s) => {
     if (
       (s.media === "naver_web" || s.media === "naver_landing") &&
@@ -203,6 +219,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     )
       return false;
     if (s.media === "meta" && metaAutoDates.has(s.date)) return false;
+    if (s.media === "danggeun" && daangnAutoDates.has(s.date)) return false;
     return true;
   });
   const naverAutoRows: AdSpend[] = Array.from(naverAutoByKey.entries()).map(
@@ -228,9 +245,19 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       created_at: new Date().toISOString(),
     })
   );
+  const daangnAutoRows: AdSpend[] = Array.from(daangnAutoByDate.entries()).map(
+    ([date, amount]) => ({
+      id: `daangn-auto-${date}`,
+      date,
+      media: "danggeun",
+      amount,
+      reporter_id: "daangn-api",
+      created_at: new Date().toISOString(),
+    })
+  );
 
   let filteredCalls = (calls as CallReport[]) || [];
-  let filteredSpend: AdSpend[] = [...manualSpend, ...naverAutoRows, ...metaAutoRows];
+  let filteredSpend: AdSpend[] = [...manualSpend, ...naverAutoRows, ...metaAutoRows, ...daangnAutoRows];
 
   if (mediaFilter !== "all" && MEDIA_FILTER_MAP[mediaFilter]) {
     const allowedChannels = MEDIA_FILTER_MAP[mediaFilter];

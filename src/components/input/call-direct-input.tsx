@@ -21,7 +21,7 @@ const MEDIA_RULES: Record<
   naver_landing: { hasPhone: true, hasApi: true, hasManualWeb: false },
   meta: { hasPhone: false, hasApi: true, hasManualWeb: false },
   google: { hasPhone: false, hasApi: false, hasManualWeb: true },
-  danggeun: { hasPhone: true, hasApi: false, hasManualWeb: true },
+  danggeun: { hasPhone: false, hasApi: true, hasManualWeb: false },
 };
 
 interface FieldDef {

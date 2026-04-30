@@ -38,6 +38,7 @@ export function NavBar({ userName, userRole, userOrganization }: NavBarProps) {
     ...NAV_ITEMS,
     { href: "/admin/naver" as const, label: "네이버 광고" as const },
     { href: "/admin/meta" as const, label: "메타 광고" as const },
+    { href: "/admin/daangn" as const, label: "당근 광고" as const },
     ...(userRole === "admin"
       ? [{ href: "/admin" as const, label: "사용자 관리" as const }]
       : []),

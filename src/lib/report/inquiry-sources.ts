@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 // API 자동 집계 가능한 매체
-export const API_MEDIA = new Set(["naver_web", "naver_landing", "meta"]);
+export const API_MEDIA = new Set(["naver_web", "naver_landing", "meta", "danggeun"]);
 
 // 메타 전환 이벤트 후보 — 우선순위 순
 // 랜딩연결 광고는 Purchase 이벤트로 "문의"를 추적하고 있어 lead 외에도 purchase 포함
@@ -79,6 +79,19 @@ export async function loadApiWebCounts(
     conversions: Array<{ action_type: string; value: string }> | null;
   }>) {
     addTo(r.date, "meta", extractMetaLeadCount(r.conversions));
+  }
+
+  // 당근 API 데이터 — 투바이어 매체 (media_id=795)만 합산
+  const { data: daangnStats } = await admin
+    .from("daangn_ad_stats")
+    .select("date, conversions")
+    .gte("date", startDate)
+    .lte("date", endDate);
+  for (const r of (daangnStats ?? []) as Array<{
+    date: string;
+    conversions: number | string;
+  }>) {
+    addTo(r.date, "danggeun", Number(r.conversions ?? 0));
   }
 
   return out;
