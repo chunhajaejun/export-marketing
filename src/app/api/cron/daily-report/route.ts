@@ -70,21 +70,35 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  // 발송 조건: 텍스트 입력 경로 + 직접 입력 경로 양쪽 모두 저장된 기록이 있어야 함.
-  // (input_source: 'text' / 'direct' / 'both')
+  // 발송 조건: call_reports 1건 이상 + (ad_spend 수기 OR API 자동 광고비) 중 하나라도 있어야 함
   if (!force) {
-    const [{ data: callRows }, { data: spendRows }] = await Promise.all([
+    const [
+      { data: callRows },
+      { data: spendRows },
+      { data: naverRows },
+      { data: metaRows },
+      { data: daangnRows },
+    ] = await Promise.all([
       admin.from("call_reports").select("id").eq("date", report.dateIso).limit(1),
       admin.from("ad_spend").select("id").eq("date", report.dateIso).limit(1),
+      admin.from("naver_ad_stats").select("date").eq("date", report.dateIso).limit(1),
+      admin.from("meta_ad_stats").select("date").eq("date", report.dateIso).limit(1),
+      admin.from("daangn_ad_stats").select("date").eq("date", report.dateIso).limit(1),
     ]);
     const hasCall = (callRows ?? []).length > 0;
-    const hasSpend = (spendRows ?? []).length > 0;
+    const hasManualSpend = (spendRows ?? []).length > 0;
+    const hasAutoSpend =
+      (naverRows ?? []).length > 0 ||
+      (metaRows ?? []).length > 0 ||
+      (daangnRows ?? []).length > 0;
+    const hasSpend = hasManualSpend || hasAutoSpend;
     if (!hasCall || !hasSpend) {
       return NextResponse.json({
         skipped: "awaiting inputs",
         date: report.dateIso,
         has_call: hasCall,
-        has_spend: hasSpend,
+        has_manual_spend: hasManualSpend,
+        has_auto_spend: hasAutoSpend,
       });
     }
   }
